@@ -1,0 +1,20 @@
+{
+    "name": "WordCounter",
+    "version": "0.0.1 [BETA]",
+    "author": [
+        "[https://komed3.de komed3] (Paul Köhler)"
+    ],
+    "url": "https://github.com/komed3/mw-WordCounter",
+    "descriptionmsg": "wordcounter-description",
+    "license-name": "MIT",
+    "type": "other",
+    "requires": {
+        "MediaWiki": ">= 1.43.0"
+    },
+    "MessagesDirs": {
+        "WordCounter": [
+            "i18n"
+        ]
+    },
+    "manifest_version": 2
+}
