@@ -2,15 +2,20 @@
 
     namespace MediaWiki\Extension\WordCounter\Hooks;
 
+    use MediaWiki\User\UserIdentity;
+    use MediaWiki\Revision\RevisionRecord;
+    use MediaWiki\Storage\EditResult;
+    use WikiPage;
+
     class PageSaveComplete {
 
         public static function onPageSaveComplete(
             WikiPage $wikiPage,
-            MediaWiki\User\UserIdentity $user,
+            UserIdentity $user,
             string $summary,
             int $flags,
-            MediaWiki\Revision\RevisionRecord $revisionRecord,
-            MediaWiki\Storage\EditResult $editResult
+            RevisionRecord $revisionRecord,
+            EditResult $editResult
         ) {
 
             //
