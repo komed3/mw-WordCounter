@@ -5,7 +5,8 @@
         "[https://komed3.de komed3] (Paul Köhler)"
     ],
     "url": "https://github.com/komed3/mw-WordCounter",
-    "descriptionmsg": "wordcounter-description",
+    "namemsg": "wordcounter",
+    "descriptionmsg": "wordcounter-desc",
     "license-name": "MIT",
     "type": "other",
     "requires": {
