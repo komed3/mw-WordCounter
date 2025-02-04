@@ -17,5 +17,13 @@
             "i18n"
         ]
     },
+    "AutoloadNamespaces": {
+        "MediaWiki\\Extension\\WordCounter\\Hooks\\": "includes/Hooks/",
+        "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/Specials/"
+    },
+    "Hooks": {
+        "PageSaveComplete": "MediaWiki\\Extension\\WordCounter\\Hooks\\PageSaveComplete::onPageSaveComplete",
+        "InfoAction": "MediaWiki\\Extension\\WordCounter\\Hooks\\InfoAction::onInfoAction"
+    },
     "manifest_version": 2
 }
