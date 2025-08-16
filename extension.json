@@ -18,11 +18,18 @@
         ]
     },
     "AutoloadNamespaces": {
-        "MediaWiki\\Extension\\WordCounter\\Hooks\\": "includes/hooks/"
+        "MediaWiki\\Extension\\WordCounter\\": "includes/"
+    },
+    "HookHandlers": {
+        "WordCounterHooks": {
+            "class": "MediaWiki\\Extension\\WordCounter\\WordCounterHooks"
+        }
     },
     "Hooks": {
-        "LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\WordCounter\\Hooks\\ExtensionSchemaUpdates::onLoadExtensionSchemaUpdates",
-        "PageSaveComplete": "MediaWiki\\Extension\\WordCounter\\Hooks\\PageSaveComplete::onPageSaveComplete"
+        "PageSaveComplete": [ {
+            "class": "WordCounterHooks",
+            "method": "onPageSaveComplete"
+        } ]
     },
     "manifest_version": 2
 }
