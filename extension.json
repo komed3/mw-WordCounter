@@ -18,10 +18,11 @@
         ]
     },
     "AutoloadNamespaces": {
-        "MediaWiki\\Extension\\WordCounter\\": "includes/"
+        "MediaWiki\\Extension\\WordCounter\\Hooks\\": "includes/hooks/"
     },
     "Hooks": {
-        "LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\WordCounter\\WordCounterHooks::onLoadExtensionSchemaUpdates"
+        "LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\WordCounter\\Hooks\\ExtensionSchemaUpdates::onLoadExtensionSchemaUpdates",
+        "PageSaveComplete": "MediaWiki\\Extension\\WordCounter\\Hooks\\PageSaveComplete::onPageSaveComplete"
     },
     "manifest_version": 2
 }

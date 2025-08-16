@@ -1,13 +1,13 @@
 <?php
 
-    namespace MediaWiki\Extension\WordCounter;
+    namespace MediaWiki\Extension\WordCounter\Hooks;
 
     use DatabaseUpdater;
 
     /**
-     * Hooks for WordCounter extension
+     * Hooks for updating the database schema
      */
-    class WordCounterHooks {
+    class ExtensionSchemaUpdates {
 
         /**
          * Add database schema updates
@@ -20,7 +20,7 @@
 
             $updater->addExtensionTable(
                 'wordcounter',
-                __DIR__ . '/../sql/wordcounter.sql'
+                __DIR__ . '/../../sql/wordcounter.sql'
             );
 
         }
