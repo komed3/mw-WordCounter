@@ -17,5 +17,11 @@
             "i18n"
         ]
     },
+    "AutoloadNamespaces": {
+        "MediaWiki\\Extension\\WordCounter\\": "includes/"
+    },
+    "Hooks": {
+        "LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\WordCounter\\WordCounterHooks::onLoadExtensionSchemaUpdates"
+    },
     "manifest_version": 2
 }
