@@ -1,5 +1,0 @@
-{
-    "wordcounter": "Word Counter",
-    "wordcounter-desc": "Counts words on all content pages, makes them available through variables, updates statistics pages, and calculates the total word count of the wiki.",
-    "wordcounter-info-label": "Words"
-}
