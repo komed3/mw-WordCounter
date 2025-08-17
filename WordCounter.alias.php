@@ -20,4 +20,14 @@
         'WC_PAGEWORDS' => [ 0, 'artikelworte' ]
     ];
 
+    $specialPageAliases = [];
+
+    $specialPageAliases[ 'en' ] = [
+        'WC_MostWords' => [ 'MostWords', 'Pages with the most words' ]
+    ];
+
+    $specialPageAliases[ 'de' ] = [
+        'WC_MostWords' => [ 'Meiste_Wörter', 'Artikel mit den meisten Wörtern' ]
+    ];
+
 ?>

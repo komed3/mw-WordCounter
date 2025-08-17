@@ -21,7 +21,8 @@
         "WordCounterAlias": "WordCounter.alias.php"
     },
     "AutoloadNamespaces": {
-        "MediaWiki\\Extension\\WordCounter\\": "includes/"
+        "MediaWiki\\Extension\\WordCounter\\": "includes/",
+        "MediaWiki\\Extension\\WordCounterSpecials\\": "includes/specials"
     },
     "HookHandlers": {
         "WordCounterHooks": {
@@ -33,6 +34,9 @@
         "GetMagicVariableIDs": "WordCounterHooks",
         "ParserGetVariableValueSwitch": "WordCounterHooks",
         "LoadExtensionSchemaUpdates": "WordCounterHooks"
+    },
+    "SpecialPages": {
+        "WC_MostWords": "MediaWiki\\Extension\\WordCounterSpecials\\SpecialWC_MostWords"
     },
     "manifest_version": 2
 }
