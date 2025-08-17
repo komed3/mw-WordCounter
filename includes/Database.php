@@ -10,6 +10,18 @@
      */
     class Database {
 
+        private static function _dbConnection (
+            bool $primary = false
+        ) : IDatabase {
+
+            $dbProvider = MediaWikiServices::getInstance()->getConnectionProvider();
+
+            return $primary
+                ? $dbProvider->getPrimaryDatabase()
+                : $dbProvider->getReplicaDatabase();
+
+        }
+
         /**
          * Update word count for a page
          * 
@@ -21,7 +33,7 @@
             int $wordCount
         ) : void {
 
-            $dbw = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_PRIMARY );
+            $dbw = Database::_dbConnection( true );
             $dts = $dbw->timestamp();
 
             $dbw->upsert(
