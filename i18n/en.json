@@ -9,5 +9,8 @@
     "wordcounter-info-label": "Number of words in article",
     "wordcounter-special-wcp-title": "Pages with the most words",
     "wordcounter-special-wcp-header": "This page lists pages in descending order of their word count.",
-    "wordcounter-special-wcp-line": "$1 $2 ($3 {{PLURAL:$4|word|words}})"
+    "wordcounter-special-wcp-line": "$1 $2 ($3 {{PLURAL:$4|word|words}})",
+    "wordcounter-stats": "Word statistics",
+    "wordcounter-stats-total": "Total words in all articles",
+    "wordcounter-stats-average": "Average words per article"
 }
