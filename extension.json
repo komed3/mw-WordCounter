@@ -30,6 +30,7 @@
         }
     },
     "Hooks": {
+        "PageDelete": "WordCounterHooks",
         "InfoAction": "WordCounterHooks",
         "GetMagicVariableIDs": "WordCounterHooks",
         "ParserGetVariableValueSwitch": "WordCounterHooks",

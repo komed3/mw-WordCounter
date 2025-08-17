@@ -14,10 +14,13 @@
 
     use MediaWiki\Context\IContextSource;
     use MediaWiki\Message\Message;
+    use MediaWiki\Page\ProperPageIdentity;
     use MediaWiki\Parser\Parser;
     use MediaWiki\Parser\PPFrame;
+    use MediaWiki\Permissions\Authority;
     use MediaWiki\Title\Title;
     use DatebaseUpdater;
+    use StatusValue;
 
     /**
      * Class WordCounterHooks
@@ -25,6 +28,7 @@
      * This class implements hooks for the WordCounter extension.
      */
     class WordCounterHooks implements
+        \MediaWiki\Page\Hook\PageDeleteHook,
         \MediaWiki\Hook\InfoActionHook,
         \MediaWiki\Hook\GetMagicVariableIDsHook,
         \MediaWiki\Hook\ParserGetVariableValueSwitchHook,
@@ -46,6 +50,31 @@
                 $title->getNamespace() == NS_MAIN &&
                 $pageId = $title->getArticleID()
             ) ? $pageId : null;
+
+        }
+
+        /**
+         * Remove the word count for a page being deleted.
+         * 
+         * @param ProperPageIdentity $page - The page being deleted
+         * @param Authority $deleter - The user performing the deletion
+         * @param string $reason - The reason for deletion
+         * @param StatusValue $status - The status of the deletion
+         * @param bool $suppress - Whether the deletion is suppressed
+         */
+        public function onPageDelete (
+            ProperPageIdentity $page,
+            Authority $deleter,
+            string $reason,
+            StatusValue $status,
+            bool $suppress
+        ) {
+
+            if ( $pageId = $page->getId() ) {
+
+                WordCounterDatabase::deleteWordCount( $pageId );
+
+            }
 
         }
 
