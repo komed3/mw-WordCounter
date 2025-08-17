@@ -33,6 +33,7 @@
         "PageSaveComplete": "WordCounterHooks",
         "PageDelete": "WordCounterHooks",
         "InfoAction": "WordCounterHooks",
+        "SpecialStatsAddExtra": "WordCounterHooks",
         "GetMagicVariableIDs": "WordCounterHooks",
         "ParserGetVariableValueSwitch": "WordCounterHooks",
         "LoadExtensionSchemaUpdates": "WordCounterHooks"

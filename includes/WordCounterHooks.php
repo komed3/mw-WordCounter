@@ -20,6 +20,7 @@
     use MediaWiki\Parser\PPFrame;
     use MediaWiki\Permissions\Authority;
     use MediaWiki\Revision\RevisionRecord;
+    use MediaWiki\SiteStats\SiteStats;
     use MediaWiki\Storage\EditResult;
     use MediaWiki\Title\Title;
     use MediaWiki\User\UserIdentity;
@@ -35,6 +36,7 @@
         \MediaWiki\Storage\Hook\PageSaveCompleteHook,
         \MediaWiki\Page\Hook\PageDeleteHook,
         \MediaWiki\Hook\InfoActionHook,
+        \MediaWiki\Hook\SpecialStatsAddExtraHook,
         \MediaWiki\Hook\GetMagicVariableIDsHook,
         \MediaWiki\Hook\ParserGetVariableValueSwitchHook,
         \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
@@ -136,6 +138,30 @@
                 }
 
             }
+
+        }
+
+        /**
+         * Add extra statistics to the Special:Stats page.
+         * 
+         * @param array &$extraStats - The array to add extra stats to
+         * @param IContextSource $context - The context of the request
+         */
+        public function onSpecialStatsAddExtra (
+            &$extraStats, $context
+        ) {
+
+            $totalWords = WordCounterUtils::getTotalWordCount() ?? 0;
+            $articles = SiteStats::articles();
+
+            $extraStats[ 'wordcounter-stats' ] = [
+                'wordcounter-stats-total' => $context->getLanguage()->formatNum(
+                    $totalWords
+                ),
+                'wordcounter-stats-average' => $context->getLanguage()->formatNum(
+                    $articles ? sprintf( '%.2f', $totalWords / $articles ) : 0
+                )
+            ];
 
         }
 
