@@ -77,7 +77,11 @@
 
             if ( $pageId && $wordCount ) {
 
+                // Store the word count in the database
                 WordCounterDatabase::updateWordCount( $pageId, $wordCount );
+
+                // Clear cache for total word count
+                WordCounterUtils::clearTotalWordCountCache();
 
             }
 
@@ -178,7 +182,7 @@
 
                 case 'WC_TOTALWORDS':
 
-                    $wordCount = WordCounterDatabase::getTotalWordCount();
+                    $wordCount = WordCounterUtils::getTotalWordCount();
                     $ret = $wordCount !== null ? (string) $wordCount : '0';
 
                     return true;

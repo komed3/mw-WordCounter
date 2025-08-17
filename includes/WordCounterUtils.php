@@ -61,6 +61,34 @@
 
         }
 
+        /**
+         * Get the total word count from the cache or database.
+         *
+         * @return int - The total word count
+         */
+        public static function getTotalWordCount () : int {
+
+            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+
+            return $cache->getWithSetCallback(
+                $cache->makeKey( 'wordcounter', 'total-words' ),
+                self::CACHE_TTL, function () {
+                    return WordCounterDatabase::getTotalWordCount();
+                }
+            );
+
+        }
+
+        /**
+         * Clear the total word count cache.
+         */
+        public static function clearTotalWordCountCache () : void {
+
+            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+            $cache->delete( $cache->makeKey( 'wordcounter', 'total-words' ) );
+
+        }
+
     }
 
 ?>
