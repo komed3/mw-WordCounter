@@ -4,8 +4,6 @@
      * Class SpecialWordCounterPages
      * 
      * Special page for displaying pages with the most words.
-     * This class extends QueryPage to provide a list of pages
-     * with their word counts in descending order.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT
