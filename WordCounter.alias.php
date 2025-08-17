@@ -23,11 +23,11 @@
     $specialPageAliases = [];
 
     $specialPageAliases[ 'en' ] = [
-        'WC_MostWords' => [ 'MostWords', 'Pages with the most words' ]
+        'WordCounterPages' => [ 'MostWords', 'Pages with the most words' ]
     ];
 
     $specialPageAliases[ 'de' ] = [
-        'WC_MostWords' => [ 'Meiste_Wörter', 'Artikel mit den meisten Wörtern' ]
+        'WordCounterPages' => [ 'Meiste_Wörter', 'Artikel mit den meisten Wörtern' ]
     ];
 
 ?>

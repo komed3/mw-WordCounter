@@ -36,7 +36,7 @@
         "LoadExtensionSchemaUpdates": "WordCounterHooks"
     },
     "SpecialPages": {
-        "WC_MostWords": "MediaWiki\\Extension\\WordCounterSpecials\\SpecialWC_MostWords"
+        "WordCounterPages": "MediaWiki\\Extension\\WordCounterSpecials\\SpecialWordCounterPages"
     },
     "manifest_version": 2
 }
