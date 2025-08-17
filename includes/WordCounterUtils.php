@@ -16,6 +16,7 @@
     use MediaWiki\Parser\ParserOptions;
     use MediaWiki\Revision\RevisionRecord;
     use MediaWiki\Revision\SlotRecord;
+    use MediaWiki\Title\Title;
     use MediaWiki\User\User;
 
     /**
@@ -99,6 +100,26 @@
                     self::CACHE_KEY[ 1 ]
                 )
             );
+
+        }
+
+        /**
+         * Get the word count for a specific page by title.
+         *
+         * @param string $titleText - The title of the page
+         * @return int - The word count for the page
+         */
+        public static function getWordCountByTitle (
+            string $titleText
+        ) : int {
+
+            if (
+                ! ( $title = Title::newFromText( $titleText ) ) ||
+                ! $title->exists || $title->getNamespace() !== NS_MAIN ||
+                ! ( $pageId = $title->getArticleID() )
+            ) return 0;
+            
+            return WordCounterDatabase::getWordCount( $pageId ) ?? 0;
 
         }
 
