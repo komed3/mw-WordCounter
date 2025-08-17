@@ -21,12 +21,12 @@
         "MediaWiki\\Extension\\WordCounter\\": "includes/"
     },
     "HookHandlers": {
-        "WordCounterHooks": {
-            "class": "MediaWiki\\Extension\\WordCounter\\WordCounterHooks"
+        "Hooks": {
+            "class": "MediaWiki\\Extension\\WordCounter\\Hooks"
         }
     },
     "Hooks": {
-        "LoadExtensionSchemaUpdates": "WordCounterHooks"
+        "LoadExtensionSchemaUpdates": "Hooks"
     },
     "manifest_version": 2
 }

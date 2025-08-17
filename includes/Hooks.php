@@ -2,7 +2,7 @@
 
     namespace MediaWiki\Extension\WordCounter;
 
-    class WordCounterHooks implements
+    class Hooks implements
         \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
     {
 
