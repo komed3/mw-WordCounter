@@ -10,6 +10,8 @@
      * @since 0.1.0
      */
 
+    // Define magic words {{PAGEWORDS}} and {{TOTALWORDS}}
+
     $magicWords = [];
 
     $magicWords[ 'en' ] = [
@@ -21,6 +23,8 @@
         'WC_PAGEWORDS' => [ 0, 'artikelworte' ],
         'WC_TOTALWORDS' => [ 0, 'alleworte' ]
     ];
+
+    // Define special pages
 
     $specialPageAliases = [];
 
