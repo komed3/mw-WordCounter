@@ -115,6 +115,7 @@
         ) {
 
             $variableIDs[] = 'WC_PAGEWORDS';
+            $variableIDs[] = 'WC_TOTALWORDS';
 
         }
 
@@ -142,6 +143,13 @@
                         $ret = $wordCount !== null ? (string) $wordCount : '0';
 
                     } else $ret = '0';
+
+                    return true;
+
+                case 'WC_TOTALWORDS':
+
+                    $wordCount = WordCounterDatabase::getTotalWordCount();
+                    $ret = $wordCount !== null ? (string) $wordCount : '0';
 
                     return true;
 

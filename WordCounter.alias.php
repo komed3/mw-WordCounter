@@ -13,11 +13,13 @@
     $magicWords = [];
 
     $magicWords[ 'en' ] = [
-        'WC_PAGEWORDS' => [ 0, 'pagewords' ]
+        'WC_PAGEWORDS' => [ 0, 'pagewords' ],
+        'WC_TOTALWORDS' => [ 0, 'totalwords' ]
     ];
 
     $magicWords[ 'de' ] = [
-        'WC_PAGEWORDS' => [ 0, 'artikelworte' ]
+        'WC_PAGEWORDS' => [ 0, 'artikelworte' ],
+        'WC_TOTALWORDS' => [ 0, 'alleworte' ]
     ];
 
     $specialPageAliases = [];
