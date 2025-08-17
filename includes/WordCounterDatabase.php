@@ -130,6 +130,81 @@
 
         }
 
+        /**
+         * Get the total word count across all pages.
+         * 
+         * @return int - The total word count
+         */
+        public static function getTotalWordCount () : int {
+
+            $dbr = self::_dbConnection();
+
+            $total = $dbr->selectField(
+                [ 'wordcounter', 'page' ],
+                'SUM( wc_word_count )',
+                [
+                    'page_namespace' => NS_MAIN,
+                    'page_is_redirect' => 0
+                ],
+                __METHOD__,
+                [],
+                [
+                    'page' => [
+                        'INNER JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+            return $total ? (int) $total : 0;
+
+        }
+
+        /**
+         * Get the number of pages that need word count updates.
+         * 
+         * @return int - The number of pages needing word count updates
+         */
+        public static function getPagesNeedingCount () : int {
+
+            $dbr = self::_dbConnection();
+
+            return $dbr->selectField(
+                'page',
+                'COUNT(*)',
+                [
+                    'page_namespace' => NS_MAIN,
+                    'page_is_redirect' => 0,
+                    'page_content_model' => CONTENT_MODEL_WIKITEXT,
+                    'page_id NOT IN (' . $dbr->selectSQLText(
+                        'wordcounter',
+                        'wc_page_id'
+                    ) . ')'
+                ],
+                __METHOD__
+            ) ?: 0;
+
+        }
+
+        /**
+         * Delete the word count for a page.
+         * 
+         * @param int $pageId - The ID of the page to delete the word count for
+         */
+        public static function deleteWordCount (
+            int $pageId
+        ) : void {
+
+            $dbw = self::_dbConnection( true );
+
+            $dbw->delete(
+                'wordcounter',
+                [ 'wc_page_id' => $pageId ],
+                __METHOD__
+            );
+
+        }
+
     }
 
 ?>
