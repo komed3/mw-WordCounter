@@ -124,18 +124,14 @@
             $context, &$pageInfo
         ) {
 
-            if ( $pageId = $this->getPageIDFromTitle( $context->getTitle() ) ) {
+            $wordCount = WordCounterUtils::getWordCountByTitle( $context->getTitle() );
 
-                $wordCount = WordCounterDatabase::getWordCount( $pageId );
+            if ( $wordCount !== null ) {
 
-                if ( $wordCount !== null ) {
-
-                    $pageInfo[ 'header-basic' ][] = [
-                        $context->msg( 'wordcounter-info-label' ),
-                        $context->getLanguage()->formatNum( $wordCount )
-                    ];
-
-                }
+                $pageInfo[ 'header-basic' ][] = [
+                    $context->msg( 'wordcounter-info-label' ),
+                    $context->getLanguage()->formatNum( $wordCount )
+                ];
 
             }
 
@@ -189,25 +185,21 @@
          */
         public function onParserGetVariableValueSwitch (
             $parser, &$variableCache, $magicWordId, &$ret, $frame
-        ) : bool {
+        ) {
 
             switch ( $magicWordId ) {
 
                 case 'WC_PAGEWORDS':
 
-                    if ( $pageId = $this->getPageIDFromTitle( $parser->getTitle() ) ) {
-
-                        $wordCount = WordCounterDatabase::getWordCount( $pageId );
-                        $ret = $wordCount !== null ? (string) $wordCount : '0';
-
-                    } else $ret = '0';
+                    $wordCount = WordCounterUtils::getWordCountByTitle( $parser->getTitle() );
+                    $ret = $wordCount !== null ? (string) $wordCount : '0';
 
                     return true;
 
                 case 'WC_TOTALWORDS':
 
-                    $wordCount = WordCounterUtils::getTotalWordCount();
-                    $ret = $wordCount !== null ? (string) $wordCount : '0';
+                    $totalWords = WordCounterUtils::getTotalWordCount();
+                    $ret = $totalWords !== null ? (string) $totalWords : '0';
 
                     return true;
 

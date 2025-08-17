@@ -39,12 +39,12 @@
             RevisionRecord $revisionRecord
         ) : ?int {
 
-            if (
-                ( $content = $revisionRecord->getContent( SlotRecord::MAIN ) ) &&
-                $content->getModel() === CONTENT_MODEL_WIKITEXT
-            ) {
+            $content = $revisionRecord->getContent( SlotRecord::MAIN );
+
+            if ( $content && $content->getModel() === CONTENT_MODEL_WIKITEXT ) {
 
                 $parser = MediaWikiServices::getInstance()->getParser();
+
                 $parserOutput = $parser->parse(
                     $content->getText(),
                     $revisionRecord->getPageAsLinkTarget(),
@@ -110,15 +110,14 @@
          * @return int - The word count for the page
          */
         public static function getWordCountByTitle (
-            string $titleText
+            Title $title
         ) : int {
 
             if (
-                ! ( $title = Title::newFromText( $titleText ) ) ||
-                ! $title->exists || $title->getNamespace() !== NS_MAIN ||
+                ! $title || ! $title->exists() || $title->getNamespace() !== NS_MAIN ||
                 ! ( $pageId = $title->getArticleID() )
             ) return 0;
-            
+
             return WordCounterDatabase::getWordCount( $pageId ) ?? 0;
 
         }

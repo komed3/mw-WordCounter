@@ -177,8 +177,7 @@
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT,
                     'page_id NOT IN (' . $dbr->selectSQLText(
-                        'wordcounter',
-                        'wc_page_id'
+                        'wordcounter', 'wc_page_id'
                     ) . ')'
                 ],
                 __METHOD__
