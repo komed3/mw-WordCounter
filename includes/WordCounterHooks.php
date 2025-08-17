@@ -2,16 +2,25 @@
 
     namespace MediaWiki\Extension\WordCounter;
 
+    use MediaWiki\Context\IContextSource;
+    use MediaWiki\Message\Message;
+    use DatebaseUpdater;
+
+    /**
+     * Class WordCounterHooks
+     * 
+     * This class implements hooks for the WordCounter extension.
+     */
     class WordCounterHooks implements
         \MediaWiki\Hook\InfoActionHook,
         \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
     {
 
         /**
-         * Add word count information to the page info action
+         * Add word count information to the page info
          * 
-         * @param IContextSource $context
-         * @param array &$pageInfo
+         * @param IContextSource $context - The context of the request
+         * @param array &$pageInfo - The page information array to modify
          */
         public function onInfoAction (
             $context, &$pageInfo
@@ -19,9 +28,7 @@
 
             $title = $context->getTitle();
 
-            if ( $title->getNamespace() !== NS_MAIN ) return;
-
-            if ( $pageId = $title->getArticleID() ) {
+            if ( $title->getNamespace() == NS_MAIN && $pageId = $title->getArticleID() ) {
 
                 $wordCount = WordCounterDatabase::getWordCount( $pageId );
 
@@ -39,9 +46,9 @@
         }
 
         /**
-         * Add database schema updates
+         * Load the extension schema updates
          * 
-         * @param DatabaseUpdater $updater
+         * @param DatebaseUpdater $updater - The updater instance
          */
         public function onLoadExtensionSchemaUpdates (
             $updater
