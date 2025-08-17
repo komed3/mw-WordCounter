@@ -50,6 +50,14 @@
 
         }
 
+        /**
+         * Process a specific page
+         *
+         * Counts words in the specified page and updates the database.
+         *
+         * @param string $pageName The name of the page to process
+         * @return bool True if successful, false otherwise
+         */
         private function processPage (
             string $pageName
         ) : bool {
@@ -85,6 +93,12 @@
 
         }
 
+        /**
+         * Execute the maintenance task
+         *
+         * This method processes either a specific page or all pages in the main namespace,
+         * counting words and updating the database.
+         */
         public function execute () {
 
             $this->output( 'WordCounter 0.1.0 © MIT Paul Köhler (komed3)' . PHP_EOL . PHP_EOL );
@@ -100,10 +114,51 @@
 
             } else {
 
+                $dbr = $this->getDB( DB_REPLICA );
 
+                // Build query conditions
+                $conditions = [
+                    'page_namespace' => NS_MAIN,
+                    'page_is_redirect' => 0,
+                    'page_content_model' => CONTENT_MODEL_WIKITEXT
+                ];
+
+                // Only process pages that haven't been counted yet
+                if ( ! $force ) $conditions[] = 'page_id NOT IN (' .
+                    $dbr->selectSQLText( 'wordcounter', 'wc_page_id' ) .
+                ')';
+
+                // Set query options, including limit if specified
+                $options = [ 'ORDER BY' => 'page_id' ];
+                if ( $limit > 0 ) $options[ 'LIMIT' ] = $limit;
+
+                // Execute the query to get pages
+                $res = $dbr->select( 'page', [ 'page_title' ], $conditions, __METHOD__, $options );
+
+                $total = $res->numRows();
+                $batchCount = 0;
+
+                $this->output( 'Processing ' . $total . ' pages ...' . PHP_EOL . PHP_EOL );
+
+                foreach ( $res as $row ) {
+
+                    $processed += (int) $this->processPage( $row->page_title );
+                    $batchCount++;
+
+                    if ( $batchCount >= $this->getBatchSize() ) {
+
+                        $batchCount = 0;
+
+                        $this->output( PHP_EOL . 'Processed ' . $processed . ' of ' . $total . ' pages...' . PHP_EOL . PHP_EOL );
+                        $this->waitForReplication();
+
+                    }
+
+                }
 
             }
 
+            // Clear the total word count cache
             WordCounterUtils::clearTotalWordCountCache();
 
             $this->output( PHP_EOL . 'Completed! Processed ' . $processed . ' pages.' . PHP_EOL );
@@ -112,8 +167,10 @@
 
     }
 
+    // Define the maintenance class
     $maintClass = CountWords::class;
 
+    // Run the maintenance script if this file is executed directly
     require_once RUN_MAINTENANCE_IF_MAIN;
 
 ?>
