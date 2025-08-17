@@ -25,6 +25,9 @@
      */
     class WordCounterUtils {
 
+        private const CACHE_KEY = [ 'wordcounter', 'total-words' ];
+        private const CACHE_TTL = 3600;
+
         /**
          * Count words from a revision record.
          *
@@ -71,8 +74,12 @@
             $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 
             return $cache->getWithSetCallback(
-                $cache->makeKey( 'wordcounter', 'total-words' ),
-                self::CACHE_TTL, function () {
+                $cache->makeKey(
+                    self::CACHE_KEY[ 0 ],
+                    self::CACHE_KEY[ 1 ]
+                ),
+                self::CACHE_TTL,
+                function () {
                     return WordCounterDatabase::getTotalWordCount();
                 }
             );
@@ -85,7 +92,13 @@
         public static function clearTotalWordCountCache () : void {
 
             $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
-            $cache->delete( $cache->makeKey( 'wordcounter', 'total-words' ) );
+
+            $cache->delete(
+                $cache->makeKey(
+                    self::CACHE_KEY[ 0 ],
+                    self::CACHE_KEY[ 1 ]
+                )
+            );
 
         }
 
