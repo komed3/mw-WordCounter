@@ -12,7 +12,6 @@
 
     namespace MediaWiki\Extension\WordCounter;
 
-    use MediaWiki\Content\ContentHandler;
     use MediaWiki\Context\IContextSource;
     use MediaWiki\Message\Message;
     use MediaWiki\Page\ProperPageIdentity;
@@ -21,7 +20,6 @@
     use MediaWiki\Parser\PPFrame;
     use MediaWiki\Permissions\Authority;
     use MediaWiki\Revision\RevisionRecord;
-    use MediaWiki\Revision\SlotRecord;
     use MediaWiki\Storage\EditResult;
     use MediaWiki\Title\Title;
     use MediaWiki\User\UserIdentity;
@@ -75,18 +73,11 @@
         ) {
 
             $pageId = $this->_pageIDFromTitle( $wikiPage->getTitle() );
-            $content = $revisionRecord->getContent( SlotRecord::MAIN );
+            $wordCount = WordCounterUtils::countWordsFromRevision( $revisionRecord );
 
-            if ( $pageId && $content && $content->getModel() === CONTENT_MODEL_WIKITEXT ) {
+            if ( $pageId && $wordCount ) {
 
-                $text = ContentHandler::getContentText( $content );
-                $wordCount = WordCounterUtils::countWords( $text );
-
-                if ( $wordCount !== null ) {
-
-                    WordCounterDatabase::updateWordCount( $pageId, $wordCount );
-
-                }
+                WordCounterDatabase::updateWordCount( $pageId, $wordCount );
 
             }
 

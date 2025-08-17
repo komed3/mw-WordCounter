@@ -2,50 +2,41 @@
 
     namespace MediaWiki\Extension\WordCounter;
 
+    use MediaWiki\MediaWikiServices;
+    use MediaWiki\Parser\ParserOptions;
+    use MediaWiki\Revision\RevisionRecord;
+    use MediaWiki\Revision\SlotRecord;
+    use MediaWiki\User\User;
+
     class WordCounterUtils {
 
-        public static function countWords (
-            string $text
-        ) : int {
+        public static function countWordsFromRevision (
+            RevisionRecord $revisionRecord
+        ) : ?int {
 
-            $text = self::stripWikitext( $text );
+            if (
+                ( $content = $revisionRecord->getContent( SlotRecord::MAIN ) ) &&
+                $content->getModel() === CONTENT_MODEL_WIKITEXT
+            ) {
 
-            $text = preg_replace( '/\s+/', ' ', trim( $text ) );
+                $parser = MediaWikiServices::getInstance()->getParser();
+                $parserOutput = $parser->parse(
+                    $content->getText(),
+                    $revisionRecord->getPageAsLinkTarget(),
+                    ParserOptions::newFromUser(
+                        User::newSystemUser( 'System' )
+                    )
+                );
 
-            if ( $text === '' ) return 0;
+                $plainText = trim( strip_tags(
+                    $parserOutput->getText( [ 'unwrap' => true ] )
+                ) );
 
-            return count( preg_split( '/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) );
+                return $plainText ? preg_match_all( '/\p{L}+/u', $plainText ) : 0;
 
-        }
+            }
 
-        private static function stripWikitext (
-            string $text
-        ) : string {
-
-            // Remove comments
-            $text = preg_replace( '/<!--.*?-->/s', '', $text );
-            // Remove templates (basic removal)
-            $text = preg_replace( '/\{\{[^}]*\}\}/', '', $text );
-            // Remove file/image links
-            $text = preg_replace( '/\[\[(?:File|Image):[^\]]*\]\]/', '', $text );
-            // Remove category links
-            $text = preg_replace( '/\[\[Category:[^\]]*\]\]/', '', $text );
-            // Convert internal links to just the display text
-            $text = preg_replace( '/\[\[(?:[^|\]]*\|)?([^\]]*)\]\]/', '$1', $text );
-            // Remove external links, keeping just the display text
-            $text = preg_replace( '/\[https?:\/\/[^\s\]]+ ([^\]]*)\]/', '$1', $text );
-            $text = preg_replace( '/https?:\/\/[^\s]+/', '', $text );
-            // Remove wiki markup
-            $text = preg_replace( "/'''?([^']*?)'''?/", '$1', $text ); // Bold/italic
-            $text = preg_replace( '/^[#*:;]+\s*/m', '', $text ); // Lists
-            $text = preg_replace( '/^=+\s*(.*?)\s*=+$/m', '$1', $text ); // Headers
-            $text = preg_replace( '/\{\|.*?\|\}/s', '', $text ); // Tables
-            // Remove HTML tags
-            $text = strip_tags( $text );
-            // Decode HTML entities
-            $text = html_entity_decode( $text, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-
-            return $text;
+            return null;
 
         }
 
