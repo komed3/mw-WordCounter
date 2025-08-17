@@ -26,10 +26,7 @@
         }
     },
     "Hooks": {
-        "PageSaveComplete": [ {
-            "class": "WordCounterHooks",
-            "method": "onPageSaveComplete"
-        } ]
+        "LoadExtensionSchemaUpdates": "WordCounterHooks"
     },
     "manifest_version": 2
 }

@@ -3,14 +3,22 @@
     namespace MediaWiki\Extension\WordCounter;
 
     class WordCounterHooks implements
-        \MediaWiki\Storage\Hook\PageSaveCompleteHook
+        \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
     {
 
-        public function onPageSaveComplete (
-            $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
+        /**
+         * Add database schema updates
+         *
+         * @param DatabaseUpdater $updater
+         */
+        public function onLoadExtensionSchemaUpdates (
+            $updater
         ) {
 
-            //
+            $updater->addExtensionTable(
+                'wordcounter',
+                __DIR__ . '/../sql/wordcounter.sql'
+            );
 
         }
 
