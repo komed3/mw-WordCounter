@@ -16,6 +16,7 @@
     use MediaWiki\Message\Message;
     use MediaWiki\Parser\Parser;
     use MediaWiki\Parser\PPFrame;
+    use MediaWiki\Title\Title;
     use DatebaseUpdater;
 
     /**
@@ -31,6 +32,24 @@
     {
 
         /**
+         * Get the page ID from the title
+         * 
+         * @param Title $title - The title of the page
+         * @return int|null - The page ID if valid, null otherwise
+         */
+        private function _pageIDFromTitle (
+            Title $title
+        ) : ?int {
+
+            return (
+                $title instanceof Title &&
+                $title->getNamespace() == NS_MAIN &&
+                $pageId = $title->getArticleID()
+            ) ? $pageId : null;
+
+        }
+
+        /**
          * Add word count information to the page info
          * 
          * @param IContextSource $context - The context of the request
@@ -40,15 +59,13 @@
             $context, &$pageInfo
         ) {
 
-            $title = $context->getTitle();
-
-            if ( $title->getNamespace() == NS_MAIN && $pageId = $title->getArticleID() ) {
+            if ( $pageId = $this->_pageIDFromTitle( $context->getTitle() ) ) {
 
                 $wordCount = WordCounterDatabase::getWordCount( $pageId );
 
                 if ( $wordCount !== null ) {
 
-                    $pageInfo['header-basic'][] = [
+                    $pageInfo[ 'header-basic' ][] = [
                         $context->msg( 'wordcounter-info-label' ),
                         $context->getLanguage()->formatNum( $wordCount )
                     ];
@@ -90,9 +107,7 @@
 
                 case 'WC_PAGEWORDS':
 
-                    $title = $parser->getTitle();
-
-                    if ( $title && $title->getNamespace() === NS_MAIN && $pageId = $title->getArticleID() ) {
+                    if ( $pageId = $this->_pageIDFromTitle( $parser->getTitle() ) ) {
 
                         $wordCount = WordCounterDatabase::getWordCount( $pageId );
                         $ret = $wordCount !== null ? (string) $wordCount : '0';
