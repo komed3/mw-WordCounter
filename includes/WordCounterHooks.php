@@ -48,7 +48,7 @@
          * @param Title $title - The title of the page
          * @return int|null - The page ID if valid, null otherwise
          */
-        private function _pageIDFromTitle (
+        private function getPageIDFromTitle (
             Title $title
         ) : ?int {
 
@@ -74,7 +74,7 @@
             $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
         ) {
 
-            $pageId = $this->_pageIDFromTitle( $wikiPage->getTitle() );
+            $pageId = $this->getPageIDFromTitle( $wikiPage->getTitle() );
             $wordCount = WordCounterUtils::countWordsFromRevision( $revisionRecord );
 
             if ( $pageId && $wordCount ) {
@@ -124,7 +124,7 @@
             $context, &$pageInfo
         ) {
 
-            if ( $pageId = $this->_pageIDFromTitle( $context->getTitle() ) ) {
+            if ( $pageId = $this->getPageIDFromTitle( $context->getTitle() ) ) {
 
                 $wordCount = WordCounterDatabase::getWordCount( $pageId );
 
@@ -195,7 +195,7 @@
 
                 case 'WC_PAGEWORDS':
 
-                    if ( $pageId = $this->_pageIDFromTitle( $parser->getTitle() ) ) {
+                    if ( $pageId = $this->getPageIDFromTitle( $parser->getTitle() ) ) {
 
                         $wordCount = WordCounterDatabase::getWordCount( $pageId );
                         $ret = $wordCount !== null ? (string) $wordCount : '0';
