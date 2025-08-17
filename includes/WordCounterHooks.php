@@ -155,10 +155,8 @@
             $articles = SiteStats::articles();
 
             $extraStats[ 'wordcounter-stats' ] = [
-                'wordcounter-stats-total' => $context->getLanguage()->formatNum(
-                    $totalWords
-                ),
-                'wordcounter-stats-average' => $context->getLanguage()->formatNum(
+                'wordcounter-stats-total' => $totalWords,
+                'wordcounter-stats-average' => (
                     $articles ? round( $totalWords / $articles ) : 0
                 )
             ];
