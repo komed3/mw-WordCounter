@@ -71,8 +71,8 @@
                 return false;
             }
 
-            if ( $title->getNamespace() !== NS_MAIN ) {
-                $this->output( '  ... Error: Page is not in the main namespace.' . PHP_EOL );
+            if ( ! WordCounterUtils::supportsNamespace( $title->getNamespace() ) ) {
+                $this->output( '  ... Error: Page namespace is not supported.' . PHP_EOL );
                 return false;
             }
 
@@ -118,7 +118,7 @@
 
                 // Build query conditions
                 $conditions = [
-                    'page_namespace' => NS_MAIN,
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT
                 ];

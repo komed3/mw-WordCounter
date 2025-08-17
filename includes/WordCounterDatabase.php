@@ -112,7 +112,7 @@
                 [ 'wordcounter', 'page' ],
                 [ 'page_id', 'page_title', 'page_namespace', 'wc_word_count' ],
                 [
-                    'page_namespace' => NS_MAIN,
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 __METHOD__,
@@ -143,7 +143,7 @@
                 [ 'wordcounter', 'page' ],
                 'SUM( wc_word_count )',
                 [
-                    'page_namespace' => NS_MAIN,
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 __METHOD__,
@@ -173,7 +173,7 @@
                 'page',
                 'COUNT(*)',
                 [
-                    'page_namespace' => NS_MAIN,
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT,
                     'page_id NOT IN (' . $dbr->selectSQLText(

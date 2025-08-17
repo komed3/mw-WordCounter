@@ -31,21 +31,30 @@
         private const CACHE_TTL = 3600;
 
         /**
-         * Check if the namespace is valid for word counting.
+         * Get the supported namespaces for word counting.
          * Use $wgWordCounterNamespaces to define valid namespaces.
-         *
-         * @param int $ns - The namespace ID
-         * @return bool - True if valid, false otherwise
+         * 
+         * @return array - Array of supported namespace IDs
          */
-        public static function isInNamespaces (
-            int $ns
-        ) : bool {
+        public static function supportedNamespaces () : array {
 
             $config = MediaWikiServices::getInstance()->getMainConfig();
 
-            return in_array( $ns, (array) (
-                $config->get( 'WordCounterNamespaces' ) ?: self::NS_FALLBACK
-            ) );
+            return (array) $config->get( 'WordCounterNamespaces' ) ?: self::NS_FALLBACK;
+
+        }
+
+        /**
+         * Check if the namespace is valid for word counting.
+         * 
+         * @param int $namespace - The namespace ID
+         * @return bool - True if valid, false otherwise
+         */
+        public static function supportsNamespace (
+            int $namespace
+        ) : bool {
+
+            return in_array( $namespace, self::supportedNamespaces() );
 
         }
 
@@ -61,7 +70,7 @@
 
             return (
                 $title instanceof Title && $title->exists() &&
-                self::isInNamespaces( $title->getNamespace() ) &&
+                self::supportsNamespace( $title->getNamespace() ) &&
                 ( $pageId = $title->getArticleID() ) && $pageId
             ) ? $pageId : null;
 
@@ -69,7 +78,7 @@
 
         /**
          * Get the word count for a specific page by title.
-         *
+         * 
          * @param string $titleText - The title of the page
          * @return int - The word count for the page
          */
@@ -85,7 +94,7 @@
 
         /**
          * Count words from a revision record.
-         *
+         * 
          * @param RevisionRecord $revisionRecord - The revision record to count words from
          * @return int|null - The word count or null if not applicable
          */
@@ -121,7 +130,7 @@
 
         /**
          * Get the total word count from the cache or database.
-         *
+         * 
          * @return int - The total word count
          */
         public static function getTotalWordCount () : int {

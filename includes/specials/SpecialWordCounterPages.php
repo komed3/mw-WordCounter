@@ -12,6 +12,7 @@
 
     namespace MediaWiki\Extension\WordCounterSpecials;
 
+    use MediaWiki\Extension\WordCounter\WordCounterUtils;
     use MediaWiki\Html\Html;
     use MediaWiki\Linker\Linker;
     use MediaWiki\SpecialPage\QueryPage;
@@ -81,7 +82,7 @@
                     'value' => 'wc_word_count'
                 ],
                 'conds' => [
-                    'page_namespace' => NS_MAIN,
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 'join_conds' => [
