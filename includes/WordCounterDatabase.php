@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * WordCounterDatabase class
+     * Class WordCounterDatabase
      * 
      * This class handles database interactions for the WordCounter extension.
      * It provides methods to update and retrieve word counts for pages.

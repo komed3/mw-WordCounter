@@ -1,9 +1,21 @@
 <?php
 
+    /**
+     * Class WordCounterHooks
+     * 
+     * This class implements hooks for the WordCounter extension.
+     * 
+     * @author Paul Köhler (komed3)
+     * @license MIT
+     * @since 0.1.0
+     */
+
     namespace MediaWiki\Extension\WordCounter;
 
     use MediaWiki\Context\IContextSource;
     use MediaWiki\Message\Message;
+    use MediaWiki\Parser\Parser;
+    use MediaWiki\Parser\PPFrame;
     use DatebaseUpdater;
 
     /**
@@ -13,6 +25,8 @@
      */
     class WordCounterHooks implements
         \MediaWiki\Hook\InfoActionHook,
+        \MediaWiki\Hook\GetMagicVariableIDsHook,
+        \MediaWiki\Hook\ParserGetVariableValueSwitchHook,
         \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
     {
 
@@ -42,6 +56,54 @@
                 }
 
             }
+
+        }
+
+        /**
+         * Register the magic variable IDs for the extension
+         * 
+         * @param array &$variableIDs - The array to add magic variable IDs to
+         */
+        public function onGetMagicVariableIDs (
+            &$variableIDs
+        ) {
+
+            $variableIDs[] = 'WC_PAGEWORDS';
+
+        }
+
+        /**
+         * Handle the magic variable switches for WordCounter extension
+         * 
+         * @param \Parser $parser - The parser instance
+         * @param array &$variableCache - The variable cache
+         * @param string $magicWordId - The magic word ID being processed
+         * @param string &$ret - The return value to set
+         * @param \ParserFrame $frame - The parser frame
+         * @return bool - True if handled, false otherwise
+         */
+        public function onParserGetVariableValueSwitch (
+            $parser, &$variableCache, $magicWordId, &$ret, $frame
+        ) : bool {
+
+            switch ( $magicWordId ) {
+
+                case 'WC_PAGEWORDS':
+
+                    $title = $parser->getTitle();
+
+                    if ( $title && $title->getNamespace() === NS_MAIN && $pageId = $title->getArticleID() ) {
+
+                        $wordCount = WordCounterDatabase::getWordCount( $pageId );
+                        $ret = $wordCount !== null ? (string) $wordCount : '0';
+
+                    } else $ret = '0';
+
+                    return true;
+
+            }
+
+            return false;
 
         }
 

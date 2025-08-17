@@ -17,6 +17,9 @@
             "i18n"
         ]
     },
+    "ExtensionMessagesFiles": {
+        "WordCounterAlias": "WordCounter.alias.php"
+    },
     "AutoloadNamespaces": {
         "MediaWiki\\Extension\\WordCounter\\": "includes/"
     },
@@ -27,6 +30,8 @@
     },
     "Hooks": {
         "InfoAction": "WordCounterHooks",
+        "GetMagicVariableIDs": "WordCounterHooks",
+        "ParserGetVariableValueSwitch": "WordCounterHooks",
         "LoadExtensionSchemaUpdates": "WordCounterHooks"
     },
     "manifest_version": 2
