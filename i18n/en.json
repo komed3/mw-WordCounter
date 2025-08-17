@@ -5,5 +5,6 @@
         ]
     },
     "wordcounter": "WordCounter",
-    "wordcounter-desc": "Counts words on all content pages, makes them available through variables, updates statistics pages, and calculates the total word count of the wiki."
+    "wordcounter-desc": "Counts words on all content pages, makes them available through variables, updates statistics pages, and calculates the total word count of the wiki.",
+    "wordcounter-info-label": "Number of words in article"
 }
