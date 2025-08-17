@@ -22,18 +22,19 @@
         ) : void {
 
             $dbw = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_PRIMARY );
+            $dts = $dbw->timestamp();
 
             $dbw->upsert(
                 'wordcounter',
                 [
                     'wc_page_id' => $pageId,
                     'wc_word_count' => $wordCount,
-                    'wc_updated' => $dbw->timestamp()
+                    'wc_updated' => $dts
                 ],
                 [ 'wc_page_id' ],
                 [
                     'wc_word_count' => $wordCount,
-                    'wc_updated' => $dbw->timestamp()
+                    'wc_updated' => $dts
                 ],
                 __METHOD__
             );
