@@ -14,6 +14,8 @@
 
     namespace MediaWiki\Extension\WordCounterSpecials;
 
+    use MediaWiki\Html\Html;
+    use MediaWiki\Linker\Linker;
     use MediaWiki\SpecialPage\QueryPage;
     use MediaWiki\Title\Title;
     use Skin;
@@ -131,19 +133,50 @@
             $skin, $result
         ) {
 
-            if ( ! ( $title = Title::makeTitleSafe(
-                $result->namespace,
-                $result->title
-            ) ) ) return false;
+            $title = Title::makeTitleSafe( $result->namespace, $result->title );
 
-            $link = $this->getLinkRenderer()->makeLink( $title );
+            if ( ! $title ) {
+
+                return Html::element(
+                    'span', [ 'class' => 'mw-invalidtitle' ],
+                    Linker::getInvalidTitleDescription(
+                        $this->getContext(),
+                        $result->namespace,
+                        $result->title
+                    )
+                );
+
+            }
+
+            $linkRenderer = $this->getLinkRenderer();
+
+            $hlink = $this->msg( 'parentheses' )->rawParams(
+                $linkRenderer->makeKnownLink(
+                    $title, $this->msg( 'hist' )->text(),
+                    [], [ 'action' => 'history' ]
+                )
+            )->escaped();
+
+            if ( $this->isCached() ) {
+
+                $plink = $linkRenderer->makeLink( $title );
+                $exists = $title->exists();
+
+            } else {
+
+                $plink = $linkRenderer->makeKnownLink( $title );
+                $exists = true;
+
+            }
+
             $wordCount = $this->getLanguage()->formatNum( $result->value );
 
             return $this
                 ->msg( 'wordcounter-special-wcp-line' )
-                ->rawParams( $link )
-                ->numParams( $result->value )
+                ->rawParams( $hlink )
+                ->rawParams( $exists ? $plink : Html::rawElement( 'del', [], $plink ) )
                 ->params( $wordCount )
+                ->numParams( $result->value )
                 ->escaped();
 
         }

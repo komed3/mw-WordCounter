@@ -9,5 +9,5 @@
     "wordcounter-info-label": "Anzahl der Worte im Artikel",
     "wordcounter-special-wcp-title": "Artikel mit den meisten Wörtern",
     "wordcounter-special-wcp-header": "Diese Seite listet Artikel in absteigender Reihenfolge ihrer Wortanzahl auf.",
-    "wordcounter-special-wcp-line": "$1 ($3 {{PLURAL:$2|Wort|Wörter}})"
+    "wordcounter-special-wcp-line": "$1 $2 [$3 {{PLURAL:$4|Wort|Wörter}}]"
 }
