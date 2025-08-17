@@ -12,13 +12,19 @@
 
     namespace MediaWiki\Extension\WordCounter;
 
+    use MediaWiki\Content\ContentHandler;
     use MediaWiki\Context\IContextSource;
     use MediaWiki\Message\Message;
     use MediaWiki\Page\ProperPageIdentity;
+    use MediaWiki\Page\WikiPage;
     use MediaWiki\Parser\Parser;
     use MediaWiki\Parser\PPFrame;
     use MediaWiki\Permissions\Authority;
+    use MediaWiki\Revision\RevisionRecord;
+    use MediaWiki\Revision\SlotRecord;
+    use MediaWiki\Storage\EditResult;
     use MediaWiki\Title\Title;
+    use MediaWiki\User\UserIdentity;
     use DatebaseUpdater;
     use StatusValue;
 
@@ -28,6 +34,7 @@
      * This class implements hooks for the WordCounter extension.
      */
     class WordCounterHooks implements
+        \MediaWiki\Storage\Hook\PageSaveCompleteHook,
         \MediaWiki\Page\Hook\PageDeleteHook,
         \MediaWiki\Hook\InfoActionHook,
         \MediaWiki\Hook\GetMagicVariableIDsHook,
@@ -50,6 +57,38 @@
                 $title->getNamespace() == NS_MAIN &&
                 $pageId = $title->getArticleID()
             ) ? $pageId : null;
+
+        }
+
+        /**
+         * Update word count on page save.
+         * 
+         * @param WikiPage $wikiPage
+         * @param UserIdentity $user
+         * @param string $summary
+         * @param int $flags
+         * @param RevisionRecord $revisionRecord
+         * @param EditResult $editResult
+         */
+        public function onPageSaveComplete (
+            $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
+        ) {
+
+            $pageId = $this->_pageIDFromTitle( $wikiPage->getTitle() );
+            $content = $revisionRecord->getContent( SlotRecord::MAIN );
+
+            if ( $pageId && $content && $content->getModel() === CONTENT_MODEL_WIKITEXT ) {
+
+                $text = ContentHandler::getContentText( $content );
+                $wordCount = WordCounterUtils::countWords( $text );
+
+                if ( $wordCount !== null ) {
+
+                    WordCounterDatabase::updateWordCount( $pageId, $wordCount );
+
+                }
+
+            }
 
         }
 
