@@ -1,13 +1,34 @@
 <?php
 
+    /**
+     * Class SpecialWordCounterPages
+     * 
+     * Special page for displaying pages with the most words.
+     * This class extends QueryPage to provide a list of pages
+     * with their word counts in descending order.
+     * 
+     * @author Paul Köhler (komed3)
+     * @license MIT
+     * @since 0.1.0
+     */
+
     namespace MediaWiki\Extension\WordCounterSpecials;
 
     use MediaWiki\SpecialPage\QueryPage;
     use MediaWiki\Title\Title;
     use Skin;
 
+    /**
+     * Class SpecialWordCounterPages
+     * 
+     * This class implements a special page that lists pages
+     * with the most words in descending order.
+     */
     class SpecialWordCounterPages extends QueryPage {
 
+        /**
+         * Constructor for the special page
+         */
         public function __construct () {
 
             parent::__construct( 'WordCounterPages', '', true );
@@ -16,18 +37,37 @@
 
         }
 
+        /**
+         * Sets the special page to be expensive.
+         * This indicates that the page may take a long time to load and
+         * should be cached on large sites.
+         * 
+         * @return bool - true if the page is expensive
+         */
         public function isExpensive () {
 
             return true;
 
         }
 
+        /**
+         * Indicates that this special page is not syndicated.
+         * 
+         * @return bool - false, as this page is not syndicated
+         */
         public function isSyndicated () {
 
             return false;
 
         }
 
+        /**
+         * Returns the query info for the special page.
+         * This method defines the database tables and fields that will be
+         * queried to retrieve the word counts.
+         * 
+         * @return array - the query information
+         */
         public function getQueryInfo () {
 
             return [
@@ -54,18 +94,39 @@
 
         }
 
+        /**
+         * Returns the order fields for sorting the results.
+         * This method specifies that the results should be sorted by the
+         * word count in descending order.
+         * 
+         * @return array - the order fields
+         */
         public function getOrderFields () {
 
             return [ 'wc_word_count' ];
 
         }
 
+        /**
+         * Indicates that the results should be sorted in descending order.
+         * 
+         * @return bool - true, as the results should be sorted descending
+         */
         public function sortDescending () {
 
             return true;
 
         }
 
+        /**
+         * Formats the result for display.
+         * This method generates the output for each page, including the link
+         * to the page and its word count.
+         * 
+         * @param Skin $skin - the skin object for rendering
+         * @param object $result - the result object containing page data
+         * @return string - formatted output for the page
+         */
         public function formatResult (
             $skin, $result
         ) {
@@ -87,18 +148,37 @@
 
         }
 
+        /**
+         * Returns the header for the special page.
+         * This method provides the title and description for the special page.
+         * 
+         * @return string - the header text
+         */
         public function getPageHeader () {
 
             return $this->msg( 'wordcounter-special-wcp-header' )->parseAsBlock();
 
         }
 
+        /**
+         * Returns the group name for the special page.
+         * This method specifies the group under which this special page
+         * will be categorized.
+         * 
+         * @return string - the group name
+         */
         protected function getGroupName () {
 
             return 'pages';
 
         }
 
+        /**
+         * Returns the description for the special page.
+         * This method provides a brief description of what the special page does.
+         * 
+         * @return string - the description text
+         */
         public function getDescription () {
 
             return $this->msg( 'wordcounter-special-wcp-title' );
