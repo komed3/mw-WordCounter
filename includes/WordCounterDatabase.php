@@ -30,7 +30,7 @@
          * @param bool $primary - Whether to get the primary connection
          * @return IDatabase - The database connection
          */
-        private static function _dbConnection (
+        private static function getDBConnection (
             bool $primary = false
         ) : IDatabase {
 
@@ -51,7 +51,7 @@
             int $wordCount
         ) : void {
 
-            $dbw = self::_dbConnection( true );
+            $dbw = self::getDBConnection( true );
             $dts = $dbw->timestamp();
 
             $dbw->upsert(
@@ -81,7 +81,7 @@
             int $pageId
         ) : ?int {
 
-            $dbr = self::_dbConnection();
+            $dbr = self::getDBConnection();
             
             $wordCount = $dbr->selectField(
                 'wordcounter',
@@ -106,7 +106,7 @@
             int $limit = 50, int $offset = 0, bool $desc = true
         ) : IResultWrapper {
 
-            $dbr = self::_dbConnection();
+            $dbr = self::getDBConnection();
 
             return $dbr->select(
                 [ 'wordcounter', 'page' ],
@@ -137,7 +137,7 @@
          */
         public static function getTotalWordCount () : int {
 
-            $dbr = self::_dbConnection();
+            $dbr = self::getDBConnection();
 
             $total = $dbr->selectField(
                 [ 'wordcounter', 'page' ],
@@ -167,7 +167,7 @@
          */
         public static function getPagesNeedingCount () : int {
 
-            $dbr = self::_dbConnection();
+            $dbr = self::getDBConnection();
 
             return $dbr->selectField(
                 'page',
@@ -195,7 +195,7 @@
             int $pageId
         ) : void {
 
-            $dbw = self::_dbConnection( true );
+            $dbw = self::getDBConnection( true );
 
             $dbw->delete(
                 'wordcounter',
