@@ -15,6 +15,7 @@
 
     use MediaWiki\MediaWikiServices;
     use Wikimedia\Rdbms\IDatabase;
+    use Wikimedia\Rdbms\IResultWrapper;
 
     /**
      * Class WordCounterDatabase
@@ -24,7 +25,7 @@
     class WordCounterDatabase {
 
         /**
-         * Get a database connection
+         * Get a database connection.
          * 
          * @param bool $primary - Whether to get the primary connection
          * @return IDatabase - The database connection
@@ -40,7 +41,7 @@
         }
 
         /**
-         * Update the word count for a page
+         * Update the word count for a page.
          * 
          * @param int $pageId - The ID of the page to update
          * @param int $wordCount - The new word count
@@ -71,7 +72,7 @@
         }
 
         /**
-         * Get the word count for a page
+         * Get the word count for a page.
          * 
          * @param int $pageId - The ID of the page to get the word count for
          * @return int|null - The word count, or null if not found
@@ -90,6 +91,42 @@
             );
             
             return $wordCount !== false ? (int) $wordCount : null;
+
+        }
+
+        /**
+         * Get pages ordered by word count.
+         * 
+         * @param int $limit - The maximum number of pages to return
+         * @param int $offset - The offset for pagination
+         * @param bool $desc - Whether to order by descending word count
+         * @return IResultWrapper - The result set containing page data
+         */
+        public static function getPagesOrderedByWordCount (
+            int $limit = 50, int $offset = 0, bool $desc = true
+        ) : IResultWrapper {
+
+            $dbr = self::_dbConnection();
+
+            return $dbr->select(
+                [ 'wordcounter', 'page' ],
+                [ 'page_id', 'page_title', 'page_namespace', 'wc_word_count' ],
+                [
+                    'page_namespace' => NS_MAIN,
+                    'page_is_redirect' => 0
+                ],
+                __METHOD__,
+                [
+                    'ORDER BY' => 'wc_word_count ' . ( $desc ? 'DESC' : 'ASC' ),
+                    'LIMIT' => $limit, 'OFFSET' => $offset
+                ],
+                [
+                    'page' => [
+                        'INNER JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
 
         }
 

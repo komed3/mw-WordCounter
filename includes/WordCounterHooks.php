@@ -32,7 +32,7 @@
     {
 
         /**
-         * Get the page ID from the title
+         * Get the page ID from the title.
          * 
          * @param Title $title - The title of the page
          * @return int|null - The page ID if valid, null otherwise
@@ -50,7 +50,7 @@
         }
 
         /**
-         * Add word count information to the page info
+         * Add word count information to the page info.
          * 
          * @param IContextSource $context - The context of the request
          * @param array &$pageInfo - The page information array to modify
@@ -77,7 +77,7 @@
         }
 
         /**
-         * Register the magic variable IDs for the extension
+         * Register the magic variable IDs for the extension.
          * 
          * @param array &$variableIDs - The array to add magic variable IDs to
          */
@@ -90,7 +90,7 @@
         }
 
         /**
-         * Handle the magic variable switches for WordCounter extension
+         * Handle the magic variable switches for WordCounter extension.
          * 
          * @param \Parser $parser - The parser instance
          * @param array &$variableCache - The variable cache
@@ -123,7 +123,7 @@
         }
 
         /**
-         * Load the extension schema updates
+         * Load the extension schema updates.
          * 
          * @param DatebaseUpdater $updater - The updater instance
          */
