@@ -1,11 +1,24 @@
 <?php
 
     /**
-     * WordCounter
-     * Count words of content pages (main namespace)
+     * WordCounter Extension
      * 
-     * @author      komed3 (Paul Köhler)
-     * @version     0.1.0 [BETA]
+     * WordCounter is a comprehensive MediaWiki extension that counts and tracks words in articles.
+     * It provides features such as automatic word counting, magic words for word count display,
+     * and a special page for listing articles by word count.
+     * 
+     * Features:
+     *  - Automatic word counting when pages are saved
+     *  - Word count display on page info
+     *  - Magic words: {{PAGEWORDS}} and {{TOTALWORDS}}
+     *  - Special page listing articles by word count
+     *  - API integration for word count data
+     *  - Total word count on Special:Statistics
+     *  - Maintenance script for batch processing
+     * 
+     * @author Paul Köhler (komed3)
+     * @version 0.1.0
+     * @license MIT
      */
 
     if ( function_exists( 'wfLoadExtension' ) ) {
