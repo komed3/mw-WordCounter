@@ -43,24 +43,6 @@
     {
 
         /**
-         * Get the page ID from the title.
-         * 
-         * @param Title $title - The title of the page
-         * @return int|null - The page ID if valid, null otherwise
-         */
-        private function getPageIDFromTitle (
-            Title $title
-        ) : ?int {
-
-            return (
-                $title instanceof Title &&
-                $title->getNamespace() == NS_MAIN &&
-                $pageId = $title->getArticleID()
-            ) ? $pageId : null;
-
-        }
-
-        /**
          * Update word count on page save.
          * 
          * @param WikiPage $wikiPage
@@ -74,7 +56,7 @@
             $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
         ) {
 
-            $pageId = $this->getPageIDFromTitle( $wikiPage->getTitle() );
+            $pageId = WordCounterUtils::getPageIDFromTitle( $wikiPage->getTitle() );
             $wordCount = WordCounterUtils::countWordsFromRevision( $revisionRecord );
 
             if ( $pageId && $wordCount ) {

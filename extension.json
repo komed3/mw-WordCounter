@@ -20,6 +20,12 @@
     "ExtensionMessagesFiles": {
         "WordCounterAlias": "WordCounter.alias.php"
     },
+    "config": {
+		"WordCounterNamespaces": {
+			"value": [ 0 ],
+			"description": "List of namespaces for whose pages words are to be counted"
+		}
+	},
     "AutoloadNamespaces": {
         "MediaWiki\\Extension\\WordCounter\\": "includes/",
         "MediaWiki\\Extension\\WordCounterSpecials\\": "includes/specials"

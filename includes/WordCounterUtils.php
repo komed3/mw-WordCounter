@@ -26,8 +26,62 @@
      */
     class WordCounterUtils {
 
+        private const NS_FALLBACK = [ NS_MAIN ];
         private const CACHE_KEY = [ 'wordcounter', 'total-words' ];
         private const CACHE_TTL = 3600;
+
+        /**
+         * Check if the namespace is valid for word counting.
+         * Use $wgWordCounterNamespaces to define valid namespaces.
+         *
+         * @param int $ns - The namespace ID
+         * @return bool - True if valid, false otherwise
+         */
+        public static function isInNamespaces (
+            int $ns
+        ) : bool {
+
+            $config = MediaWikiServices::getInstance()->getMainConfig();
+
+            return in_array( $ns, (array) (
+                $config->get( 'WordCounterNamespaces' ) ?: self::NS_FALLBACK
+            ) );
+
+        }
+
+        /**
+         * Get the page ID from the title.
+         * 
+         * @param Title $title - The title of the page
+         * @return int|null - The page ID if valid, null otherwise
+         */
+        public static function getPageIDFromTitle (
+            Title $title
+        ) : ?int {
+
+            return (
+                $title instanceof Title && $title->exists() &&
+                self::isInNamespaces( $title->getNamespace() ) &&
+                ( $pageId = $title->getArticleID() ) && $pageId
+            ) ? $pageId : null;
+
+        }
+
+        /**
+         * Get the word count for a specific page by title.
+         *
+         * @param string $titleText - The title of the page
+         * @return int - The word count for the page
+         */
+        public static function getWordCountByTitle (
+            Title $title
+        ) : int {
+
+            return ( $pageId = self::getPageIDFromTitle( $title ) )
+                ? WordCounterDatabase::getWordCount( $pageId ) ?? 0
+                : 0;
+
+        }
 
         /**
          * Count words from a revision record.
@@ -75,10 +129,7 @@
             $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 
             return $cache->getWithSetCallback(
-                $cache->makeKey(
-                    self::CACHE_KEY[ 0 ],
-                    self::CACHE_KEY[ 1 ]
-                ),
+                $cache->makeKey( self::CACHE_KEY[ 0 ], self::CACHE_KEY[ 1 ] ),
                 self::CACHE_TTL,
                 function () {
                     return WordCounterDatabase::getTotalWordCount();
@@ -94,31 +145,9 @@
 
             $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 
-            $cache->delete(
-                $cache->makeKey(
-                    self::CACHE_KEY[ 0 ],
-                    self::CACHE_KEY[ 1 ]
-                )
-            );
-
-        }
-
-        /**
-         * Get the word count for a specific page by title.
-         *
-         * @param string $titleText - The title of the page
-         * @return int - The word count for the page
-         */
-        public static function getWordCountByTitle (
-            Title $title
-        ) : int {
-
-            if (
-                ! $title || ! $title->exists() || $title->getNamespace() !== NS_MAIN ||
-                ! ( $pageId = $title->getArticleID() )
-            ) return 0;
-
-            return WordCounterDatabase::getWordCount( $pageId ) ?? 0;
+            $cache->delete( $cache->makeKey(
+                self::CACHE_KEY[ 0 ], self::CACHE_KEY[ 1 ]
+            ) );
 
         }
 
