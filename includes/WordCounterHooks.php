@@ -159,7 +159,7 @@
                     $totalWords
                 ),
                 'wordcounter-stats-average' => $context->getLanguage()->formatNum(
-                    $articles ? sprintf( '%.2f', $totalWords / $articles ) : 0
+                    $articles ? round( $totalWords / $articles ) : 0
                 )
             ];
 
