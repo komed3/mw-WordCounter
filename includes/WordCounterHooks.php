@@ -157,6 +157,7 @@
 
             $variableIDs[] = 'WC_PAGEWORDS';
             $variableIDs[] = 'WC_TOTALWORDS';
+            $variableIDs[] = 'WC_TOTALPAGES';
 
         }
 
@@ -190,6 +191,13 @@
 
                     $totalWords = WordCounterUtils::getTotalWordCount();
                     $ret = $totalWords !== null ? (string) $totalWords : '0';
+
+                    return true;
+
+                case 'WC_TOTALPAGES':
+
+                    $totalPages = WordCounterUtils::getTotalPageCount();
+                    $ret = $totalPages !== null ? (string) $totalPages : '0';
 
                     return true;
 

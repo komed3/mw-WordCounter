@@ -14,12 +14,14 @@
 
     $magicWords[ 'en' ] = [
         'WC_PAGEWORDS' => [ 0, 'pagewords' ],
-        'WC_TOTALWORDS' => [ 0, 'totalwords' ]
+        'WC_TOTALWORDS' => [ 0, 'totalwords' ],
+        'WC_TOTALPAGES' => [ 0, 'totalpages' ]
     ];
 
     $magicWords[ 'de' ] = [
         'WC_PAGEWORDS' => [ 0, 'artikelworte' ],
-        'WC_TOTALWORDS' => [ 0, 'alleworte' ]
+        'WC_TOTALWORDS' => [ 0, 'alleworte' ],
+        'WC_TOTALPAGES' => [ 0, 'alleseiten' ]
     ];
 
 ?>
