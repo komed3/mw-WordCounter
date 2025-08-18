@@ -66,6 +66,24 @@
         private const CACHE_TTL = 3600;
 
         /**
+         * Get a configuration value or return a default.
+         * 
+         * @param string $key - The configuration key
+         * @param mixed $default - Default value if key does not exist
+         * @return mixed - The configuration value or default
+         */
+        private static function getConfig (
+            string $key,
+            mixed $default = null
+        ) : mixed {
+
+            $config = MediaWikiServices::getInstance()->getMainConfig();
+
+            return $config->has( $key ) ? $config->get( $key ) : $default;
+
+        }
+
+        /**
          * Get the cache service based on configuration.
          * 
          * @return - The cache service instance
@@ -73,8 +91,7 @@
          */
         public static function getCacheService () {
 
-            $config = MediaWikiServices::getInstance()->getMainConfig();
-            $service = $config->get( 'WordCounterCacheService' ) ?? 'local';
+            $service = self::getConfig( 'WordCounterCacheService', 'local' );
 
             if ( ! array_key_exists( $service, self::CACHE_SERVICES ) ) {
 
@@ -98,9 +115,7 @@
          */
         public static function countOnPageSave () : bool {
 
-            $config = MediaWikiServices::getInstance()->getMainConfig();
-
-            return (bool) $config->get( 'WordCounterOnPageSave' ) ?? true;
+            return (bool) self::getConfig( 'WordCounterOnPageSave', true );
 
         }
 
@@ -112,9 +127,7 @@
          */
         public static function supportedNamespaces () : array {
 
-            $config = MediaWikiServices::getInstance()->getMainConfig();
-
-            return (array) $config->get( 'WordCounterNamespaces' ) ?? self::NS_FALLBACK;
+            return (array) self::getConfig( 'WordCounterNamespaces', self::NS_FALLBACK );
 
         }
 
@@ -134,6 +147,7 @@
 
         /**
          * Get the page ID from the title.
+         * Checks if the title exists, is not a redirect and is in a supported namespace.
          * 
          * @param Title $title - The title of the page
          * @return int|null - The page ID if valid, null otherwise
@@ -214,8 +228,9 @@
             ) ) ) === '' ) return 0;
 
             // Determine if numbers should be counted as words
-            $countNumbers = $services->getMainConfig()->get( 'WordCounterCountNumbers' );
-            $pattern = $countNumbers ? '/[\p{L}\p{N}]+/u' : '/\p{L}+/u';
+            $pattern = self::getConfig( 'WordCounterCountNumbers', false )
+                ? '/[\p{L}\p{N}]+/u'
+                : '/\p{L}+/u';
 
             // Count words
             return preg_match_all( $pattern, $plainText );
