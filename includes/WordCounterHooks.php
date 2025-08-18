@@ -24,7 +24,7 @@
     use MediaWiki\Storage\EditResult;
     use MediaWiki\Title\Title;
     use MediaWiki\User\UserIdentity;
-    use DatebaseUpdater;
+    use DatabaseUpdater;
     use StatusValue;
 
     /**
@@ -66,6 +66,12 @@
 
                 // Clear cache for total word count
                 WordCounterUtils::clearTotalWordCountCache();
+
+            } else {
+
+                wfDebugLog( 'WordCounter', 'Could not count words for page ' .
+                    $wikiPage->getTitle()->getPrefixedText()
+                );
 
             }
 
@@ -168,6 +174,9 @@
         public function onParserGetVariableValueSwitch (
             $parser, &$variableCache, $magicWordId, &$ret, $frame
         ) {
+
+            // Do not cache the output for magic words
+            $parser->getOutput()->updateCacheExpiry( 0 );
 
             switch ( $magicWordId ) {
 
