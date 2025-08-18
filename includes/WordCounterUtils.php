@@ -179,7 +179,7 @@
             $wikiPage
         ) : void {
 
-            // Clear parser cache for the current page
+            // Clear parser cache for the given page
             $parserCache = MediaWikiServices::getInstance()->getParserCache();
             $parserCache->deleteOptionsKey( $wikiPage );
 

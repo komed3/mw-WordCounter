@@ -51,23 +51,30 @@
         }
 
         /**
-         * Process a specific page
+         * Process a specific page by ID.
          *
          * Counts words in the specified page and updates the database.
          *
-         * @param string $pageName The name of the page to process
-         * @return bool True if successful, false otherwise
+         * @param int $pageId - The ID of the page to process
+         * @param string $pageTitle - The title of the page (for display purposes)
+         * @return bool - True if successful, false otherwise
          */
-        private function processPage (
-            string $pageName
+        private function processPageById (
+            int $pageId,
+            string $pageTitle
         ) : bool {
 
             $revLookup = MediaWikiServices::getInstance()->getRevisionLookup();
 
-            $this->output( 'Count words for page <' . $pageName . '> ...' . PHP_EOL );
+            $this->output( 'Count words for page <' . $pageTitle . '> (#' . $pageId . ') ...' . PHP_EOL );
 
-            if ( ! ( $title = Title::newFromText( $pageName ) )->exists() ) {
-                $this->output( '  ... Error: Page does not exists.' . PHP_EOL );
+            if ( ! ( $title = Title::newFromID( $pageId ) ) ) {
+                $this->output( '  ... Error: Could not create from ID.' . PHP_EOL );
+                return false;
+            }
+
+            if ( ! $title->exists() || $title->isRedirect() ) {
+                $this->output( '  ... Error: Page does not exist or is a redirect.' . PHP_EOL );
                 return false;
             }
 
@@ -94,6 +101,33 @@
         }
 
         /**
+         * Process a specific page by title.
+         *
+         * @param string $pageName The name of the page to process
+         * @return bool True if successful, false otherwise
+         */
+        private function processPageByTitle (
+            string $pageName
+        ) : bool {
+
+            if ( ! ( $title = Title::newFromText( $pageName ) ) ) {
+                $this->output( 'Error: Invalid page title <' . $pageName . '>.' . PHP_EOL );
+                return false;
+            }
+
+            if ( ! $title->exists() || $title->isRedirect() ) {
+                $this->output( 'Error: Page <' . $pageName . '> does not exist or is a redirect.' . PHP_EOL );
+                return false;
+            }
+
+            return $this->processPageById(
+                $title->getArticleID(),
+                $title->getPrefixedText()
+            );
+
+        }
+
+        /**
          * Execute the maintenance task
          *
          * This method processes either a specific page or all pages in the main namespace,
@@ -110,7 +144,7 @@
 
             if ( $specificPage ) {
 
-                $processed += (int) $this->processPage( $specificPage );
+                $processed += (int) $this->processPageByTitle( $specificPage );
 
             } else {
 
@@ -133,18 +167,28 @@
                 if ( $limit > 0 ) $options[ 'LIMIT' ] = $limit;
 
                 // Execute the query to get pages
-                $res = $dbr->select( 'page', [ 'page_title' ], $conditions, __METHOD__, $options );
+                $res = $dbr->select(
+                    'page', [ 'page_id', 'page_title', 'page_namespace' ],
+                    $conditions, __METHOD__, $options
+                );
 
                 $total = $res->numRows();
                 $batchCount = 0;
 
                 $this->output( 'Processing ' . $total . ' pages ...' . PHP_EOL . PHP_EOL );
 
+                // Loop through page results
                 foreach ( $res as $row ) {
 
-                    $processed += (int) $this->processPage( $row->page_title );
+                    // Create full title for display
+                    $title = Title::makeTitle( $row->page_namespace, $row->page_title );
+                    $fullTitle = $title ? $title->getPrefixedText() : $row->page_title;
+
+                    // Process the page
+                    $processed += (int) $this->processPageById( $row->page_id, $fullTitle );
                     $batchCount++;
 
+                    // If batch size reached, output progress and wait for replication
                     if ( $batchCount >= $this->getBatchSize() ) {
 
                         $batchCount = 0;
