@@ -17,7 +17,6 @@
     use MediaWiki\Revision\RevisionRecord;
     use MediaWiki\Revision\SlotRecord;
     use MediaWiki\Title\Title;
-    use MediaWiki\User\User;
 
     /**
      * Class WordCounterUtils
@@ -103,35 +102,48 @@
             RevisionRecord $revisionRecord
         ) : ?int {
 
+            // Get the content of the revision
             $content = $revisionRecord->getContent( SlotRecord::MAIN );
 
-            if ( $content && $content->getModel() === CONTENT_MODEL_WIKITEXT ) {
+            // If the content is not available or not in wikitext format, return null
+            if ( ! $content || $content->getModel() !== CONTENT_MODEL_WIKITEXT ) return null;
 
-                $config = MediaWikiServices::getInstance()->getMainConfig();
-                $parser = MediaWikiServices::getInstance()->getParser();
+            // Get services and create a parser options object from anon (no DB user)
+            $services = MediaWikiServices::getInstance();
+            $lang = $services->getContentLanguage();
+            $parser = $services->getParser();
+            $parserOptions = ParserOptions::newFromAnon();
 
-                $parserOutput = $parser->parse(
-                    $content->getText(),
-                    $revisionRecord->getPageAsLinkTarget(),
-                    ParserOptions::newFromUser(
-                        User::newSystemUser( 'WordCounter', [ 'steal' => true ] )
-                    )
-                );
+            // Set the target language for the parser options
+            if ( method_exists( $parserOptions, 'setTargetLanguage' ) )
+                $parserOptions->setTargetLanguage( $lang );
 
-                $plainText = trim( strip_tags(
-                    $parserOutput->getText( [ 'unwrap' => true ] )
-                ) );
+            else if ( method_exists( $parserOptions, 'setUserLang' ) )
+                $parserOptions->setUserLang( $lang );
 
-                return $plainText ? preg_match_all(
-                    $config->get( 'WordCounterCountNumbers' )
-                        ? '/[\p{L}\p{N}]+/u'
-                        : '/\p{L}+/u',
-                    $plainText
-                ) : 0;
+            // Disable preview mode if applicable
+            if ( method_exists( $parserOptions, 'setIsPreview' ) )
+                $parserOptions->setIsPreview( false );
 
-            }
+            // Parse the content to get Html output
+            $parserOutput = $parser->parse(
+                $content->getText(),
+                $revisionRecord->getPageAsLinkTarget(),
+                $parserOptions
+            );
 
-            return null;
+            // Strip Html tags and trim the text
+            // If the text is empty after stripping tags, return 0
+            if ( ( $plainText = trim( strip_tags(
+                $parserOutput->getText( [ 'unwrap' => true ] )
+            ) ) ) === '' ) return 0;
+
+            // Determine if numbers should be counted as words
+            $countNumbers = $services->getMainConfig()->get( 'WordCounterCountNumbers' );
+            $pattern = $countNumbers ? '/[\p{L}\p{N}]+/u' : '/\p{L}+/u';
+
+            // Count words
+            return preg_match_all( $pattern, $plainText );
 
         }
 
