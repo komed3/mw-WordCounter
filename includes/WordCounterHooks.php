@@ -68,8 +68,8 @@
 
             } else {
 
-                wfDebugLog( 'WordCounter', 'Could not count words for page ' .
-                    $wikiPage->getTitle()->getPrefixedText()
+                wfDebugLog( 'WordCounter', 'Could not count words for page <' .
+                    $wikiPage->getTitle()->getPrefixedText() . '>'
                 );
 
             }
