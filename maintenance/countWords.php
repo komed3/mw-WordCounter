@@ -158,8 +158,8 @@
 
             }
 
-            // Clear the total word count cache
-            WordCounterUtils::clearTotalWordCountCache();
+            // Clear the total word/page count cache
+            WordCounterUtils::clearCache();
 
             $this->output( PHP_EOL . 'Completed! Processed ' . $processed . ' pages.' . PHP_EOL );
 

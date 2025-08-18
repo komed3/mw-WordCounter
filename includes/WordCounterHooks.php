@@ -20,7 +20,6 @@
     use MediaWiki\Parser\PPFrame;
     use MediaWiki\Permissions\Authority;
     use MediaWiki\Revision\RevisionRecord;
-    use MediaWiki\SiteStats\SiteStats;
     use MediaWiki\Storage\EditResult;
     use MediaWiki\Title\Title;
     use MediaWiki\User\UserIdentity;
@@ -64,8 +63,8 @@
                 // Store the word count in the database
                 WordCounterDatabase::updateWordCount( $pageId, $wordCount );
 
-                // Clear cache for total word count
-                WordCounterUtils::clearTotalWordCountCache();
+                // Clear cache for total word/page count
+                WordCounterUtils::clearCache();
 
             } else {
 
@@ -136,12 +135,12 @@
         ) {
 
             $totalWords = WordCounterUtils::getTotalWordCount() ?? 0;
-            $articles = SiteStats::articles();
+            $totalPages = WordCounterUtils::getTotalPageCount() ?? 0;
 
             $extraStats[ 'wordcounter-stats' ] = [
                 'wordcounter-stats-total' => $totalWords,
                 'wordcounter-stats-average' => (
-                    $articles ? round( $totalWords / $articles ) : 0
+                    $totalPages ? round( $totalWords / $totalPages ) : 0
                 )
             ];
 

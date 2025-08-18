@@ -161,6 +161,36 @@
         }
 
         /**
+         * Get the total number of pages with word counts.
+         * 
+         * @return int - The total number of pages
+         */
+        public static function getTotalPageCount () : int {
+
+            $dbr = self::getDBConnection();
+
+            $count = $dbr->selectField(
+                [ 'wordcounter', 'page' ],
+                'COUNT( wc_page_id )',
+                [
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_is_redirect' => 0
+                ],
+                __METHOD__,
+                [],
+                [
+                    'page' => [
+                        'INNER JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+            return $count ? (int) $count : 0;
+
+        }
+
+        /**
          * Get the number of pages that need word count updates.
          * 
          * @return int - The number of pages needing word count updates

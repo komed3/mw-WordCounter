@@ -25,8 +25,30 @@
      */
     class WordCounterUtils {
 
-        private const NS_FALLBACK = [ NS_MAIN ];
-        private const CACHE_KEY = [ 'wordcounter', 'total-words' ];
+        /**
+         * Supported namespaces for word counting.
+         * 
+         * @var array
+         */
+        private const NS_FALLBACK = [
+            NS_MAIN
+        ];
+
+        /**
+         * Cache keys for total word and page counts.
+         * 
+         * @var array
+         */
+        private const CACHE_KEY = [
+            'words' => 'total-words',
+            'pages' => 'total-pages'
+        ];
+
+        /**
+         * Cache TTL in seconds.
+         * 
+         * @var int
+         */
         private const CACHE_TTL = 3600;
 
         /**
@@ -157,10 +179,29 @@
             $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 
             return $cache->getWithSetCallback(
-                $cache->makeKey( self::CACHE_KEY[ 0 ], self::CACHE_KEY[ 1 ] ),
+                $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'words' ] ),
                 self::CACHE_TTL,
                 function () {
                     return WordCounterDatabase::getTotalWordCount();
+                }
+            );
+
+        }
+
+        /**
+         * Get the total page count from the cache or database.
+         * 
+         * @return int - The total page count
+         */
+        public static function getTotalPageCount () : int {
+
+            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+
+            return $cache->getWithSetCallback(
+                $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'pages' ] ),
+                self::CACHE_TTL,
+                function () {
+                    return WordCounterDatabase::getTotalPageCount();
                 }
             );
 
@@ -174,8 +215,31 @@
             $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 
             $cache->delete( $cache->makeKey(
-                self::CACHE_KEY[ 0 ], self::CACHE_KEY[ 1 ]
+                'wordcounter', self::CACHE_KEY[ 'words' ]
             ) );
+
+        }
+
+        /**
+         * Clear the total page count cache.
+         */
+        public static function clearTotalPageCountCache () : void {
+
+            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+
+            $cache->delete( $cache->makeKey(
+                'wordcounter', self::CACHE_KEY[ 'pages' ]
+            ) );
+
+        }
+
+        /**
+         * Clear all caches related to word counting.
+         */
+        public static function clearCache () : void {
+
+            self::clearTotalWordCountCache();
+            self::clearTotalPageCountCache();
 
         }
 
