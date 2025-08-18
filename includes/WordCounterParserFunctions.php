@@ -5,6 +5,16 @@
      * 
      * This class provides parser functions for the WordCounter extension.
      * 
+     * Usage examples:
+     *  - {{#pagewords:}} - Current page word count (formatted)
+     *  - {{#pagewords:R}} - Current page word count (raw number)
+     *  - {{#pagewords:|<Title>}} - Word count for <Title> (formatted)
+     *  - {{#pagewords:R|<Title>}} - Word count for <Title> (raw number)
+     *  - {{#totalwords:}} - Total word count across all pages (formatted)
+     *  - {{#totalwords:R}} - Total word count across all pages (raw number)
+     *  - {{#totalpages:}} - Total number of pages (formatted)
+     *  - {{#totalpages:R}} - Total number of pages (raw number)
+     * 
      * @author Paul Köhler (komed3)
      * @license MIT
      * @since 0.1.0
@@ -57,7 +67,11 @@
 
             // If a specific page name is provided, use it to get the title
             // Otherwise, use the current page title
-            if ( $pageName && ! ( $title = Title::newFromText( $pageName ) ) ) return '0';
+            if ( $pageName && (
+                ! ( $title = Title::newFromText( $pageName ) ) ||
+                ! $title->exists() || $title->isRedirect() ||
+                ! WordCounterUtils::supportsNamespace( $title->getNamespace() )
+            ) ) return '0';
 
             $wordCount = WordCounterUtils::getWordCountByTitle( $title );
 
