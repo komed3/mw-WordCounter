@@ -69,7 +69,8 @@
         ) : ?int {
 
             return (
-                $title instanceof Title && $title->exists() &&
+                $title instanceof Title &&
+                $title->exists() && ! $title->isRedirect() &&
                 self::supportsNamespace( $title->getNamespace() ) &&
                 ( $pageId = $title->getArticleID() ) && $pageId
             ) ? $pageId : null;
@@ -112,7 +113,7 @@
                     $content->getText(),
                     $revisionRecord->getPageAsLinkTarget(),
                     ParserOptions::newFromUser(
-                        User::newSystemUser( 'System' )
+                        User::newSystemUser( 'WordCounter', [ 'steal' => true ] )
                     )
                 );
 
