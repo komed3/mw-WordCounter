@@ -13,6 +13,7 @@
     namespace MediaWiki\Extension\WordCounter;
 
     use MediaWiki\MediaWikiServices;
+    use MediaWiki\Page\WikiPage;
     use MediaWiki\Parser\ParserOptions;
     use MediaWiki\Revision\RevisionRecord;
     use MediaWiki\Revision\SlotRecord;
@@ -166,6 +167,24 @@
 
             // Count words
             return preg_match_all( $pattern, $plainText );
+
+        }
+
+        /**
+         * Invalidate the parser cache for a specific page.
+         * 
+         * @param WikiPage $wikiPage - The wiki page to invalidate the cache for
+         */
+        public static function invalidateParserCache (
+            $wikiPage
+        ) : void {
+
+            // Clear parser cache for the current page
+            $parserCache = MediaWikiServices::getInstance()->getParserCache();
+            $parserCache->deleteOptionsKey( $wikiPage );
+
+            // Also clear the HTML cache
+            $wikiPage->doPurge();
 
         }
 

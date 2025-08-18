@@ -64,6 +64,9 @@
                 // Clear the total word/page count cache
                 WordCounterUtils::clearCache();
 
+                // Invalidate parser cache for this page and any pages that might reference it
+                WordCounterUtils::invalidateParserCache( $wikiPage );
+
             } else {
 
                 wfDebugLog( 'WordCounter', 'Could not count words for page <' .
