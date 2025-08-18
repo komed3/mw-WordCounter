@@ -72,7 +72,7 @@
          * @param mixed $default - Default value if key does not exist
          * @return mixed - The configuration value or default
          */
-        private static function getConfig (
+        public static function getConfig (
             string $key,
             mixed $default = null
         ) : mixed {

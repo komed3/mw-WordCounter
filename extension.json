@@ -22,10 +22,10 @@
         "WordCounterMagic": "WordCounter.magic.php"
     },
     "config": {
-		"WordCounterNamespaces": {
-			"value": [ 0 ],
-			"description": "List of namespaces for whose pages words are to be counted"
-		},
+        "WordCounterNamespaces": {
+            "value": [ 0 ],
+            "description": "List of namespaces for whose pages words are to be counted"
+        },
         "WordCounterCountNumbers": {
             "value": false,
             "description": "Whether to count numbers (digits) as words"
@@ -38,7 +38,7 @@
             "value": "main",
             "description": "Cache service to use; options are 'local', 'wan', 'micro' or 'main'"
         }
-	},
+    },
     "AutoloadNamespaces": {
         "MediaWiki\\Extension\\WordCounter\\": "includes/",
         "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/specials/"
