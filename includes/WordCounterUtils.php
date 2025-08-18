@@ -61,7 +61,7 @@
 
             $config = MediaWikiServices::getInstance()->getMainConfig();
 
-            return (bool) $config->get( 'WordCounterOnPageSave' ) ?: true;
+            return (bool) $config->get( 'WordCounterOnPageSave' ) ?? true;
 
         }
 
@@ -75,7 +75,7 @@
 
             $config = MediaWikiServices::getInstance()->getMainConfig();
 
-            return (array) $config->get( 'WordCounterNamespaces' ) ?: self::NS_FALLBACK;
+            return (array) $config->get( 'WordCounterNamespaces' ) ?? self::NS_FALLBACK;
 
         }
 
