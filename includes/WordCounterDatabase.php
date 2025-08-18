@@ -170,17 +170,22 @@
             $dbr = self::getDBConnection();
 
             return $dbr->selectField(
-                'page',
+                [ 'page', 'wordcounter' ],
                 'COUNT(*)',
                 [
                     'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT,
-                    'page_id NOT IN (' . $dbr->selectSQLText(
-                        'wordcounter', 'wc_page_id'
-                    ) . ')'
+                    'wc_page_id IS NULL'
                 ],
-                __METHOD__
+                __METHOD__,
+                [],
+                [
+                    'wordcounter' => [
+                        'LEFT JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
             ) ?: 0;
 
         }
