@@ -10,7 +10,7 @@
      * @since 0.1.0
      */
 
-    namespace MediaWiki\Extension\WordCounterSpecials;
+    namespace MediaWiki\Extension\WordCounter\Specials;
 
     use MediaWiki\Extension\WordCounter\WordCounterUtils;
     use MediaWiki\Html\Html;

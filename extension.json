@@ -18,7 +18,8 @@
         ]
     },
     "ExtensionMessagesFiles": {
-        "WordCounterAlias": "WordCounter.alias.php"
+        "WordCounterAlias": "WordCounter.alias.php",
+        "WordCounterMagic": "WordCounter.magic.php"
     },
     "config": {
 		"WordCounterNamespaces": {
@@ -28,7 +29,7 @@
 	},
     "AutoloadNamespaces": {
         "MediaWiki\\Extension\\WordCounter\\": "includes/",
-        "MediaWiki\\Extension\\WordCounterSpecials\\": "includes/specials"
+        "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/specials/"
     },
     "HookHandlers": {
         "WordCounterHooks": {
@@ -45,7 +46,7 @@
         "LoadExtensionSchemaUpdates": "WordCounterHooks"
     },
     "SpecialPages": {
-        "WordCounterPages": "MediaWiki\\Extension\\WordCounterSpecials\\SpecialWordCounterPages"
+        "WordCounterPages": "MediaWiki\\Extension\\WordCounter\\Specials\\SpecialWordCounterPages"
     },
     "manifest_version": 2
 }
