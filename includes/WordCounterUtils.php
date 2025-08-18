@@ -53,6 +53,19 @@
         private const CACHE_TTL = 3600;
 
         /**
+         * Check if word counting should be performed on page save.
+         * 
+         * @return bool - True if word counting is enabled on page save
+         */
+        public static function countOnPageSave () : bool {
+
+            $config = MediaWikiServices::getInstance()->getMainConfig();
+
+            return (bool) $config->get( 'WordCounterOnPageSave' ) ?: true;
+
+        }
+
+        /**
          * Get the supported namespaces for word counting.
          * Use $wgWordCounterNamespaces to define valid namespaces.
          * 

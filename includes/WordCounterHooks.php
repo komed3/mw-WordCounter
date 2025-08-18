@@ -68,6 +68,10 @@
             $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
         ) {
 
+            // Only count words if $wgWordCounterOnPageSave is true
+            // Should be disabled for large wikis or performance-sensitive environments
+            if ( ! WordCounterUtils::countOnPageSave() ) return true;
+
             $pageId = WordCounterUtils::getPageIDFromTitle( $wikiPage->getTitle() );
             $wordCount = WordCounterUtils::countWordsFromRevision( $revisionRecord );
 

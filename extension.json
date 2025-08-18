@@ -22,6 +22,10 @@
         "WordCounterMagic": "WordCounter.magic.php"
     },
     "config": {
+        "WordCounterOnPageSave": {
+            "value": true,
+            "description": "Whether to count words on page save"
+        },
 		"WordCounterNamespaces": {
 			"value": [ 0 ],
 			"description": "List of namespaces for whose pages words are to be counted"
