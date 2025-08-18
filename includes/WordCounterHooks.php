@@ -129,33 +129,64 @@
 
         }
 
+        /**
+         * Render the number of words on the current page.
+         * 
+         * @param Parser $parser - The parser instance
+         * @param string $format - The format specifier
+         * @param string $pageName - Optional page name to count words for
+         * @return array - The rendered word count and options
+         */
         public static function renderPageWords (
             $parser, $format = '', $pageName = ''
         ) {
 
-            return WordCounterParserFunctions::renderPageWords(
-                $parser, $format, $pageName
-            );
+            return [
+                WordCounterParserFunctions::renderPageWords(
+                    $parser, $format, $pageName
+                ),
+                'noparse' => false
+            ];
 
         }
 
+        /**
+         * Render the total number of words across all pages.
+         * 
+         * @param Parser $parser - The parser instance
+         * @param string $format - The format specifier
+         * @return array - The rendered total word count and options
+         */
         public static function renderTotalWords (
             $parser, $format = ''
         ) {
 
-            return WordCounterParserFunctions::renderTotalWords(
-                $parser, $format
-            );
+            return [
+                WordCounterParserFunctions::renderTotalWords(
+                    $parser, $format
+                ),
+                'noparse' => false
+            ];
 
         }
 
+        /**
+         * Render the total number of pages.
+         * 
+         * @param Parser $parser - The parser instance
+         * @param string $format - The format specifier
+         * @return array - The rendered total page count and options
+         */
         public static function renderTotalPages (
             $parser, $format = ''
         ) {
 
-            return WordCounterParserFunctions::renderTotalPages(
-                $parser, $format
-            );
+            return [
+                WordCounterParserFunctions::renderTotalPages(
+                    $parser, $format
+                ),
+                'noparse' => false
+            ];
 
         }
 

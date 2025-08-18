@@ -1,12 +1,35 @@
 <?php
 
+    /**
+     * Class WordCounterParserFunctions
+     * 
+     * This class provides parser functions for the WordCounter extension.
+     * 
+     * @author Paul Köhler (komed3)
+     * @license MIT
+     * @since 0.1.0
+     */
+
     namespace MediaWiki\Extension\WordCounter;
 
     use MediaWiki\Parser\Parser;
     use MediaWiki\Title\Title;
 
+    /**
+     * Class WordCounterParserFunctions
+     * 
+     * This class provides parser functions for the WordCounter extension.
+     */
     class WordCounterParserFunctions {
 
+        /**
+         * Format a number based on the specified format.
+         *
+         * @param Parser $parser - The parser instance
+         * @param int|string $result - The number to format
+         * @param string $format - The format specifier
+         * @return string - The formatted number
+         */
         private static function formatNum (
             $parser, $result, $format = ''
         ) : string {
@@ -18,50 +41,61 @@
 
         }
 
+        /**
+         * Render the number of words on the current page.
+         *
+         * @param Parser $parser - The parser instance
+         * @param string $format - The format specifier
+         * @param string $pageName - Optional page name to count words for
+         * @return string - The formatted word count
+         */
         public static function renderPageWords (
             $parser, $format = '', $pageName = ''
-        ) : array {
+        ) : string {
 
             $title = $parser->getTitle();
 
-            if ( $pageName && ! ( $title = Title::newFromText( $pageName ) ) ) {
-
-                return [ '0', 'noparse' => false ];
-
-            }
+            // If a specific page name is provided, use it to get the title
+            // Otherwise, use the current page title
+            if ( $pageName && ! ( $title = Title::newFromText( $pageName ) ) ) return '0';
 
             $wordCount = WordCounterUtils::getWordCountByTitle( $title );
 
-            return [
-                self::formatNum( $parser, $wordCount, $format ),
-                'noparse' => false
-            ];
+            return self::formatNum( $parser, $wordCount, $format );
 
         }
 
+        /**
+         * Render the total number of words across all pages.
+         *
+         * @param Parser $parser - The parser instance
+         * @param string $format - The format specifier
+         * @return string - The formatted total word count
+         */
         public static function renderTotalWords (
             $parser, $format = ''
-        ) : array {
+        ) : string {
 
             $totalWords = WordCounterUtils::getTotalWordCount();
 
-            return [
-                self::formatNum( $parser, $totalWords, $format ),
-                'noparse' => false
-            ];
+            return self::formatNum( $parser, $totalWords, $format );
 
         }
 
+        /**
+         * Render the total number of pages.
+         *
+         * @param Parser $parser - The parser instance
+         * @param string $format - The format specifier
+         * @return string - The formatted total page count
+         */
         public static function renderTotalPages (
             $parser, $format = ''
-        ) : array {
+        ) : string {
 
             $totalPages = WordCounterUtils::getTotalPageCount();
 
-            return [
-                self::formatNum( $parser, $totalPages, $format ),
-                'noparse' => false
-            ];
+            return self::formatNum( $parser, $totalPages, $format );
 
         }
 
