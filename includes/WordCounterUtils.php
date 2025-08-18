@@ -107,6 +107,7 @@
 
             if ( $content && $content->getModel() === CONTENT_MODEL_WIKITEXT ) {
 
+                $config = MediaWikiServices::getInstance()->getMainConfig();
                 $parser = MediaWikiServices::getInstance()->getParser();
 
                 $parserOutput = $parser->parse(
@@ -121,7 +122,12 @@
                     $parserOutput->getText( [ 'unwrap' => true ] )
                 ) );
 
-                return $plainText ? preg_match_all( '/\p{L}+/u', $plainText ) : 0;
+                return $plainText ? preg_match_all(
+                    $config->get( 'WordCounterCountNumbers' )
+                        ? '/[\p{L}\p{N}]+/u'
+                        : '/\p{L}+/u',
+                    $plainText
+                ) : 0;
 
             }
 
