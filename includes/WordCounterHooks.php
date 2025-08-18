@@ -13,7 +13,6 @@
     namespace MediaWiki\Extension\WordCounter;
 
     use MediaWiki\Context\IContextSource;
-    use MediaWiki\Message\Message;
     use MediaWiki\Page\ProperPageIdentity;
     use MediaWiki\Page\WikiPage;
     use MediaWiki\Parser\Parser;
@@ -21,7 +20,6 @@
     use MediaWiki\Permissions\Authority;
     use MediaWiki\Revision\RevisionRecord;
     use MediaWiki\Storage\EditResult;
-    use MediaWiki\Title\Title;
     use MediaWiki\User\UserIdentity;
     use DatabaseUpdater;
     use StatusValue;
@@ -86,11 +84,7 @@
          * @param bool $suppress - Whether the deletion is suppressed
          */
         public function onPageDelete (
-            ProperPageIdentity $page,
-            Authority $deleter,
-            string $reason,
-            StatusValue $status,
-            bool $suppress
+            $page, $deleter, $reason, $status, $suppress
         ) {
 
             if ( $pageId = $page->getId() ) {
@@ -163,11 +157,11 @@
         /**
          * Handle the magic variable switches for WordCounter extension.
          * 
-         * @param \Parser $parser - The parser instance
+         * @param Parser $parser - The parser instance
          * @param array &$variableCache - The variable cache
          * @param string $magicWordId - The magic word ID being processed
          * @param string &$ret - The return value to set
-         * @param \ParserFrame $frame - The parser frame
+         * @param ParserFrame $frame - The parser frame
          * @return bool - True if handled, false otherwise
          */
         public function onParserGetVariableValueSwitch (
