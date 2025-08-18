@@ -72,6 +72,25 @@
         }
 
         /**
+         * Delete the word count for a page.
+         * 
+         * @param int $pageId - The ID of the page to delete the word count for
+         */
+        public static function deleteWordCount (
+            int $pageId
+        ) : void {
+
+            $dbw = self::getDBConnection( true );
+
+            $dbw->delete(
+                'wordcounter',
+                [ 'wc_page_id' => $pageId ],
+                __METHOD__
+            );
+
+        }
+
+        /**
          * Get the word count for a page.
          * 
          * @param int $pageId - The ID of the page to get the word count for
@@ -217,25 +236,6 @@
                     ]
                 ]
             ) ?: 0;
-
-        }
-
-        /**
-         * Delete the word count for a page.
-         * 
-         * @param int $pageId - The ID of the page to delete the word count for
-         */
-        public static function deleteWordCount (
-            int $pageId
-        ) : void {
-
-            $dbw = self::getDBConnection( true );
-
-            $dbw->delete(
-                'wordcounter',
-                [ 'wc_page_id' => $pageId ],
-                __METHOD__
-            );
 
         }
 

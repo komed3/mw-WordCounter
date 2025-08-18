@@ -63,7 +63,7 @@
                 // Store the word count in the database
                 WordCounterDatabase::updateWordCount( $pageId, $wordCount );
 
-                // Clear cache for total word/page count
+                // Clear the total word/page count cache
                 WordCounterUtils::clearCache();
 
             } else {
