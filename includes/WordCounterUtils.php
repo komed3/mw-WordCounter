@@ -12,6 +12,7 @@
 
     namespace MediaWiki\Extension\WordCounter;
 
+    use InvalidArgumentException;
     use MediaWiki\MediaWikiServices;
     use MediaWiki\Page\WikiPage;
     use MediaWiki\Parser\ParserOptions;
@@ -25,6 +26,18 @@
      * Utility class for WordCounter extension.
      */
     class WordCounterUtils {
+
+        /**
+         * Cache services for different environments.
+         * 
+         * @var array
+         */
+        private const CACHE_SERVICES = [
+            'local' => 'getLocalServerObjectCache',
+            'wan' => 'getMainWANObjectCache',
+            'micro' => 'getMicroStash',
+            'main' => 'getMainObjectStash'
+        ];
 
         /**
          * Supported namespaces for word counting.
@@ -51,6 +64,32 @@
          * @var int
          */
         private const CACHE_TTL = 3600;
+
+        /**
+         * Get the cache service based on configuration.
+         * 
+         * @return - The cache service instance
+         * @throws InvalidArgumentException - If the configured cache service is invalid
+         */
+        public static function getCacheService () {
+
+            $config = MediaWikiServices::getInstance()->getMainConfig();
+            $service = $config->get( 'WordCounterCacheService' ) ?? 'local';
+
+            if ( ! array_key_exists( $service, self::CACHE_SERVICES ) ) {
+
+                throw new InvalidArgumentException (
+                    'Invalid cache service <' . $service . '>. ' .
+                    'Valid options are: <' . implode( ', ', array_keys( self::CACHE_SERVICES ) ) . '>'
+                );
+
+            }
+
+            return MediaWikiServices::getInstance()->{
+                self::CACHE_SERVICES[ $service ]
+            }();
+
+        }
 
         /**
          * Check if word counting should be performed on page save.
@@ -208,7 +247,7 @@
          */
         public static function getTotalWordCount () : int {
 
-            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+            $cache = self::getCacheService();
 
             return $cache->getWithSetCallback(
                 $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'words' ] ),
@@ -227,7 +266,7 @@
          */
         public static function getTotalPageCount () : int {
 
-            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+            $cache = self::getCacheService();
 
             return $cache->getWithSetCallback(
                 $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'pages' ] ),
@@ -244,7 +283,7 @@
          */
         public static function clearTotalWordCountCache () : void {
 
-            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+            $cache = self::getCacheService();
 
             $cache->delete( $cache->makeKey(
                 'wordcounter', self::CACHE_KEY[ 'words' ]
@@ -257,7 +296,7 @@
          */
         public static function clearTotalPageCountCache () : void {
 
-            $cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+            $cache = self::getCacheService();
 
             $cache->delete( $cache->makeKey(
                 'wordcounter', self::CACHE_KEY[ 'pages' ]
