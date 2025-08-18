@@ -96,6 +96,7 @@
             if ( $pageId = $page->getId() ) {
 
                 WordCounterDatabase::deleteWordCount( $pageId );
+                WordCounterUtils::clearCache();
 
             }
 
@@ -111,9 +112,7 @@
             $context, &$pageInfo
         ) {
 
-            $wordCount = WordCounterUtils::getWordCountByTitle( $context->getTitle() );
-
-            if ( $wordCount !== null ) {
+            if ( ( $wordCount = WordCounterUtils::getWordCountByTitle( $context->getTitle() ) ) !== null ) {
 
                 $pageInfo[ 'header-basic' ][] = [
                     $context->msg( 'wordcounter-info-label' ),
@@ -174,9 +173,6 @@
         public function onParserGetVariableValueSwitch (
             $parser, &$variableCache, $magicWordId, &$ret, $frame
         ) {
-
-            // Do not cache the output for magic words
-            $parser->getOutput()->updateCacheExpiry( 0 );
 
             switch ( $magicWordId ) {
 
