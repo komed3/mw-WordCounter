@@ -30,14 +30,29 @@
      * This class implements hooks for the WordCounter extension.
      */
     class WordCounterHooks implements
+        \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook,
         \MediaWiki\Storage\Hook\PageSaveCompleteHook,
         \MediaWiki\Page\Hook\PageDeleteHook,
+        \MediaWiki\Hook\ParserFirstCallInitHook,
         \MediaWiki\Hook\InfoActionHook,
-        \MediaWiki\Hook\SpecialStatsAddExtraHook,
-        \MediaWiki\Hook\GetMagicVariableIDsHook,
-        \MediaWiki\Hook\ParserGetVariableValueSwitchHook,
-        \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
+        \MediaWiki\Hook\SpecialStatsAddExtraHook
     {
+
+        /**
+         * Load the extension schema updates.
+         * 
+         * @param DatebaseUpdater $updater - The updater instance
+         */
+        public function onLoadExtensionSchemaUpdates (
+            $updater
+        ) {
+
+            $updater->addExtensionTable(
+                'wordcounter',
+                __DIR__ . '/../sql/wordcounter.sql'
+            );
+
+        }
 
         /**
          * Update word count on page save.
@@ -100,6 +115,51 @@
         }
 
         /**
+         * Register parser functions for word counting.
+         * 
+         * @param Parser $parser - The parser instance
+         */
+        public function onParserFirstCallInit (
+            $parser
+        ) {
+
+            $parser->setFunctionHook( 'pagewords', [ __CLASS__, 'renderPageWords' ] );
+            $parser->setFunctionHook( 'totalwords', [ __CLASS__, 'renderTotalWords' ] );
+            $parser->setFunctionHook( 'totalpages', [ __CLASS__, 'renderTotalPages' ] );
+
+        }
+
+        public static function renderPageWords (
+            $parser, $format = '', $pageName = ''
+        ) {
+
+            return WordCounterParserFunctions::renderPageWords(
+                $parser, $format, $pageName
+            );
+
+        }
+
+        public static function renderTotalWords (
+            $parser, $format = ''
+        ) {
+
+            return WordCounterParserFunctions::renderTotalWords(
+                $parser, $format
+            );
+
+        }
+
+        public static function renderTotalPages (
+            $parser, $format = ''
+        ) {
+
+            return WordCounterParserFunctions::renderTotalPages(
+                $parser, $format
+            );
+
+        }
+
+        /**
          * Add word count information to the page info.
          * 
          * @param IContextSource $context - The context of the request
@@ -139,80 +199,6 @@
                     $totalPages ? round( $totalWords / $totalPages ) : 0
                 )
             ];
-
-        }
-
-        /**
-         * Register the magic variable IDs for the extension.
-         * 
-         * @param array &$variableIDs - The array to add magic variable IDs to
-         */
-        public function onGetMagicVariableIDs (
-            &$variableIDs
-        ) {
-
-            $variableIDs[] = 'WC_PAGEWORDS';
-            $variableIDs[] = 'WC_TOTALWORDS';
-            $variableIDs[] = 'WC_TOTALPAGES';
-
-        }
-
-        /**
-         * Handle the magic variable switches for WordCounter extension.
-         * 
-         * @param Parser $parser - The parser instance
-         * @param array &$variableCache - The variable cache
-         * @param string $magicWordId - The magic word ID being processed
-         * @param string &$ret - The return value to set
-         * @param ParserFrame $frame - The parser frame
-         * @return bool - True if handled, false otherwise
-         */
-        public function onParserGetVariableValueSwitch (
-            $parser, &$variableCache, $magicWordId, &$ret, $frame
-        ) {
-
-            switch ( $magicWordId ) {
-
-                case 'WC_PAGEWORDS':
-
-                    $wordCount = WordCounterUtils::getWordCountByTitle( $parser->getTitle() );
-                    $ret = $wordCount !== null ? (string) $wordCount : '0';
-
-                    return true;
-
-                case 'WC_TOTALWORDS':
-
-                    $totalWords = WordCounterUtils::getTotalWordCount();
-                    $ret = $totalWords !== null ? (string) $totalWords : '0';
-
-                    return true;
-
-                case 'WC_TOTALPAGES':
-
-                    $totalPages = WordCounterUtils::getTotalPageCount();
-                    $ret = $totalPages !== null ? (string) $totalPages : '0';
-
-                    return true;
-
-            }
-
-            return false;
-
-        }
-
-        /**
-         * Load the extension schema updates.
-         * 
-         * @param DatebaseUpdater $updater - The updater instance
-         */
-        public function onLoadExtensionSchemaUpdates (
-            $updater
-        ) {
-
-            $updater->addExtensionTable(
-                'wordcounter',
-                __DIR__ . '/../sql/wordcounter.sql'
-            );
 
         }
 

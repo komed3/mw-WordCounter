@@ -36,18 +36,17 @@
         "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/specials/"
     },
     "HookHandlers": {
-        "WordCounterHooks": {
+        "hooks": {
             "class": "MediaWiki\\Extension\\WordCounter\\WordCounterHooks"
         }
     },
     "Hooks": {
-        "PageSaveComplete": "WordCounterHooks",
-        "PageDelete": "WordCounterHooks",
-        "InfoAction": "WordCounterHooks",
-        "SpecialStatsAddExtra": "WordCounterHooks",
-        "GetMagicVariableIDs": "WordCounterHooks",
-        "ParserGetVariableValueSwitch": "WordCounterHooks",
-        "LoadExtensionSchemaUpdates": "WordCounterHooks"
+        "LoadExtensionSchemaUpdates": "hooks",
+        "PageSaveComplete": "hooks",
+        "PageDelete": "hooks",
+        "ParserFirstCallInit": "hooks",
+        "InfoAction": "hooks",
+        "SpecialStatsAddExtra": "hooks"
     },
     "SpecialPages": {
         "WordCounterPages": "MediaWiki\\Extension\\WordCounter\\Specials\\SpecialWordCounterPages"
