@@ -28,12 +28,12 @@
     "wordcounter-api-warning-invalid-pageid": "The page ID '$1' is not supported and will be skipped.",
     "wordcounter-api-warning-invalid-title": "The title '$1' is invalid and will be skipped.",
     "wordcounter-desc": "Counts words on all content pages, makes them available through parser functions, updates statistics pages, and calculates the total word count of the wiki.",
-    "wordcounter-info-label": "Number of words in article",
-    "wordcounter-special-wcp-cache-info": "''This page is cached and was last updated $1. It shows a limit of $2 results.''",
-    "wordcounter-special-wcp-header": "This page lists pages in descending order of their word count.",
-    "wordcounter-special-wcp-line": "$1 $2 ($3 {{PLURAL:$4|word|words}})",
-    "wordcounter-special-wcp-title": "Pages with the most words",
+    "wordcounter-info-label": "Number of words",
+    "wordcounter-special-mostwords-cache-info": "''This page is cached and was last updated $1. It shows a limit of $2 results.''",
+    "wordcounter-special-mostwords-header": "This special page lists pages in descending order of their word count.",
+    "wordcounter-special-mostwords-line": "$1 $2 ($3 {{PLURAL:$4|word|words}})",
+    "wordcounter-special-mostwords-title": "Pages with the most words",
     "wordcounter-stats": "Word statistics",
-    "wordcounter-stats-total": "Total words in all articles",
-    "wordcounter-stats-average": "Average words per article"
+    "wordcounter-stats-total": "Total words in all pages",
+    "wordcounter-stats-average": "Average words per page"
 }

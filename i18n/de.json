@@ -27,13 +27,13 @@
     "wordcounter-api-warning-invalid-ns": "Der Namensraum der Seite „$1“ ist ungültig und wird übersprungen.",
     "wordcounter-api-warning-invalid-pageid": "Die Seiten-ID „$1“ wird nicht unterstützt und wird übersprungen.",
     "wordcounter-api-warning-invalid-title": "Der Titel „$1“ ist ungültig und wird übersprungen.",
-    "wordcounter-desc": "Zählt Worte auf allen Inhaltsseiten, machte diese durch Parserfunktionen verfügbar, aktualisiert Statistikseiten und berechnet die Gesamtwortzahl des Wikis.",
-    "wordcounter-info-label": "Anzahl der Worte im Artikel",
-    "wordcounter-special-wcp-cache-info": "''Diese Seite ist gecached und wurde zuletzt am $1 aktualisiert. Sie zeigt maximal $2 Ergebnisse an.''",
-    "wordcounter-special-wcp-header": "Diese Seite listet Artikel in absteigender Reihenfolge ihrer Wortanzahl auf.",
-    "wordcounter-special-wcp-line": "$1 $2 [$3 {{PLURAL:$4|Wort|Wörter}}]",
-    "wordcounter-special-wcp-title": "Artikel mit den meisten Wörtern",
+    "wordcounter-desc": "Zählt Worte auf allen Inhaltsseiten, macht diese durch Parserfunktionen verfügbar, aktualisiert Statistikseiten und berechnet die Gesamtwortzahl des Wikis.",
+    "wordcounter-info-label": "Anzahl der Worte dieser Seite",
+    "wordcounter-special-mostwords-cache-info": "''Diese Seite ist gecached und wurde zuletzt am $1 aktualisiert. Sie zeigt maximal $2 Ergebnisse an.''",
+    "wordcounter-special-mostwords-header": "Diese Spezialseite listet Seiten in absteigender Reihenfolge ihrer Wortanzahl auf.",
+    "wordcounter-special-mostwords-line": "$1 $2 [$3 {{PLURAL:$4|Wort|Wörter}}]",
+    "wordcounter-special-mostwords-title": "Seiten mit den meisten Wörtern",
     "wordcounter-stats": "Wortstatistik",
-    "wordcounter-stats-total": "Wörter in allen Artikeln",
-    "wordcounter-stats-average": "Wörter pro Artikel im Durchschnitt"
+    "wordcounter-stats-total": "Wörter in allen Seiten",
+    "wordcounter-stats-average": "Wörter pro Seite im Durchschnitt"
 }

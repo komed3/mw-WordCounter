@@ -19,7 +19,7 @@
     ];
 
     $magicWords[ 'de' ] = [
-        'pagewords' => [ 0, 'artikelworte' ],
+        'pagewords' => [ 0, 'seitenworte' ],
         'totalwords' => [ 0, 'alleworte' ],
         'totalpages' => [ 0, 'alleseiten' ]
     ];

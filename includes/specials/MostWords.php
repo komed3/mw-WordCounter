@@ -197,7 +197,7 @@
             $wordCount = $this->getLanguage()->formatNum( $result->value );
 
             return $this
-                ->msg( 'wordcounter-special-wcp-line' )
+                ->msg( 'wordcounter-special-mostwords-line' )
                 ->rawParams( $hlink )
                 ->rawParams( $exists ? $plink : Html::rawElement( 'del', [], $plink ) )
                 ->params( $wordCount )
@@ -214,7 +214,7 @@
          */
         public function getPageHeader () {
 
-            $header = $this->msg( 'wordcounter-special-wcp-header' )->parseAsBlock();
+            $header = $this->msg( 'wordcounter-special-mostwords-header' )->parseAsBlock();
 
             // Add cache information if caching is enabled
             if (
@@ -227,7 +227,7 @@
                 $lastUpdated = $lang->userTimeAndDate( $cacheTS, $this->getUser() );
                 $maxResults = $lang->formatNum( $this->getMaxResults() );
 
-                $cacheInfo = $this->msg( 'wordcounter-special-wcp-cache-info' )
+                $cacheInfo = $this->msg( 'wordcounter-special-mostwords-cache-info' )
                     ->params( $lastUpdated, $maxResults )
                     ->parseAsBlock();
 
@@ -263,7 +263,7 @@
          */
         public function getDescription () {
 
-            return $this->msg( 'wordcounter-special-wcp-title' );
+            return $this->msg( 'wordcounter-special-mostwords-title' );
 
         }
 
