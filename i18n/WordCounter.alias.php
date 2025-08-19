@@ -22,7 +22,7 @@
     $specialPageAliases[ 'de' ] = [
         'WordCounterMostWords' => [
             'Meiste_Wörter',
-            'Artikel mit den meisten Wörtern'
+            'Seiten mit den meisten Wörtern'
         ]
     ];
 
