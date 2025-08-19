@@ -74,7 +74,7 @@
             return [
                 'totalWords' => Utils::getTotalWordCount(),
                 'totalPages' => Utils::getTotalPageCount(),
-                'uncountedPages' => Database::getPagesNeedingCount()
+                'uncountedPages' => Utils::getPagesNeedingCount()
             ];
 
         }

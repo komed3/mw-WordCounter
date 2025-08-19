@@ -55,7 +55,8 @@
          */
         private const CACHE_KEY = [
             'words' => 'total-words',
-            'pages' => 'total-pages'
+            'pages' => 'total-pages',
+            'uncounted' => 'pages-needing-count'
         ];
 
         /**
@@ -308,6 +309,25 @@
         }
 
         /**
+         * Get the number of pages that need word counting.
+         * 
+         * @return int - The number of pages needing word count
+         */
+        public static function getPagesNeedingCount () : int {
+
+            $cache = self::getCacheService();
+
+            return $cache->getWithSetCallback(
+                $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'uncounted' ] ),
+                self::CACHE_TTL,
+                function () {
+                    return Database::getPagesNeedingCount();
+                }
+            );
+
+        }
+
+        /**
          * Clear the total word count cache.
          */
         public static function clearTotalWordCountCache () : void {
@@ -334,12 +354,26 @@
         }
 
         /**
+         * Clear the pages needing word count cache.
+         */
+        public static function clearPagesNeedingCountCache () : void {
+
+            $cache = self::getCacheService();
+
+            $cache->delete( $cache->makeKey(
+                'wordcounter', self::CACHE_KEY[ 'uncounted' ]
+            ) );
+
+        }
+
+        /**
          * Clear all caches related to word counting.
          */
         public static function clearCache () : void {
 
             self::clearTotalWordCountCache();
             self::clearTotalPageCountCache();
+            self::clearPagesNeedingCountCache();
 
         }
 
