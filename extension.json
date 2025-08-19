@@ -10,7 +10,10 @@
     "license-name": "MIT",
     "type": "other",
     "requires": {
-        "MediaWiki": ">= 1.43.0"
+        "MediaWiki": ">= 1.43.0",
+        "platform": {
+			"php": ">= 8.0"
+        }
     },
     "MessagesDirs": {
         "WordCounter": [
@@ -18,8 +21,8 @@
         ]
     },
     "ExtensionMessagesFiles": {
-        "WordCounterAlias": "WordCounter.alias.php",
-        "WordCounterMagic": "WordCounter.magic.php"
+        "WordCounterAlias": "i18n/WordCounter.alias.php",
+        "WordCounterMagic": "i18n/WordCounter.magic.php"
     },
     "config": {
         "WordCounterNamespaces": {
