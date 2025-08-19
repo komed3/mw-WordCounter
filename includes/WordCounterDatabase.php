@@ -239,6 +239,42 @@
 
         }
 
+        /**
+         * Get pages that need word counting with limit.
+         * 
+         * @param int $limit - Maximum number of pages to return
+         * @return IResultWrapper - The result set
+         */
+        public static function getUncountedPages (
+            int $limit = 100
+        ) : IResultWrapper {
+
+            $dbr = self::getDBConnection();
+
+            return $dbr->select(
+                [ 'page', 'wordcounter' ],
+                [ 'page_id', 'page_title', 'page_namespace' ],
+                [
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_is_redirect' => 0,
+                    'page_content_model' => CONTENT_MODEL_WIKITEXT,
+                    'wc_page_id IS NULL'
+                ],
+                __METHOD__,
+                [
+                    'LIMIT' => $limit,
+                    'ORDER BY' => 'page_id'
+                ],
+                [
+                    'wordcounter' => [
+                        'LEFT JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+        }
+
     }
 
 ?>
