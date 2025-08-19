@@ -294,20 +294,12 @@
                 [
                     'page_namespace' => WordCounterUtils::supportedNamespaces(),
                     'page_is_redirect' => 0,
-                    'page_content_model' => CONTENT_MODEL_WIKITEXT,
-                    'wc_page_id IS NULL'
+                    'page_content_model' => CONTENT_MODEL_WIKITEXT
                 ],
                 __METHOD__,
                 [
                     'ORDER BY' => 'page_id',
-                    'LIMIT' => $limit,
-                    'OFFSET' => $offset
-                ],
-                [
-                    'wordcounter' => [
-                        'LEFT JOIN',
-                        'page_id = wc_page_id'
-                    ]
+                    'LIMIT' => $limit, 'OFFSET' => $offset
                 ]
             );
 
