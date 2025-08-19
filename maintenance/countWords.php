@@ -26,6 +26,13 @@
     use MediaWiki\Title\Title;
     use Wikimedia\Rdbms\IResultWrapper;
 
+    /**
+     * Class CountWords
+     * 
+     * This class implements the maintenance task to count words in articles.
+     * It processes either specific pages or all pages in the main namespace,
+     * counting words and updating the database accordingly.
+     */
     class CountWords extends Maintenance {
 
         /**
