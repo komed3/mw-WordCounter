@@ -45,16 +45,17 @@
          * 
          * @param int $pageId - The ID of the page to update
          * @param int $wordCount - The new word count
+         * @return bool - True if the update was successful, false otherwise
          */
         public static function updateWordCount (
             int $pageId,
             int $wordCount
-        ) : void {
+        ) : bool {
 
             $dbw = self::getDBConnection( true );
             $dts = $dbw->timestamp();
 
-            $dbw->upsert(
+            return $dbw->upsert(
                 'wordcounter',
                 [
                     'wc_page_id' => $pageId,
@@ -75,16 +76,39 @@
          * Delete the word count for a page.
          * 
          * @param int $pageId - The ID of the page to delete the word count for
+         * @return bool - True if the deletion was successful, false otherwise
          */
         public static function deleteWordCount (
             int $pageId
-        ) : void {
+        ) : bool {
 
             $dbw = self::getDBConnection( true );
 
-            $dbw->delete(
+            return $dbw->delete(
                 'wordcounter',
                 [ 'wc_page_id' => $pageId ],
+                __METHOD__
+            );
+
+        }
+
+        /**
+         * Delete multiple entries by page IDs.
+         * 
+         * @param array $pageIds - Array of page IDs to delete
+         * @return bool - True if deletion was successful, false otherwise
+         */
+        public static function deleteWordCounts (
+            array $pageIds
+        ) : bool {
+
+            if ( empty( $pageIds ) ) return true;
+
+            $dbw = self::getDBConnection( true );
+
+            return $dbw->delete(
+                'wordcounter',
+                [ 'wc_page_id' => $pageIds ],
                 __METHOD__
             );
 
@@ -276,6 +300,44 @@
         }
 
         /**
+         * Get a batch of wordcounter entries with page join.
+         * 
+         * @param int $limit - Maximum number of entries to return
+         * @param int $offset - Offset for pagination
+         * @return IResultWrapper - The result set
+         */
+        public static function getWordCounterEntriesWithPageJoin (
+            int $limit = 100, int $offset = 0
+        ) : IResultWrapper {
+
+            $dbr = self::getDBConnection();
+
+            $res = $dbw->select(
+                [ 'wordcounter', 'page' ],
+                [
+                    'wc_page_id',
+                    'page_id',
+                    'page_namespace',
+                    'page_is_redirect',
+                    'page_content_model'
+                ],
+                [],
+                __METHOD__,
+                [
+                    'ORDER BY' => 'wc_page_id',
+                    'LIMIT' => $limit, 'OFFSET' => $offset
+                ],
+                [
+                    'page' => [
+                        'LEFT JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+        }
+
+        /**
          * Get all pages in supported namespaces (for forced recounting).
          * 
          * @param int $limit - Maximum number of pages to return
@@ -283,7 +345,7 @@
          * @return IResultWrapper - The result set
          */
         public static function getAllSupportedPages (
-            int $limit = 0, int $offset = 0
+            int $limit = 100, int $offset = 0
         ) : IResultWrapper {
 
             $dbr = self::getDBConnection();
