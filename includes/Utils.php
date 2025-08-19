@@ -227,10 +227,12 @@
                 $parserOutput->getText( [ 'unwrap' => true ] )
             ) ) ) === '' ) return 0;
 
-            // Determine if numbers should be counted as words
-            $pattern = self::getConfig( 'WordCounterCountNumbers', false )
-                ? '/(?:[\p{N}]+([.,][\p{N}]+)*)|[\p{L}]+/u'
-                : '/[\p{L}]+/u';
+            // Determine which pattern to use for word counting
+            // Use the configured pattern or default to counting words
+            $pattern = self::getConfig( 'WordCounterPattern', null ) ??
+                ( self::getConfig( 'WordCounterCountNumbers', false )
+                    ? '/(?:[\p{N}]+([.,][\p{N}]+)*)|[\p{L}]+/u'
+                    : '/[\p{L}]+/u' );
 
             // Count words
             return preg_match_all( $pattern, $plainText );

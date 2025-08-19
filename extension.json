@@ -33,6 +33,10 @@
             "value": false,
             "description": "Whether to count numbers (digits) as words"
         },
+        "WordCounterPattern": {
+            "value": null,
+            "description": "Regular expression pattern to match words; if null, the default pattern is used"
+        },
         "WordCounterCountOnPageSave": {
             "value": true,
             "description": "Whether to count words on page save"
