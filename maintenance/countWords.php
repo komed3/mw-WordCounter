@@ -1,11 +1,12 @@
 <?php
 
     /**
-     * WordCounter Maintenance Script
-     *
+     * WordCounter Maintenance Script: Count Words
+     * 
      * This script is part of the WordCounter extension for MediaWiki.
-     * It provides a maintenance task to count words in articles and update the database.
-     *
+     * It provides a maintenance task to count words in articles and
+     * update the database.
+     * 
      * @author Paul Köhler (komed3)
      * @license MIT
      * @since 0.1.0
