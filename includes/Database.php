@@ -312,7 +312,7 @@
 
             $dbr = self::getDBConnection();
 
-            $res = $dbw->select(
+            return $res = $dbr->select(
                 [ 'wordcounter', 'page' ],
                 [
                     'wc_page_id',
