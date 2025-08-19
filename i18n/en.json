@@ -5,7 +5,7 @@
         ]
     },
     "wordcounter": "WordCounter",
-    "wordcounter-desc": "Counts words on all content pages, makes them available through variables, updates statistics pages, and calculates the total word count of the wiki.",
+    "wordcounter-desc": "Counts words on all content pages, makes them available through parser functions, updates statistics pages, and calculates the total word count of the wiki.",
     "wordcounter-info-label": "Number of words in article",
     "wordcounter-special-wcp-cache-info": "''This page is cached and was last updated $1. It shows a limit of $2 results.''",
     "wordcounter-special-wcp-header": "This page lists pages in descending order of their word count.",

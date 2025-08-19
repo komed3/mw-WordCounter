@@ -5,7 +5,7 @@
         ]
     },
     "wordcounter": "Worte zählen",
-    "wordcounter-desc": "Zählt Worte auf allen Inhaltsseiten, machte diese durch Variablen verfügbar, aktualisiert Statistikseiten und berechnet die Gesamtwortzahl des Wikis.",
+    "wordcounter-desc": "Zählt Worte auf allen Inhaltsseiten, machte diese durch Parserfunktionen verfügbar, aktualisiert Statistikseiten und berechnet die Gesamtwortzahl des Wikis.",
     "wordcounter-info-label": "Anzahl der Worte im Artikel",
     "wordcounter-special-wcp-cache-info": "''Diese Seite ist gecached und wurde zuletzt am $1 aktualisiert. Sie zeigt maximal $2 Ergebnisse an.''",
     "wordcounter-special-wcp-header": "Diese Seite listet Artikel in absteigender Reihenfolge ihrer Wortanzahl auf.",
