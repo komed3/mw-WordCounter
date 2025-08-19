@@ -75,7 +75,7 @@
             $pageId = Utils::getPageTitleSave( $wikiPage->getTitle() );
             $wordCount = Utils::countWordsFromRevision( $revisionRecord );
 
-            if ( $pageId && $wordCount ) {
+            if ( $pageId && $wordCount !== null ) {
 
                 // Store the word count in the database
                 Database::updateWordCount( $pageId, $wordCount );
