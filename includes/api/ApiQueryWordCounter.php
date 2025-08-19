@@ -318,15 +318,15 @@
 
             return [
                 'action=wordcounter&prop=totals'
-                    => 'apihelp-wordcounter-example-totals',
+                    => 'wordcounter-api-help-example-totals',
                 'action=wordcounter&prop=pagewords&titles=Main_Page'
-                    => 'apihelp-wordcounter-example-pagewords',
+                    => 'wordcounter-api-help-example-pagewords',
                 'action=wordcounter&prop=pagewords&pageids=1|2|3'
-                    => 'apihelp-wordcounter-example-pageids',
+                    => 'wordcounter-api-help-example-pageids',
                 'action=wordcounter&prop=pages&limit=10&sort=desc'
-                    => 'apihelp-wordcounter-example-pages',
+                    => 'wordcounter-api-help-example-pages',
                 'action=wordcounter&prop=uncounted&limit=100'
-                    => 'apihelp-wordcounter-example-uncounted',
+                    => 'wordcounter-api-help-example-uncounted',
             ];
 
         }
