@@ -48,8 +48,8 @@
                 $data[ 'pagewords' ] = $this->getPageWords( $params );
 
             // Handle page list
-            if ( isset( $prop[ 'pages' ] ) )
-                $data[ 'pages' ] = $this->getPages( $params );
+            if ( isset( $prop[ 'listpages' ] ) )
+                $data[ 'listpages' ] = $this->getPageList( $params );
 
             // Handle uncounted pages
             if ( isset( $prop[ 'uncounted' ] ) )
@@ -171,17 +171,18 @@
          * @param array $params - The parameters containing limit, offset, and sort order.
          * @return array - An array of results with page details and word counts.
          */
-        private function getPages (
+        private function getPageList (
             array $params
         ) : array {
 
+            $ns = $params[ 'namespaces' ];
             $limit = $params[ 'limit' ];
             $offset = $params[ 'offset' ];
             $desc = $params[ 'sort' ] === 'desc';
             $results = [];
 
             // Fetch pages ordered by word count from the database
-            if ( $res = Database::getPagesOrderedByWordCount( $limit, $offset, $desc ) ) {
+            if ( $res = Database::getPagesOrderedByWordCount( $limit, $offset, $desc, $ns ) ) {
 
                 foreach ( $res as $row ) {
 
@@ -204,6 +205,8 @@
             return [
                 'results' => $results,
                 'count' => count( $results ),
+                'totalWords' => array_sum( array_column( $results, 'wordCount' ) ),
+                'namespaces' => $ns,
                 'offset' => $offset,
                 'limit' => $limit,
                 'sort' => $params[ 'sort' ]
@@ -269,7 +272,7 @@
                     ApiBase::PARAM_TYPE => [
                         'totals',
                         'pagewords',
-                        'pages',
+                        'listpages',
                         'uncounted'
                     ],
                     ApiBase::PARAM_REQUIRED => true,
@@ -281,6 +284,11 @@
                     ApiBase::PARAM_REQUIRED => false
                 ],
                 'pageids' => [
+                    ApiBase::PARAM_TYPE => 'integer',
+                    ApiBase::PARAM_ISMULTI => true,
+                    ApiBase::PARAM_REQUIRED => false
+                ],
+                'namespaces' => [
                     ApiBase::PARAM_TYPE => 'integer',
                     ApiBase::PARAM_ISMULTI => true,
                     ApiBase::PARAM_REQUIRED => false
@@ -323,8 +331,10 @@
                     => 'wordcounter-api-help-example-pagewords',
                 'action=wordcounter&prop=pagewords&pageids=1|2|3'
                     => 'wordcounter-api-help-example-pageids',
-                'action=wordcounter&prop=pages&limit=10&sort=desc'
-                    => 'wordcounter-api-help-example-pages',
+                'action=wordcounter&prop=listpages&limit=10&sort=desc'
+                    => 'wordcounter-api-help-example-listpages',
+                'action=wordcounter&prop=listpages&limit=10&namespaces=0'
+                    => 'wordcounter-api-help-example-listns',
                 'action=wordcounter&prop=uncounted&limit=100'
                     => 'wordcounter-api-help-example-uncounted',
             ];

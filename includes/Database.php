@@ -143,19 +143,23 @@
          * @param int $limit - The maximum number of pages to return
          * @param int $offset - The offset for pagination
          * @param bool $desc - Whether to order by descending word count
+         * @param array|null $ns - An array of namespace IDs to filter by, or null for all supported namespaces
          * @return IResultWrapper - The result set containing page data
          */
         public static function getPagesOrderedByWordCount (
-            int $limit = 50, int $offset = 0, bool $desc = true
-        ) : IResultWrapper {
+            int $limit = 50, int $offset = 0, bool $desc = true, ?array $ns = null
+        ) : ?IResultWrapper {
 
             $dbr = self::getDBConnection();
 
-            return $dbr->select(
+            $namespaces = Utils::supportedNamespaces();
+            $namespaces = $ns ? array_intersect( $namespaces, $ns ) : $namespaces;
+
+            return empty( $namespaces ) ? null : $dbr->select(
                 [ 'wordcounter', 'page' ],
                 [ 'page_id', 'page_title', 'page_namespace', 'wc_word_count' ],
                 [
-                    'page_namespace' => Utils::supportedNamespaces(),
+                    'page_namespace' => $namespaces,
                     'page_is_redirect' => 0
                 ],
                 __METHOD__,
