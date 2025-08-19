@@ -30,13 +30,25 @@
             "value": false,
             "description": "Whether to count numbers (digits) as words"
         },
-        "WordCounterOnPageSave": {
+        "WordCounterCountOnPageSave": {
             "value": true,
             "description": "Whether to count words on page save"
         },
         "WordCounterCacheService": {
             "value": "main",
             "description": "Cache service to use; options are 'local', 'wan', 'micro' or 'main'"
+        },
+        "WordCounterCacheSpecialPages": {
+            "value": true,
+            "description": "Whether to cache the query results of special pages"
+        },
+        "WordCounterSpecialPageCacheExpiry": {
+            "value": 3600,
+            "description": "Cache expiry time for special pages in seconds"
+        },
+        "WordCounterSpecialPageMaxResults": {
+            "value": 5000,
+            "description": "Maximum number of results to return in special pages"
         }
     },
     "AutoloadNamespaces": {
