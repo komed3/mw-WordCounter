@@ -70,7 +70,7 @@
         "SpecialStatsAddExtra": "hooks"
     },
     "SpecialPages": {
-        "WordCounterPages": "MediaWiki\\Extension\\WordCounter\\Specials\\WCPages"
+        "WordCounterMostWords": "MediaWiki\\Extension\\WordCounter\\Specials\\MostWords"
     },
     "APIModules": {
         "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\WCQuery"

@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class WordCounter/Specials/WCPages
+     * Class WordCounter/Specials/MostWords
      * 
      * Special page for displaying pages with the most words.
      * 
@@ -20,19 +20,19 @@
     use Skin;
 
     /**
-     * Class WordCounter/Specials/WCPages
+     * Class WordCounter/Specials/MostWords
      * 
      * This class implements a special page that lists pages
      * with the most words in descending order.
      */
-    class WCPages extends QueryPage {
+    class MostWords extends QueryPage {
 
         /**
          * Constructor for the special page
          */
         public function __construct () {
 
-            parent::__construct( 'WordCounterPages', '', true );
+            parent::__construct( 'WordCounterMostWords', '', true );
 
             $this->mIncludable = true;
 

@@ -13,14 +13,14 @@
     $specialPageAliases = [];
 
     $specialPageAliases[ 'en' ] = [
-        'WordCounterPages' => [
+        'WordCounterMostWords' => [
             'MostWords',
             'Pages with the most words'
         ]
     ];
 
     $specialPageAliases[ 'de' ] = [
-        'WordCounterPages' => [
+        'WordCounterMostWords' => [
             'Meiste_Wörter',
             'Artikel mit den meisten Wörtern'
         ]
