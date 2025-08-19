@@ -262,8 +262,46 @@
                 ],
                 __METHOD__,
                 [
+                    'ORDER BY' => 'page_id',
+                    'LIMIT' => $limit
+                ],
+                [
+                    'wordcounter' => [
+                        'LEFT JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+        }
+
+        /**
+         * Get all pages in supported namespaces (for forced recounting)
+         * 
+         * @param int $limit - Maximum number of pages to return
+         * @param int $offset - Offset for pagination
+         * @return IResultWrapper - The result set
+         */
+        public static function getAllSupportedPages (
+            int $limit = 0, int $offset = 0
+        ) : IResultWrapper {
+
+            $dbr = self::getDBConnection();
+
+            return $dbr->select(
+                'page',
+                [ 'page_id', 'page_title', 'page_namespace' ],
+                [
+                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_is_redirect' => 0,
+                    'page_content_model' => CONTENT_MODEL_WIKITEXT,
+                    'wc_page_id IS NULL'
+                ],
+                __METHOD__,
+                [
+                    'ORDER BY' => 'page_id',
                     'LIMIT' => $limit,
-                    'ORDER BY' => 'page_id'
+                    'OFFSET' => $offset
                 ],
                 [
                     'wordcounter' => [
