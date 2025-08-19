@@ -206,7 +206,6 @@
             // Set the target language for the parser options
             if ( method_exists( $parserOptions, 'setTargetLanguage' ) )
                 $parserOptions->setTargetLanguage( $lang );
-
             else if ( method_exists( $parserOptions, 'setUserLang' ) )
                 $parserOptions->setUserLang( $lang );
 
@@ -227,6 +226,11 @@
                 $parserOutput->getText( [ 'unwrap' => true ] )
             ) ) ) === '' ) return 0;
 
+            // Allow extensions to modify the plain text before counting
+            $services->getHookContainer()->run( 'WordCounterBeforeCount', [
+                &$plainText, $revisionRecord, $content, $parserOutput
+            ] );
+
             // Determine which pattern to use for word counting
             // Use the configured pattern or default to counting words
             $pattern = self::getConfig( 'WordCounterPattern', null ) ??
@@ -234,8 +238,16 @@
                     ? '/(?:[\p{N}]+([.,][\p{N}]+)*)|[\p{L}]+/u'
                     : '/[\p{L}]+/u' );
 
-            // Count words
-            return preg_match_all( $pattern, $plainText );
+            // Count words using the pattern
+            $wordCount = preg_match_all( $pattern, $plainText );
+
+            // Allow extensions to override or modify the word count
+            $services->getHookContainer()->run( 'WordCounterAfterCount', [
+                &$wordCount, $plainText, $pattern, $revisionRecord,
+                $content, $parserOutput
+            ] );
+
+            return $wordCount;
 
         }
 
