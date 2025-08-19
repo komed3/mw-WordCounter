@@ -88,6 +88,10 @@
 
             } else {
 
+                // If page not meet the requirements, delete the word count
+                Database::deleteWordCount( $wikiPage->getId() );
+
+                // Log a debug message if word count could not be counted
                 wfDebugLog( 'WordCounter', 'Could not count words for page <' .
                     $wikiPage->getTitle()->getPrefixedText() . '>'
                 );
