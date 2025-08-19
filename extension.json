@@ -73,7 +73,7 @@
         "WordCounterMostWords": "MediaWiki\\Extension\\WordCounter\\Specials\\MostWords"
     },
     "APIModules": {
-        "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\WCQuery"
+        "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\WordCounter"
     },
     "manifest_version": 2
 }

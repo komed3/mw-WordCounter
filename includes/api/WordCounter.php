@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class WordCounter/Api/WCQuery
+     * Class WordCounter/Api/WordCounter
      * 
      * This class handles API queries related to word counting in MediaWiki.
      * It provides methods to retrieve total word counts, page-specific word counts,
@@ -21,11 +21,11 @@
     use MediaWiki\Title\Title;
 
     /**
-     * Class WCQuery
+     * Class WordCounter/Api/WordCounter
      * 
      * This class handles API queries related to word counting in MediaWiki.
      */
-    class WCQuery extends ApiBase {
+    class WordCounter extends ApiBase {
 
         /**
          * Execute the API query.
