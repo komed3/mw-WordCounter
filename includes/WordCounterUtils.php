@@ -115,7 +115,7 @@
          */
         public static function countOnPageSave () : bool {
 
-            return (bool) self::getConfig( 'WordCounterOnPageSave', true );
+            return (bool) self::getConfig( 'WordCounterCountOnPageSave', true );
 
         }
 
