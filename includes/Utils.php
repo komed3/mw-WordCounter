@@ -229,8 +229,8 @@
 
             // Determine if numbers should be counted as words
             $pattern = self::getConfig( 'WordCounterCountNumbers', false )
-                ? '/[\p{L}\p{N}]+/u'
-                : '/\p{L}+/u';
+                ? '/(?:[\p{N}]+([.,][\p{N}]+)*)|[\p{L}]+/u'
+                : '/[\p{L}]+/u';
 
             // Count words
             return preg_match_all( $pattern, $plainText );
