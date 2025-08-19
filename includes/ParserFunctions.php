@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class WordCounterParserFunctions
+     * Class WordCounter/ParserFunctions
      * 
      * This class provides parser functions for the WordCounter extension.
      * 
@@ -26,11 +26,11 @@
     use MediaWiki\Title\Title;
 
     /**
-     * Class WordCounterParserFunctions
+     * Class WordCounter/ParserFunctions
      * 
      * This class provides parser functions for the WordCounter extension.
      */
-    class WordCounterParserFunctions {
+    class ParserFunctions {
 
         /**
          * Format a number based on the specified format.
@@ -70,10 +70,10 @@
             if ( $pageName && (
                 ! ( $title = Title::newFromText( $pageName ) ) ||
                 ! $title->exists() || $title->isRedirect() ||
-                ! WordCounterUtils::supportsNamespace( $title->getNamespace() )
+                ! Utils::supportsNamespace( $title->getNamespace() )
             ) ) return '0';
 
-            $wordCount = WordCounterUtils::getWordCountByTitle( $title );
+            $wordCount = Utils::getWordCountByTitle( $title );
 
             return self::formatNum( $parser, $wordCount, $format );
 
@@ -90,7 +90,7 @@
             $parser, $format = ''
         ) : string {
 
-            $totalWords = WordCounterUtils::getTotalWordCount();
+            $totalWords = Utils::getTotalWordCount();
 
             return self::formatNum( $parser, $totalWords, $format );
 
@@ -107,7 +107,7 @@
             $parser, $format = ''
         ) : string {
 
-            $totalPages = WordCounterUtils::getTotalPageCount();
+            $totalPages = Utils::getTotalPageCount();
 
             return self::formatNum( $parser, $totalPages, $format );
 

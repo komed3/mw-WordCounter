@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class WordCounterDatabase
+     * Class WordCounter/Database
      * 
      * This class handles database interactions for the WordCounter extension.
      * It provides methods to update and retrieve word counts for pages.
@@ -18,11 +18,11 @@
     use Wikimedia\Rdbms\IResultWrapper;
 
     /**
-     * Class WordCounterDatabase
+     * Class WordCounter/Database
      * 
      * This class handles database interactions for the WordCounter extension.
      */
-    class WordCounterDatabase {
+    class Database {
 
         /**
          * Get a database connection.
@@ -131,7 +131,7 @@
                 [ 'wordcounter', 'page' ],
                 [ 'page_id', 'page_title', 'page_namespace', 'wc_word_count' ],
                 [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 __METHOD__,
@@ -162,7 +162,7 @@
                 [ 'wordcounter', 'page' ],
                 'SUM( wc_word_count )',
                 [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 __METHOD__,
@@ -192,7 +192,7 @@
                 [ 'wordcounter', 'page' ],
                 'COUNT( wc_page_id )',
                 [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 __METHOD__,
@@ -222,7 +222,7 @@
                 [ 'page', 'wordcounter' ],
                 'COUNT(*)',
                 [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT,
                     'wc_page_id IS NULL'
@@ -255,7 +255,7 @@
                 [ 'page', 'wordcounter' ],
                 [ 'page_id', 'page_title', 'page_namespace' ],
                 [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT,
                     'wc_page_id IS NULL'
@@ -292,7 +292,7 @@
                 'page',
                 [ 'page_id', 'page_title', 'page_namespace' ],
                 [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0,
                     'page_content_model' => CONTENT_MODEL_WIKITEXT
                 ],

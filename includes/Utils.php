@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class WordCounterUtils
+     * Class WordCounter/Utils
      * 
      * Utility class for WordCounter extension.
      * 
@@ -21,11 +21,11 @@
     use MediaWiki\Title\Title;
 
     /**
-     * Class WordCounterUtils
+     * Class WordCounter/Utils
      * 
      * Utility class for WordCounter extension.
      */
-    class WordCounterUtils {
+    class Utils {
 
         /**
          * Cache services for different environments.
@@ -176,7 +176,7 @@
         ) : int {
 
             return ( $pageId = self::getPageIDFromTitle( $title ) )
-                ? WordCounterDatabase::getWordCount( $pageId ) ?? 0
+                ? Database::getWordCount( $pageId ) ?? 0
                 : 0;
 
         }
@@ -268,7 +268,7 @@
                 $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'words' ] ),
                 self::CACHE_TTL,
                 function () {
-                    return WordCounterDatabase::getTotalWordCount();
+                    return Database::getTotalWordCount();
                 }
             );
 
@@ -287,7 +287,7 @@
                 $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'pages' ] ),
                 self::CACHE_TTL,
                 function () {
-                    return WordCounterDatabase::getTotalPageCount();
+                    return Database::getTotalPageCount();
                 }
             );
 

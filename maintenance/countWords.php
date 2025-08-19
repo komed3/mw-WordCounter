@@ -19,8 +19,8 @@
     // @codeCoverageIgnoreEnd
 
     use Maintenance;
-    use MediaWiki\Extension\WordCounter\WordCounterDatabase;
-    use MediaWiki\Extension\WordCounter\WordCounterUtils;
+    use MediaWiki\Extension\WordCounter\Database;
+    use MediaWiki\Extension\WordCounter\Utils;
     use MediaWiki\MediaWikiServices;
     use MediaWiki\Revision\RevisionLookup;
     use MediaWiki\Title\Title;
@@ -146,7 +146,7 @@
             }
 
             // Check if the namespace is supported
-            if ( ! WordCounterUtils::supportsNamespace( $title->getNamespace() ) ) {
+            if ( ! Utils::supportsNamespace( $title->getNamespace() ) ) {
                 $this->outputMessage(
                     'Page <' . $pageTitle . '> namespace is not supported',
                     'error'
@@ -164,7 +164,7 @@
             }
 
             // Check if the word count can be determined
-            if ( ( $wordCount = WordCounterUtils::countWordsFromRevision( $revision ) ) === null ) {
+            if ( ( $wordCount = Utils::countWordsFromRevision( $revision ) ) === null ) {
                 $this->outputMessage(
                     'Could not count words for page <' . $pageTitle . '>',
                     'error'
@@ -173,7 +173,7 @@
             }
 
             // Only update database if not in dry-run mode
-            if ( ! $this->dryRun ) WordCounterDatabase::updateWordCount(
+            if ( ! $this->dryRun ) Database::updateWordCount(
                 $title->getArticleID(), $wordCount
             );
 
@@ -231,12 +231,12 @@
             if ( $force ) {
 
                 // If forcing, get all supported pages
-                return WordCounterDatabase::getAllSupportedPages( $limit, $offset );
+                return Database::getAllSupportedPages( $limit, $offset );
 
             } else {
 
                 // Otherwise, get only uncounted pages
-                return WordCounterDatabase::getUncountedPages( $limit );
+                return Database::getUncountedPages( $limit );
 
             }
 
@@ -381,7 +381,7 @@
             // Clear cache only if not in dry-run mode
             if ( ! $this->dryRun ) {
 
-                WordCounterUtils::clearCache();
+                Utils::clearCache();
                 $this->outputMessage( 'Cache cleared' );
 
             }

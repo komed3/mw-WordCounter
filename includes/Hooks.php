@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class WordCounterHooks
+     * Class WordCounter/Hooks
      * 
      * This class implements hooks for the WordCounter extension.
      * 
@@ -25,11 +25,11 @@
     use StatusValue;
 
     /**
-     * Class WordCounterHooks
+     * Class WordCounter/Hooks
      * 
      * This class implements hooks for the WordCounter extension.
      */
-    class WordCounterHooks implements
+    class Hooks implements
         \MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook,
         \MediaWiki\Storage\Hook\PageSaveCompleteHook,
         \MediaWiki\Page\Hook\PageDeleteHook,
@@ -70,21 +70,21 @@
 
             // Only count words if $wgWordCounterCountOnPageSave is true
             // Should be disabled for large wikis or performance-sensitive environments
-            if ( ! WordCounterUtils::countOnPageSave() ) return true;
+            if ( ! Utils::countOnPageSave() ) return true;
 
-            $pageId = WordCounterUtils::getPageIDFromTitle( $wikiPage->getTitle() );
-            $wordCount = WordCounterUtils::countWordsFromRevision( $revisionRecord );
+            $pageId = Utils::getPageIDFromTitle( $wikiPage->getTitle() );
+            $wordCount = Utils::countWordsFromRevision( $revisionRecord );
 
             if ( $pageId && $wordCount ) {
 
                 // Store the word count in the database
-                WordCounterDatabase::updateWordCount( $pageId, $wordCount );
+                Database::updateWordCount( $pageId, $wordCount );
 
                 // Clear the total word/page count cache
-                WordCounterUtils::clearCache();
+                Utils::clearCache();
 
                 // Invalidate parser cache for this page and any pages that might reference it
-                WordCounterUtils::invalidateParserCache( $wikiPage );
+                Utils::invalidateParserCache( $wikiPage );
 
             } else {
 
@@ -111,8 +111,8 @@
 
             if ( $pageId = $page->getId() ) {
 
-                WordCounterDatabase::deleteWordCount( $pageId );
-                WordCounterUtils::clearCache();
+                Database::deleteWordCount( $pageId );
+                Utils::clearCache();
 
             }
 
@@ -146,7 +146,7 @@
         ) {
 
             return [
-                WordCounterParserFunctions::renderPageWords(
+                ParserFunctions::renderPageWords(
                     $parser, $format, $pageName
                 ),
                 'noparse' => false
@@ -166,7 +166,7 @@
         ) {
 
             return [
-                WordCounterParserFunctions::renderTotalWords(
+                ParserFunctions::renderTotalWords(
                     $parser, $format
                 ),
                 'noparse' => false
@@ -186,7 +186,7 @@
         ) {
 
             return [
-                WordCounterParserFunctions::renderTotalPages(
+                ParserFunctions::renderTotalPages(
                     $parser, $format
                 ),
                 'noparse' => false
@@ -204,7 +204,7 @@
             $context, &$pageInfo
         ) {
 
-            if ( ( $wordCount = WordCounterUtils::getWordCountByTitle( $context->getTitle() ) ) !== null ) {
+            if ( ( $wordCount = Utils::getWordCountByTitle( $context->getTitle() ) ) !== null ) {
 
                 $pageInfo[ 'header-basic' ][] = [
                     $context->msg( 'wordcounter-info-label' ),
@@ -225,8 +225,8 @@
             &$extraStats, $context
         ) {
 
-            $totalWords = WordCounterUtils::getTotalWordCount() ?? 0;
-            $totalPages = WordCounterUtils::getTotalPageCount() ?? 0;
+            $totalWords = Utils::getTotalWordCount() ?? 0;
+            $totalPages = Utils::getTotalPageCount() ?? 0;
 
             $extraStats[ 'wordcounter-stats' ] = [
                 'wordcounter-stats-total' => $totalWords,

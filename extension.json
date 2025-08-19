@@ -58,7 +58,7 @@
     },
     "HookHandlers": {
         "hooks": {
-            "class": "MediaWiki\\Extension\\WordCounter\\WordCounterHooks"
+            "class": "MediaWiki\\Extension\\WordCounter\\Hooks"
         }
     },
     "Hooks": {
@@ -70,10 +70,10 @@
         "SpecialStatsAddExtra": "hooks"
     },
     "SpecialPages": {
-        "WordCounterPages": "MediaWiki\\Extension\\WordCounter\\Specials\\SpecialWordCounterPages"
+        "WordCounterPages": "MediaWiki\\Extension\\WordCounter\\Specials\\WCPages"
     },
     "APIModules": {
-        "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\ApiQueryWordCounter"
+        "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\WCQuery"
     },
     "manifest_version": 2
 }

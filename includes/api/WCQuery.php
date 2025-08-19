@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class ApiQueryWordCounter
+     * Class WordCounter/Api/WCQuery
      * 
      * This class handles API queries related to word counting in MediaWiki.
      * It provides methods to retrieve total word counts, page-specific word counts,
@@ -16,16 +16,16 @@
 
     use MediaWiki\Api\ApiBase;
     use MediaWiki\Api\ApiMain;
-    use MediaWiki\Extension\WordCounter\WordCounterDatabase;
-    use MediaWiki\Extension\WordCounter\WordCounterUtils;
+    use MediaWiki\Extension\WordCounter\Database;
+    use MediaWiki\Extension\WordCounter\Utils;
     use MediaWiki\Title\Title;
 
     /**
-     * Class ApiQueryWordCounter
+     * Class WCQuery
      * 
      * This class handles API queries related to word counting in MediaWiki.
      */
-    class ApiQueryWordCounter extends ApiBase {
+    class WCQuery extends ApiBase {
 
         /**
          * Execute the API query.
@@ -72,9 +72,9 @@
         private function getTotals () : array {
 
             return [
-                'totalWords' => WordCounterUtils::getTotalWordCount(),
-                'totalPages' => WordCounterUtils::getTotalPageCount(),
-                'uncountedPages' => WordCounterDatabase::getPagesNeedingCount()
+                'totalWords' => Utils::getTotalWordCount(),
+                'totalPages' => Utils::getTotalPageCount(),
+                'uncountedPages' => Database::getPagesNeedingCount()
             ];
 
         }
@@ -133,7 +133,7 @@
             foreach ( $titles as $title ) {
 
                 // Check if the title is valid and supported
-                if ( ! WordCounterUtils::supportsNamespace( $title->getNamespace() ) ) {
+                if ( ! Utils::supportsNamespace( $title->getNamespace() ) ) {
 
                     $this->addWarning( [ 'wordcounter-api-warning-invalid-ns', $title->getPrefixedText() ] );
                     continue;
@@ -141,7 +141,7 @@
                 }
 
                 // Get word count for the title
-                $wordCount = WordCounterUtils::getWordCountByTitle( $title );
+                $wordCount = Utils::getWordCountByTitle( $title );
                 $totalWords += $wordCount;
 
                 $results[] = [
@@ -181,7 +181,7 @@
             $results = [];
 
             // Fetch pages ordered by word count from the database
-            if ( $res = WordCounterDatabase::getPagesOrderedByWordCount( $limit, $offset, $desc ) ) {
+            if ( $res = Database::getPagesOrderedByWordCount( $limit, $offset, $desc ) ) {
 
                 foreach ( $res as $row ) {
 
@@ -227,7 +227,7 @@
             $results = [];
 
             // Fetch uncounted pages from the database
-            if ( $res = WordCounterDatabase::getUncountedPages( $limit ) ) {
+            if ( $res = Database::getUncountedPages( $limit ) ) {
 
                 foreach ( $res as $row ) {
 
@@ -250,7 +250,7 @@
                 'results' => $results,
                 'count' => count( $results ),
                 'limit' => $limit,
-                'total' => WordCounterDatabase::getPagesNeedingCount()
+                'total' => Database::getPagesNeedingCount()
             ];
 
         }

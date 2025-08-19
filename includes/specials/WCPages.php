@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class SpecialWordCounterPages
+     * Class WordCounter/Specials/WCPages
      * 
      * Special page for displaying pages with the most words.
      * 
@@ -12,7 +12,7 @@
 
     namespace MediaWiki\Extension\WordCounter\Specials;
 
-    use MediaWiki\Extension\WordCounter\WordCounterUtils;
+    use MediaWiki\Extension\WordCounter\Utils;
     use MediaWiki\Html\Html;
     use MediaWiki\Linker\Linker;
     use MediaWiki\SpecialPage\QueryPage;
@@ -20,12 +20,12 @@
     use Skin;
 
     /**
-     * Class SpecialWordCounterPages
+     * Class WordCounter/Specials/WCPages
      * 
      * This class implements a special page that lists pages
      * with the most words in descending order.
      */
-    class SpecialWordCounterPages extends QueryPage {
+    class WCPages extends QueryPage {
 
         /**
          * Constructor for the special page
@@ -47,7 +47,7 @@
          */
         public function isExpensive () {
 
-            return (bool) WordCounterUtils::getConfig( 'WordCounterCacheSpecialPages', true );
+            return (bool) Utils::getConfig( 'WordCounterCacheSpecialPages', true );
 
         }
 
@@ -58,7 +58,7 @@
          */
         public function getCacheExpiry () {
 
-            return (int) WordCounterUtils::getConfig( 'WordCounterSpecialPageCacheExpiry', 3600 );
+            return (int) Utils::getConfig( 'WordCounterSpecialPageCacheExpiry', 3600 );
 
         }
 
@@ -69,7 +69,7 @@
          */
         public function getMaxResults () {
 
-            return (int) WordCounterUtils::getConfig( 'WordCounterSpecialPageMaxResults', 5000 );
+            return (int) Utils::getConfig( 'WordCounterSpecialPageMaxResults', 5000 );
 
         }
 
@@ -104,7 +104,7 @@
                     'value' => 'wc_word_count'
                 ],
                 'conds' => [
-                    'page_namespace' => WordCounterUtils::supportedNamespaces(),
+                    'page_namespace' => Utils::supportedNamespaces(),
                     'page_is_redirect' => 0
                 ],
                 'join_conds' => [
