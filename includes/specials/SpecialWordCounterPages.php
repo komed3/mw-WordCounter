@@ -39,15 +39,37 @@
         }
 
         /**
-         * Sets the special page to be expensive.
+         * Sets the special page to be expensive based on configuration.
          * This indicates that the page may take a long time to load and
          * should be cached on large sites.
          * 
-         * @return bool - true if the page is expensive
+         * @return bool - true if the page is expensive and should be cached
          */
         public function isExpensive () {
 
-            return true;
+            return (bool) WordCounterUtils::getConfig( 'WordCounterCacheSpecialPages', true );
+
+        }
+
+        /**
+         * Get the maximum age of cached results in seconds.
+         * 
+         * @return int - Cache age in seconds
+         */
+        public function getCacheExpiry () {
+
+            return (int) WordCounterUtils::getConfig( 'WordCounterSpecialPageCacheExpiry', 3600 );
+
+        }
+
+        /**
+         * Get the maximum number of results to cache.
+         * 
+         * @return int - Maximum cached results
+         */
+        public function getMaxResults () {
+
+            return (int) WordCounterUtils::getConfig( 'WordCounterSpecialPageMaxResults', 5000 );
 
         }
 
