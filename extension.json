@@ -53,7 +53,8 @@
     },
     "AutoloadNamespaces": {
         "MediaWiki\\Extension\\WordCounter\\": "includes/",
-        "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/specials/"
+        "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/specials/",
+        "MediaWiki\\Extension\\WordCounter\\Api\\": "includes/api/"
     },
     "HookHandlers": {
         "hooks": {
@@ -70,6 +71,9 @@
     },
     "SpecialPages": {
         "WordCounterPages": "MediaWiki\\Extension\\WordCounter\\Specials\\SpecialWordCounterPages"
+    },
+    "APIModules": {
+        "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\ApiQueryWordCounter"
     },
     "manifest_version": 2
 }
