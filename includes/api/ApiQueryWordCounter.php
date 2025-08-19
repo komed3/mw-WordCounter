@@ -28,22 +28,6 @@
     class ApiQueryWordCounter extends ApiBase {
 
         /**
-         * Constructor for the ApiQueryWordCounter class.
-         * This initializes the API module with the main module and module name.
-         *
-         * @param ApiMain $mainModule - The main API module instance.
-         * @param string $moduleName - The name of this API module.
-         */
-        public function __construct (
-            ApiMain $mainModule,
-            string $moduleName
-        ) {
-
-            parent::__construct( $mainModule, $moduleName );
-
-        }
-
-        /**
          * Execute the API query.
          * This method processes the request parameters and retrieves
          * the requested word count data based on the specified properties.
@@ -321,6 +305,41 @@
                     ApiBase::PARAM_REQUIRED => false
                 ]
             ];
+
+        }
+
+        /**
+         * Get the examples messages for this API module.
+         * This method provides example API requests and their corresponding messages.
+         *
+         * @return array - An array of example API requests with their messages.
+         */
+        protected function getExamplesMessages () : array {
+
+            return [
+                'action=wordcounter&prop=totals'
+                    => 'apihelp-wordcounter-example-totals',
+                'action=wordcounter&prop=pagewords&titles=Main_Page'
+                    => 'apihelp-wordcounter-example-pagewords',
+                'action=wordcounter&prop=pagewords&pageids=1|2|3'
+                    => 'apihelp-wordcounter-example-pageids',
+                'action=wordcounter&prop=pages&limit=10&sort=desc'
+                    => 'apihelp-wordcounter-example-pages',
+                'action=wordcounter&prop=uncounted&limit=100'
+                    => 'apihelp-wordcounter-example-uncounted',
+            ];
+
+        }
+
+        /**
+         * Get the name of this API module.
+         * This method returns the name used to identify this module in API requests.
+         *
+         * @return string - The name of the API module.
+         */
+        public function getHelpUrls () : array {
+
+            return [ 'https://github.com/komed3/mw-WordCounter' ];
 
         }
 
