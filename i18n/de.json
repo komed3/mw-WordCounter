@@ -7,9 +7,10 @@
     "wordcounter": "Worte zählen",
     "wordcounter-desc": "Zählt Worte auf allen Inhaltsseiten, machte diese durch Variablen verfügbar, aktualisiert Statistikseiten und berechnet die Gesamtwortzahl des Wikis.",
     "wordcounter-info-label": "Anzahl der Worte im Artikel",
-    "wordcounter-special-wcp-title": "Artikel mit den meisten Wörtern",
+    "wordcounter-special-wcp-cache-info": "''Diese Seite ist gecached und wurde zuletzt am $1 aktualisiert. Sie zeigt maximal $2 Ergebnisse an.''",
     "wordcounter-special-wcp-header": "Diese Seite listet Artikel in absteigender Reihenfolge ihrer Wortanzahl auf.",
     "wordcounter-special-wcp-line": "$1 $2 [$3 {{PLURAL:$4|Wort|Wörter}}]",
+    "wordcounter-special-wcp-title": "Artikel mit den meisten Wörtern",
     "wordcounter-stats": "Wortstatistik",
     "wordcounter-stats-total": "Wörter in allen Artikeln",
     "wordcounter-stats-average": "Wörter pro Artikel im Durchschnitt"

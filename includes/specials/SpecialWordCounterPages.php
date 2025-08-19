@@ -156,6 +156,7 @@
 
             $title = Title::makeTitleSafe( $result->namespace, $result->title );
 
+            // If the title is invalid, return an error message
             if ( ! $title ) {
 
                 return Html::element(
@@ -171,6 +172,7 @@
 
             $linkRenderer = $this->getLinkRenderer();
 
+            // Create a link to the page history
             $hlink = $this->msg( 'parentheses' )->rawParams(
                 $linkRenderer->makeKnownLink(
                     $title, $this->msg( 'hist' )->text(),
@@ -178,6 +180,7 @@
                 )
             )->escaped();
 
+            // Create a link to the page itself
             if ( $this->isCached() ) {
 
                 $plink = $linkRenderer->makeLink( $title );
@@ -190,6 +193,7 @@
 
             }
 
+            // Format the word count
             $wordCount = $this->getLanguage()->formatNum( $result->value );
 
             return $this
@@ -210,7 +214,31 @@
          */
         public function getPageHeader () {
 
-            return $this->msg( 'wordcounter-special-wcp-header' )->parseAsBlock();
+            $header = $this->msg( 'wordcounter-special-wcp-header' )->parseAsBlock();
+
+            // Add cache information if caching is enabled
+            if (
+                $this->isExpensive() && $this->isCached() &&
+                $cacheTS = $this->getCachedTimestamp()
+            ) {
+
+                $lang = $this->getLanguage();
+
+                $lastUpdated = $lang->userTimeAndDate( $cacheTS, $this->getUser() );
+                $maxResults = $lang->formatNum( $this->getMaxResults() );
+
+                $cacheInfo = $this->msg( 'wordcounter-special-wcp-cache-info' )
+                    ->params( $lastUpdated, $maxResults )
+                    ->parseAsBlock();
+
+                $header .= Html::rawElement( 'div', 
+                    [ 'class' => 'mw-wordcounter-cache-info' ], 
+                    $cacheInfo 
+                );
+
+            }
+
+            return $header;
 
         }
 
