@@ -141,7 +141,7 @@
                 }
 
                 // Get word count for the title
-                $wordCount = Utils::getWordCountByTitle( $title );
+                $wordCount = Utils::getWordCountByTitle( $title ) ?? 0;
                 $totalWords += $wordCount;
 
                 $results[] = [

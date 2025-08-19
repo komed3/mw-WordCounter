@@ -152,7 +152,7 @@
          * @param Title $title - The title of the page
          * @return int|null - The page ID if valid, null otherwise
          */
-        public static function getPageIDFromTitle (
+        public static function getPageTitleSave (
             Title $title
         ) : ?int {
 
@@ -173,11 +173,11 @@
          */
         public static function getWordCountByTitle (
             Title $title
-        ) : int {
+        ) : ?int {
 
-            return ( $pageId = self::getPageIDFromTitle( $title ) )
-                ? Database::getWordCount( $pageId ) ?? 0
-                : 0;
+            return ( $pageId = self::getPageTitleSave( $title ) )
+                ? Database::getWordCount( $pageId )
+                : null;
 
         }
 

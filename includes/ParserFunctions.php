@@ -73,7 +73,7 @@
                 ! Utils::supportsNamespace( $title->getNamespace() )
             ) ) return '0';
 
-            $wordCount = Utils::getWordCountByTitle( $title );
+            $wordCount = Utils::getWordCountByTitle( $title ) ?? 0;
 
             return self::formatNum( $parser, $wordCount, $format );
 

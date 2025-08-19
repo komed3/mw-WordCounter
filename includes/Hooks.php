@@ -72,7 +72,7 @@
             // Should be disabled for large wikis or performance-sensitive environments
             if ( ! Utils::countOnPageSave() ) return true;
 
-            $pageId = Utils::getPageIDFromTitle( $wikiPage->getTitle() );
+            $pageId = Utils::getPageTitleSave( $wikiPage->getTitle() );
             $wordCount = Utils::countWordsFromRevision( $revisionRecord );
 
             if ( $pageId && $wordCount ) {

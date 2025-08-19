@@ -276,7 +276,7 @@
         }
 
         /**
-         * Get all pages in supported namespaces (for forced recounting)
+         * Get all pages in supported namespaces (for forced recounting).
          * 
          * @param int $limit - Maximum number of pages to return
          * @param int $offset - Offset for pagination

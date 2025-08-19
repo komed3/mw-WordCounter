@@ -45,7 +45,7 @@
             "value": true,
             "description": "Whether to cache the query results of special pages"
         },
-        "WordCounterSpecialPageCacheExpiry": {
+        "WordCounterSpecialPageCacheTTL": {
             "value": 3600,
             "description": "Cache expiry time for special pages in seconds"
         },

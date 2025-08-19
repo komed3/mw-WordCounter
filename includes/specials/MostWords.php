@@ -58,7 +58,7 @@
          */
         public function getCacheExpiry () {
 
-            return (int) Utils::getConfig( 'WordCounterSpecialPageCacheExpiry', 3600 );
+            return (int) Utils::getConfig( 'WordCounterSpecialPageCacheTTL', 3600 );
 
         }
 
