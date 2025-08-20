@@ -19,6 +19,7 @@
     use MediaWiki\MediaWikiServices;
     use MediaWiki\Revision\RevisionLookup;
     use MediaWiki\Title\Title;
+    use Wikimedia\Rdbms\IResultWrapper;
 
     /**
      * Class CountWords
@@ -144,26 +145,53 @@
             bool $force, int $limit
         ) : void {
 
-            // Retrieve pages to process
-            $res = $force 
-                ? Database::getAllSupportedPages( $limit )
-                : Database::getUncountedPages( $limit );
+            /**
+             * Processes a set of pages from the database.
+             * 
+             * @param IResultWrapper $res - The result set containing pages to process.
+             */
+            $processPages = function ( IResultWrapper $res ) : void {
 
-            // Check if there are pages to process
-            if ( ! $res || $res->numRows() === 0 ) {
+                // Check if there are pages to process
+                if ( ! $res || $res->numRows() === 0 ) {
 
-                $this->output( 'No pages to process.' );
-                return ;
+                    $this->output( 'No pages to process.' );
+                    return ;
 
-            }
+                }
 
-            // Process each page in the result set
-            foreach ( $res as $row ) {
+                // Process each page in the result set
+                foreach ( $res as $row ) {
 
-                $title = Title::makeTitle( $row->page_namespace, $row->page_title );
+                    $title = Title::makeTitle( $row->page_namespace, $row->page_title );
 
-                if ( $this->processPage( $title ) ) $this->processed++;
-                else $this->errors++;
+                    if ( $this->processPage( $title ) ) $this->processed++;
+                    else $this->errors++;
+
+                }
+
+            };
+
+            if ( $force ) {
+
+                // Force mode: process all supported pages
+                $this->output( 'Processing all supported pages (force mode).' );
+                $processPages( Database::getAllSupportedPages( $limit ) );
+
+            } else {
+
+                // Normal mode: process uncounted pages first
+                $this->output( 'Processing uncounted pages.' );
+                $processPages( $res = Database::getUncountedPages( $limit ) );
+
+                // If limit reached, stop processing early
+                if ( $res->numRows() >= $limit ) return ;
+
+                // If not enough uncounted pages, process outdated pages
+                $this->output( 'Processing outdated pages.' );
+                $processPages( Database::getPagesWithOutdatedWordCount(
+                    $limit - $res->numRows()
+                ) );
 
             }
 
