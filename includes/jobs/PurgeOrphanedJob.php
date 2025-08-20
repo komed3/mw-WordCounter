@@ -1,10 +1,10 @@
 <?php
 
     /**
-     * Job: CountWords
+     * Job: PurgeOrphaned
      * 
-     * Background job that executes the CountWords task.
-     * Processes pages in configurable batches without output.
+     * Background job that executes the PurgeOrphaned task.
+     * Cleans up orphaned entries in configurable batches without output.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT
@@ -13,25 +13,25 @@
 
     namespace MediaWiki\Extension\WordCounter\Jobs;
 
-    use MediaWiki\Extension\WordCounter\Tasks\CountWords;
+    use MediaWiki\Extension\WordCounter\Tasks\PurgeOrphaned;
     use MediaWiki\Extension\WordCounter\Utils;
     use MediaWiki\JobQueue\Job;
 
     /**
-     * Class CountWordsJob
+     * Class PurgeOrphaned
      * 
-     * Executes word counting in the background job queue.
+     * Executes orphaned entry cleanup in the background job queue.
      */
-    class CountWordsJob extends Job {
+    class PurgeOrphanedJob extends Job {
 
         /**
-         * CountWordsJob constructor.
+         * PurgeOrphanedJob constructor.
          * 
          * Initializes the job with a unique name and sets it to remove duplicates.
          */
         public function __construct () {
 
-            parent::__construct( 'WordCounterCountWords', null );
+            parent::__construct( 'WordCounterPurgeOrphaned', null );
             $this->removeDuplicates = true;
 
         }
@@ -39,32 +39,32 @@
         /**
          * Run the job.
          * 
-         * Checks if jobs are enabled, sets up the CountWords task,
-         * and runs it with a limit. If the full limit is processed,
-         * it schedules the next job immediately.
+         * Checks if jobs are enabled, sets up the PurgeOrphaned task,
+         * and runs it with a limit. If entries are deleted, it schedules
+         * the next job immediately.
          * 
-         * @return bool - True if successful, false otherwise.
+         * @return bool - Always return true for cleanup jobs
          */
         public function run () {
 
             // Check if jobs are enabled (limit > 0)
-            $limit = (int) Utils::getConfig( 'WordCounterJobCountWordsLimit', 50 );
+            $limit = (int) Utils::getConfig( 'WordCounterJobPurgeOrphanedLimit', 1000 );
             if ( $limit <= 0 ) return true;
 
             // Set up the task
-            $task = new CountWords ();
+            $task = new PurgeOrphaned ();
 
             // Run the task
             $result = $task->runTask( [ 'limit' => $limit ] ) !== null;
 
             // Schedule next job if we processed the full limit
-            if ( $result[ 'result' ][ 'processed' ] >= $limit ) {
+            if ( $result[ 'result' ][ 'deleted' ] >= $limit ) {
 
                 //
 
             }
 
-            return $result[ 'result' ][ 'errors' ] === 0;
+            return true;
 
         }
 
