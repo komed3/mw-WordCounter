@@ -57,12 +57,12 @@
         /**
          * Update word count on page save.
          * 
-         * @param WikiPage $wikiPage
-         * @param UserIdentity $user
-         * @param string $summary
-         * @param int $flags
-         * @param RevisionRecord $revisionRecord
-         * @param EditResult $editResult
+         * @param WikiPage $wikiPage - The wiki page being saved
+         * @param UserIdentity $user - The user performing the save
+         * @param string $summary - The edit summary
+         * @param int $flags - Flags for the edit operation
+         * @param RevisionRecord $revisionRecord - The revision being saved
+         * @param EditResult $editResult - The result of the edit operation
          */
         public function onPageSaveComplete (
             $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
@@ -78,7 +78,7 @@
             if ( $pageId && $wordCount !== null ) {
 
                 // Store the word count in the database
-                Database::updateWordCount( $pageId, $wordCount );
+                Database::updateWordCount( $pageId, $revisionRecord->getId(), $wordCount );
 
                 // Clear the total word/page count cache
                 Utils::clearCache();

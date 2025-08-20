@@ -208,7 +208,7 @@
 
             // Update the word count in the database if not in dry-run mode
             if ( ! $this->isDryRun() ) Database::updateWordCount(
-                $title->getArticleID(), $wordCount
+                $title->getArticleID(), $revision->getId(), $wordCount
             );
 
             $this->output(

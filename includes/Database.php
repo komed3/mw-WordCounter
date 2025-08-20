@@ -46,12 +46,12 @@
          * Update the word count for a page.
          * 
          * @param int $pageId - The ID of the page to update
+         * @param int $revId - The ID of the revision to update
          * @param int $wordCount - The new word count
          * @return bool|null - True if the update was successful, false otherwise
          */
         public static function updateWordCount (
-            int $pageId,
-            int $wordCount
+            int $pageId, int $revId, int $wordCount
         ) : ?bool {
 
             $dbw = self::getDBConnection( true );
@@ -61,11 +61,13 @@
                 'wordcounter',
                 [
                     'wc_page_id' => $pageId,
+                    'wc_rev_id' => $revId,
                     'wc_word_count' => $wordCount,
                     'wc_updated' => $dts
                 ],
                 [ 'wc_page_id' ],
                 [
+                    'wc_rev_id' => $revId,
                     'wc_word_count' => $wordCount,
                     'wc_updated' => $dts
                 ],
