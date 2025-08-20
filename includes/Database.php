@@ -304,44 +304,6 @@
         }
 
         /**
-         * Get a batch of wordcounter entries with page join.
-         * 
-         * @param int $limit - Maximum number of entries to return
-         * @param int $offset - Offset for pagination
-         * @return IResultWrapper - The result set
-         */
-        public static function getWordCounterEntriesWithPageJoin (
-            int $limit = 100, int $offset = 0
-        ) : IResultWrapper {
-
-            $dbr = self::getDBConnection();
-
-            return $res = $dbr->select(
-                [ 'wordcounter', 'page' ],
-                [
-                    'wc_page_id',
-                    'page_id',
-                    'page_namespace',
-                    'page_is_redirect',
-                    'page_content_model'
-                ],
-                [],
-                __METHOD__,
-                [
-                    'ORDER BY' => 'wc_page_id',
-                    'LIMIT' => $limit, 'OFFSET' => $offset
-                ],
-                [
-                    'page' => [
-                        'LEFT JOIN',
-                        'page_id = wc_page_id'
-                    ]
-                ]
-            );
-
-        }
-
-        /**
          * Get all pages in supported namespaces (for forced recounting).
          * 
          * @param int $limit - Maximum number of pages to return
