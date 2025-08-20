@@ -13,9 +13,10 @@
 
     namespace MediaWiki\Extension\WordCounter\Jobs;
 
+    use Job;
     use MediaWiki\Extension\WordCounter\Tasks\PurgeOrphaned;
+    use MediaWiki\Extension\WordCounter\JobScheduler;
     use MediaWiki\Extension\WordCounter\Utils;
-    use MediaWiki\JobQueue\Job;
 
     /**
      * Class PurgeOrphaned
@@ -31,7 +32,7 @@
          */
         public function __construct () {
 
-            parent::__construct( 'WordCounterPurgeOrphaned', null );
+            parent::__construct( 'WordCounterPurgeOrphaned', [] );
             $this->removeDuplicates = true;
 
         }
@@ -60,7 +61,7 @@
             // Schedule next job if we processed the full limit
             if ( $result[ 'result' ][ 'deleted' ] >= $limit ) {
 
-                //
+                JobScheduler::scheduleNext( __CLASS__ );
 
             }
 

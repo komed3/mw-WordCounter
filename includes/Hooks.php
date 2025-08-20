@@ -68,6 +68,9 @@
             $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult
         ) {
 
+            // Maybe schedule background jobs
+            JobScheduler::maybeSchedule();
+
             // Only count words if $wgWordCounterCountOnPageSave is true
             // Should be disabled for large wikis or performance-sensitive environments
             if ( ! Utils::countOnPageSave() ) return true;
@@ -80,7 +83,7 @@
                 // Store the word count in the database
                 Database::updateWordCount( $pageId, $wordCount );
 
-                // Clear the total word/page count cache
+                // Clear cache
                 Utils::clearCache();
 
                 // Invalidate parser cache for this page and any pages that might reference it
@@ -115,8 +118,14 @@
 
             if ( $pageId = $page->getId() ) {
 
+                // Delete orphaned word count entry from database
                 Database::deleteWordCount( $pageId );
+
+                // Clear cache
                 Utils::clearCache();
+
+                // Maybe schedule background jobs
+                JobScheduler::maybeSchedule();
 
             }
 

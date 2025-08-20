@@ -13,9 +13,10 @@
 
     namespace MediaWiki\Extension\WordCounter\Jobs;
 
+    use Job;
     use MediaWiki\Extension\WordCounter\Tasks\CountWords;
+    use MediaWiki\Extension\WordCounter\JobScheduler;
     use MediaWiki\Extension\WordCounter\Utils;
-    use MediaWiki\JobQueue\Job;
 
     /**
      * Class CountWordsJob
@@ -31,7 +32,7 @@
          */
         public function __construct () {
 
-            parent::__construct( 'WordCounterCountWords', null );
+            parent::__construct( 'WordCounterCountWords', [] );
             $this->removeDuplicates = true;
 
         }
@@ -60,7 +61,7 @@
             // Schedule next job if we processed the full limit
             if ( $result[ 'result' ][ 'processed' ] >= $limit ) {
 
-                //
+                JobScheduler::scheduleNext( __CLASS__ );
 
             }
 
