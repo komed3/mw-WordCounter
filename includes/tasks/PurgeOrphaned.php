@@ -43,9 +43,10 @@
             // Delete orphaned or invalid entries
             $deleted = Database::deleteOrphanedEntries( $limit, $this->isDryRun() );
 
-            $this->output(
-                ( $this->isDryRun() ? 'Would delete ' : 'Deleted ' ) .
-                $deleted . ' orphaned entries.'
+            $this->output( $deleted === 0
+                ? 'No entries to delete.'
+                : ( $this->isDryRun() ? 'Would delete ' : 'Deleted ' ) .
+                  $deleted . ' orphaned entries.'
             );
 
             // Clear cache if entries were deleted and not in dry-run mode
