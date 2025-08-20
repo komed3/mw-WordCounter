@@ -56,6 +56,14 @@
         "WordCounterSpecialPageMaxResults": {
             "value": 5000,
             "description": "Maximum number of results to return in special pages"
+        },
+        "WordCounterJobCountWordsLimit": {
+            "value": 50,
+            "description": "Number of pages to process per CountWords job (0 to disable jobs)"
+        },
+        "WordCounterJobPurgeOrphanedLimit": {
+            "value": 1000,
+            "description": "Number of entries to process per PurgeOrphaned job (0 to disable jobs)"
         }
     },
     "AutoloadNamespaces": {
@@ -80,6 +88,10 @@
     },
     "SpecialPages": {
         "WordCounterMostWords": "MediaWiki\\Extension\\WordCounter\\Specials\\MostWords"
+    },
+    "JobClasses": {
+        "WordCounterCountWords": "MediaWiki\\Extension\\WordCounter\\Jobs\\CountWordsJob",
+        "WordCounterPurgeOrphaned": "MediaWiki\\Extension\\WordCounter\\Jobs\\PurgeOrphanedJob"
     },
     "APIModules": {
         "wordcounter": "MediaWiki\\Extension\\WordCounter\\Api\\WordCounter"
