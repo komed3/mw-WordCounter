@@ -78,7 +78,7 @@
             if ( $pageId && $wordCount !== null ) {
 
                 // Store the word count in the database
-                Database::updateWordCount( $pageId, $revisionRecord->getId(), $wordCount );
+                Database::updateWordCount( $pageId, $wordCount );
 
                 // Clear the total word/page count cache
                 Utils::clearCache();
