@@ -46,9 +46,8 @@
             bool $dryRun
         ) : void {
 
+            if ( $dryRun ) $this->output( 'Dry-run mode is enabled.' );
             $this->dryRun = $dryRun;
-
-            $this->output( 'Dry-run mode is ' . ( $dryRun ? 'enabled' : 'disabled' ) . '.' );
 
         }
 
