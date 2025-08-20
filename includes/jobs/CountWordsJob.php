@@ -49,7 +49,7 @@
         public function run () {
 
             // Check if jobs are enabled (limit > 0)
-            $limit = (int) Utils::getConfig( 'WordCounterJobCountWordsLimit', 50 );
+            $limit = (int) Utils::getConfig( 'WordCounterCountWordsJobLimit', 50 );
             if ( $limit <= 0 ) return true;
 
             // Set up the task

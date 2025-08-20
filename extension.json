@@ -27,43 +27,51 @@
     "config": {
         "WordCounterNamespaces": {
             "value": [ 0 ],
-            "description": "List of namespaces for whose pages words are to be counted"
+            "description": "List of namespaces for whose pages words are to be counted."
         },
         "WordCounterCountNumbers": {
             "value": false,
-            "description": "Whether to count numbers (digits) as words"
+            "description": "Whether to count numbers (digits) as words."
         },
         "WordCounterPattern": {
             "value": null,
-            "description": "Regular expression pattern to match words; if null, the default pattern is used"
+            "description": "Regular expression pattern to match words; if null, the default pattern is used."
         },
         "WordCounterCountOnPageSave": {
             "value": true,
-            "description": "Whether to count words on page save"
+            "description": "Whether to count words on page save."
         },
         "WordCounterCacheService": {
             "value": "main",
-            "description": "Cache service to use; options are 'local', 'wan', 'micro' or 'main'"
+            "description": "Cache service to use; options are 'local', 'wan', 'micro' or 'main'."
         },
         "WordCounterCacheSpecialPages": {
             "value": true,
-            "description": "Whether to cache the query results of special pages"
+            "description": "Whether to cache the query results of special pages."
         },
         "WordCounterSpecialPageCacheTTL": {
             "value": 3600,
-            "description": "Cache expiry time for special pages in seconds"
+            "description": "Cache expiry time for special pages in seconds."
         },
         "WordCounterSpecialPageMaxResults": {
             "value": 5000,
-            "description": "Maximum number of results to return in special pages"
+            "description": "Maximum number of results to return in special pages."
         },
-        "WordCounterJobCountWordsLimit": {
+        "WordCounterCountWordsJobLimit": {
             "value": 50,
-            "description": "Number of pages to process per CountWords job (0 to disable jobs)"
+            "description": "Number of pages to process per CountWords job (0 to disable jobs)."
         },
-        "WordCounterJobPurgeOrphanedLimit": {
+        "WordCounterCountWordsJobInterval": {
+            "value": 3600,
+            "description": "Minimum interval in seconds between automatic CountWords job scheduling."
+        },
+        "WordCounterPurgeOrphanedJobLimit": {
             "value": 1000,
-            "description": "Number of entries to process per PurgeOrphaned job (0 to disable jobs)"
+            "description": "Number of entries to process per PurgeOrphaned job (0 to disable jobs)."
+        },
+        "WordCounterPurgeOrphanedJobInterval": {
+            "value": 86400,
+            "description": "Minimum Interval in seconds between automatic PurgeOrphaned job scheduling."
         }
     },
     "AutoloadNamespaces": {

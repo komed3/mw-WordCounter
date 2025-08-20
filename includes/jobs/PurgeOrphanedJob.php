@@ -49,7 +49,7 @@
         public function run () {
 
             // Check if jobs are enabled (limit > 0)
-            $limit = (int) Utils::getConfig( 'WordCounterJobPurgeOrphanedLimit', 1000 );
+            $limit = (int) Utils::getConfig( 'WordCounterPurgeOrphanedJobLimit', 1000 );
             if ( $limit <= 0 ) return true;
 
             // Set up the task
