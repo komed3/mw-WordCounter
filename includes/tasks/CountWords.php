@@ -67,9 +67,11 @@
         ) : array {
 
             $this->output( 'Starting word counting task.' );
+            $this->setDryRun( (bool) $options[ 'dry-run' ] );
 
             $this->revLookup = MediaWikiServices::getInstance()->getRevisionLookup();
-            $this->setDryRun( (bool) $options[ 'dry-run' ] );
+            $this->processed = 0;
+            $this->errors = 0;
 
             $force = (bool) ( $options[ 'force' ] ?? false );
             $limit = (int) ( $options[ 'limit' ] ?? 100 );
