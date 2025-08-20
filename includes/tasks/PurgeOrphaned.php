@@ -36,19 +36,20 @@
 
             $this->output( 'Starting orphaned wordcounter entry cleanup.' );
 
+            $this->setDryRun( (bool) $options[ 'dry-run' ] );
+
             $limit = (int) $options[ 'limit' ] ?: 1000;
-            $dryRun = (bool) $options[ 'dry-run' ];
 
             // Delete orphaned or invalid entries
-            $deleted = Database::deleteOrphanedEntries( $limit, $dryRun );
+            $deleted = Database::deleteOrphanedEntries( $limit, $this->isDryRun() );
 
             $this->output(
-                ( $dryRun ? 'Would delete ' : 'Deleted ' ) .
+                ( $this->isDryRun() ? 'Would delete ' : 'Deleted ' ) .
                 $deleted . ' orphaned entries.'
             );
 
             // Clear cache if entries were deleted and not in dry-run mode
-            if ( $deleted && ! $dryRun ) {
+            if ( $deleted && ! $this->isDryRun() ) {
 
                 Utils::clearCache();
                 $this->output( 'Cache cleared.' );

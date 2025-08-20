@@ -21,6 +21,13 @@
     class Task {
 
         /**
+         * Flag to indicate if the task is running in dry-run mode.
+         * 
+         * @var bool
+         */
+        private bool $dryRun = false;
+
+        /**
          * Output callback function.
          * 
          * This function is called to output messages during task execution.
@@ -29,6 +36,32 @@
          * @var callable|null
          */
         private $outputCallback = null;
+
+        /**
+         * Sets the dry-run mode for the task.
+         * 
+         * @param bool $dryRun - If true, the task will run in dry-run mode.
+         */
+        public function setDryRun (
+            bool $dryRun
+        ) : void {
+
+            $this->dryRun = $dryRun;
+
+            $this->output( 'Dry-run mode is ' . ( $dryRun ? 'enabled' : 'disabled' ) . '.' );
+
+        }
+
+        /**
+         * Checks if the task is running in dry-run mode.
+         * 
+         * @return bool - Returns true if the task is in dry-run mode, false otherwise.
+         */
+        public function isDryRun () : bool {
+
+            return $this->dryRun;
+
+        }
 
         /**
          * Outputs a message.
