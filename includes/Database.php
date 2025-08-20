@@ -401,7 +401,7 @@
 
             // Delete orphaned entries
             if ( $orphanedIds && ! $tryRun ) self::deleteWordCounts( $orphanedIds );
-            $totalDeleted += count( $orphanedIds );
+            $totalDeleted = count( $orphanedIds );
 
             // If limit is reached, do not proceed further
             if ( $totalDeleted >= $limit ) return $totalDeleted;
@@ -411,10 +411,10 @@
                 [ 'wordcounter', 'page' ],
                 'wc_page_id',
                 [
-                    $dbw->makeList( [
-                        'page_namespace NOT IN (' . $dbw->makeList( Utils::supportedNamespaces() ) . ')',
+                    $dbr->makeList( [
+                        'page_namespace NOT IN (' . $dbr->makeList( Utils::supportedNamespaces() ) . ')',
                         'page_is_redirect = 1',
-                        'page_content_model != ' . $dbw->addQuotes( CONTENT_MODEL_WIKITEXT )
+                        'page_content_model != ' . $dbr->addQuotes( CONTENT_MODEL_WIKITEXT )
                     ], LIST_OR )
                 ],
                 __METHOD__,

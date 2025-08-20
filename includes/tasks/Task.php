@@ -6,7 +6,7 @@
 
         private $outputCallback = null;
 
-        private function output (
+        protected function output (
             string $msg
         ) : void {
 
