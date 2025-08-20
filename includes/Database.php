@@ -34,9 +34,11 @@
             bool $primary = false
         ) : IDatabase {
 
-            return MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection(
-                $primary ? DB_PRIMARY : DB_REPLICA
-            );
+            return MediaWikiServices::getInstance()
+                ->getDBLoadBalancer()
+                ->getConnection(
+                    $primary ? DB_PRIMARY : DB_REPLICA
+                );
 
         }
 
