@@ -81,7 +81,7 @@
 
             }
 
-            $totalProcessed = 0;
+            $totalProcessed = $totalErrors = 0;
 
             do {
 
@@ -94,21 +94,30 @@
 
                 }
 
-                // Run the batch task
-                if (
-                    ! ( $result = $task->runTask( $options ) ) ||
-                    ( $processed = array_sum( $result[ 'result' ] ) ) < $options[ 'limit' ] ||
-                    ( ( $totalProcessed += $processed ) >= $totalLimit && $totalLimit > 0 )
-                ) break;
+                // Run the batch task, abort if it fails
+                if ( ! ( $result = $task->runTask( $options ) ) ) break;
+
+                // Update counters
+                extract( $result[ 'result' ] );
+                $totalProcessed += $processed;
+                $totalErrors += $errors;
+
+                // Check if script has reached the end or its limit
+                if ( $processed + $errors < $options[ 'limit' ] || (
+                    $totalLimit > 0 && $totalProcessed + $totalErrors >= $totalLimit
+                ) ) break;
 
                 // Wait for replication
+                $this->output( 'Processed ' . $totalProcessed . ' entries so far.' . PHP_EOL );
                 $this->output( 'Waiting for replication ...' . PHP_EOL );
                 $this->waitForReplication();
 
             } while ( true );
 
             // Final summary
+            $this->output( '=== Summary ===' . PHP_EOL );
             $this->output( 'Total processed: ' . $totalProcessed . ' entries.' . PHP_EOL );
+            $this->output( 'Total errors: ' . $totalErrors . ' entries.' . PHP_EOL );
 
         }
 
