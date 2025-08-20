@@ -60,8 +60,10 @@
     },
     "AutoloadNamespaces": {
         "MediaWiki\\Extension\\WordCounter\\": "includes/",
+        "MediaWiki\\Extension\\WordCounter\\Api\\": "includes/api/",
+        "MediaWiki\\Extension\\WordCounter\\Jobs\\": "includes/jobs/",
         "MediaWiki\\Extension\\WordCounter\\Specials\\": "includes/specials/",
-        "MediaWiki\\Extension\\WordCounter\\Api\\": "includes/api/"
+        "MediaWiki\\Extension\\WordCounter\\Tasks\\": "includes/tasks/"
     },
     "HookHandlers": {
         "hooks": {
