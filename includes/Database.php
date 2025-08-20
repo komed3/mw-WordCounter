@@ -144,6 +144,9 @@
         /**
          * Get pages ordered by word count.
          * 
+         * This method retrieves pages ordered by their word count, optionally
+         * filtered by namespace and ordered in ascending or descending order.
+         * 
          * @param int $limit - The maximum number of pages to return
          * @param int $offset - The offset for pagination
          * @param bool $desc - Whether to order by descending word count
@@ -244,6 +247,10 @@
         /**
          * Get the number of pages that need word count updates.
          * 
+         * This method counts pages that are in supported namespaces,
+         * not redirects, and have a wikitext content model, but do not
+         * have a corresponding entry in the wordcounter table.
+         * 
          * @return int - The number of pages needing word count updates
          */
         public static function getPagesNeedingCount () : int {
@@ -273,6 +280,9 @@
 
         /**
          * Get pages that need word counting with limit.
+         * 
+         * This method retrieves pages that have not been counted yet,
+         * filtered by supported namespaces and content model.
          * 
          * @param int $limit - Maximum number of pages to return
          * @return IResultWrapper - The result set
@@ -308,7 +318,48 @@
         }
 
         /**
+         * Get pages with outdated word counts that need updating.
+         * 
+         * This method retrieves pages where the word count is outdated,
+         * meaning the word count was last updated before the page was last touched.
+         * 
+         * @param int $limit - Maximum number of pages to return
+         * @return IResultWrapper - The result set containing outdated word counts
+         */
+        public static function getPagesWithOutdatedWordCount (
+            int $limit = 100
+        ) : IResultWrapper {
+
+            $dbr = self::getDBConnection();
+
+            return $dbr->select(
+                [ 'wordcounter', 'page' ],
+                [ 'wc_page_id', 'wc_word_count', 'page_title', 'page_namespace' ],
+                [
+                    'page_namespace' => Utils::supportedNamespaces(),
+                    'page_is_redirect' => 0,
+                    'wc_updated < page_touched'
+                ],
+                __METHOD__,
+                [
+                    'ORDER BY' => 'wc_page_id',
+                    'LIMIT' => $limit
+                ],
+                [
+                    'page' => [
+                        'INNER JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+        }
+
+        /**
          * Get all pages in supported namespaces (for forced recounting).
+         * 
+         * This method retrieves all pages that are in supported namespaces,
+         * not redirects, and have the wikitext content model.
          * 
          * @param int $limit - Maximum number of pages to return
          * @param int $offset - Offset for pagination
@@ -339,6 +390,9 @@
 
         /**
          * Delete orphaned entries directly using efficient SQL.
+         * 
+         * This method finds and deletes entries in the wordcounter table
+         * that do not have a corresponding page entry.
          * 
          * @param int $limit - Maximum number of entries to delete in this batch
          * @param bool $tryRun - If true, only simulate the deletion without executing it
