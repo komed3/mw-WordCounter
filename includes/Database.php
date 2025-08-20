@@ -371,6 +371,68 @@
 
         }
 
+        /**
+         * Delete orphaned entries directly using efficient SQL.
+         * 
+         * @param int $limit - Maximum number of entries to delete in this batch
+         * @param bool $tryRun - If true, only simulate the deletion without executing it
+         * @return int - Number of deleted entries
+         */
+        public static function deleteOrphanedEntries (
+            int $limit = 1000, bool $tryRun = false
+        ) : int {
+
+            $dbr = self::getDBConnection();
+
+            // Find orphaned entries (no matching page)
+            $orphanedIds = $dbr->selectFieldValues(
+                [ 'wordcounter', 'page' ],
+                'wc_page_id',
+                [ 'page_id IS NULL' ],
+                __METHOD__,
+                [ 'LIMIT' => $limit ],
+                [
+                    'page' => [
+                        'LEFT JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+            // Delete orphaned entries
+            if ( $orphanedIds && ! $tryRun ) self::deleteWordCounts( $orphanedIds );
+            $totalDeleted += count( $orphanedIds );
+
+            // If limit is reached, do not proceed further
+            if ( $totalDeleted >= $limit ) return $totalDeleted;
+
+            // Find entries for unsupported namespaces, redirects, or non-wikitext
+            $invalidIds = $dbr->selectFieldValues(
+                [ 'wordcounter', 'page' ],
+                'wc_page_id',
+                [
+                    $dbw->makeList( [
+                        'page_namespace NOT IN (' . $dbw->makeList( Utils::supportedNamespaces() ) . ')',
+                        'page_is_redirect = 1',
+                        'page_content_model != ' . $dbw->addQuotes( CONTENT_MODEL_WIKITEXT )
+                    ], LIST_OR )
+                ],
+                __METHOD__,
+                [ 'LIMIT' => $limit - $totalDeleted ],
+                [
+                    'page' => [
+                        'INNER JOIN',
+                        'page_id = wc_page_id'
+                    ]
+                ]
+            );
+
+            // Delete invalid entries
+            if ( $invalidIds && ! $tryRun ) self::deleteWordCounts( $invalidIds );
+            return $totalDeleted + count( $invalidIds );
+
+        }
+
     }
 
 ?>
