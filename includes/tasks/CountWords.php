@@ -17,6 +17,7 @@
     use MediaWiki\Extension\WordCounter\Database;
     use MediaWiki\Extension\WordCounter\Utils;
     use MediaWiki\MediaWikiServices;
+    use MediaWiki\Revision\RevisionLookup;
     use MediaWiki\Title\Title;
 
     /**
@@ -26,8 +27,33 @@
      */
     class CountWords extends Task {
 
-        private $revLookup;
+        /**
+         * Revision lookup service.
+         * 
+         * This service is used to retrieve revisions for titles.
+         * 
+         * @var RevisionLookup
+         */
+        private RevisionLookup $revLookup;
+
+        /**
+         * Number of processed pages.
+         * 
+         * This variable keeps track of how many pages have been processed
+         * during the word counting task.
+         * 
+         * @var int
+         */
         private int $processed = 0;
+
+        /**
+         * Number of errors encountered.
+         * 
+         * This variable counts the number of errors that occur during
+         * the word counting task, such as invalid titles or failed revisions.
+         * 
+         * @var int
+         */
         private int $errors = 0;
 
         /**
@@ -55,7 +81,7 @@
             else $this->processBatch( $force, $limit );
 
             // Clear cache if entries were deleted and not in dry-run mode
-            if ( $deleted && ! $this->isDryRun() ) {
+            if ( $this->processed && ! $this->isDryRun() ) {
 
                 Utils::clearCache();
                 $this->output( 'Cache cleared.' );

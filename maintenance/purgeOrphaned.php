@@ -61,7 +61,7 @@
                 $this->output( $msg . PHP_EOL );
             } );
 
-            // Get options
+            // Prepare options
             $totalLimit = (int) $this->getOption( 'limit', 0 );
             $batchSize = $this->getBatchSize();
             $dryRun = $this->hasOption( 'dry-run' );
