@@ -8,7 +8,12 @@
 
     class JobScheduler {
 
-        public static function maybeSchedule () {
+        private const JOB_REGISTRY = [
+            'CountWordsJob' => 'WordCounterCountWords',
+            'PurgeOrphanedJob' => 'WordCounterPurgeOrphaned'
+        ];
+
+        public static function maybeSchedule () : void {
 
             
 
@@ -36,6 +41,34 @@
                     ->lazyPush( $job );
 
             }
+
+        }
+
+        /**
+         * Get job queue status information.
+         * 
+         * @return array - Status information about job queues
+         */
+        public static function getJobStatus () : array {
+
+            $jobQueueGroup = MediaWikiServices::getInstance()->getJobQueueGroup();
+            $status = [];
+
+            foreach ( self::JOB_REGISTRY as $job => $type ) {
+
+                if ( $queue = $jobQueueGroup->get( $type ) ) {
+
+                    $status[ $job ] = [
+                        'type' => $type,
+                        'size' => $queue->getSize(),
+                        'delayed' => $queue->getDelayedCount()
+                    ];
+
+                }
+
+            }
+            
+            return $status;
 
         }
 
