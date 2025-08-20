@@ -45,12 +45,12 @@
          * 
          * @param int $pageId - The ID of the page to update
          * @param int $wordCount - The new word count
-         * @return bool - True if the update was successful, false otherwise
+         * @return bool|null - True if the update was successful, false otherwise
          */
         public static function updateWordCount (
             int $pageId,
             int $wordCount
-        ) : bool {
+        ) : ?bool {
 
             $dbw = self::getDBConnection( true );
             $dts = $dbw->timestamp();
