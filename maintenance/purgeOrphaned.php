@@ -78,7 +78,7 @@
                 if (
                     ! ( $result = $task->runTask( $options ) ) ||
                     ( $deleted = $result[ 'result' ][ 'deleted' ] ) < $batchSize ||
-                    ( $proceeded += $deleted ) >= $limit
+                    ( ( $proceeded += $deleted ) >= $limit && $limit > 0 )
                 ) break;
 
                 // Wait for replication
