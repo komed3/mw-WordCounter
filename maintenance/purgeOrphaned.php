@@ -62,23 +62,29 @@
             } );
 
             // Get options
-            $limit = (int) $this->getOption( 'limit', 0 );
+            $totalLimit = (int) $this->getOption( 'limit', 0 );
             $batchSize = $this->getBatchSize();
+            $dryRun = $this->hasOption( 'dry-run' );
+            $options = [ 'limit' => $batchSize, 'dry-run' => $dryRun ];
 
-            $options = [
-                'limit' => $batchSize,
-                'dry-run' => $this->hasOption( 'dry-run' )
-            ];
-
-            $proceeded = 0;
+            $totalProcessed = 0;
 
             do {
+
+                // Adjust batch size if we're approaching the total limit
+                if ( $totalLimit > 0 ) {
+
+                    if ( ( $remaining = $totalLimit - $totalProcessed ) <= 0 ) break;
+
+                    $options[ 'limit' ] = min( $batchSize, $remaining );
+
+                }
 
                 // Run the batch task
                 if (
                     ! ( $result = $task->runTask( $options ) ) ||
-                    ( $deleted = $result[ 'result' ][ 'deleted' ] ) < $batchSize ||
-                    ( ( $proceeded += $deleted ) >= $limit && $limit > 0 )
+                    ( $deleted = $result[ 'result' ][ 'deleted' ] ) < $options[ 'limit' ] ||
+                    ( ( $totalProcessed += $deleted ) >= $totalLimit && $totalLimit > 0 )
                 ) break;
 
                 // Wait for replication
@@ -86,6 +92,9 @@
                 $this->waitForReplication();
 
             } while ( true );
+
+            // Final summary
+            $this->output( 'Total processed: ' . $totalProcessed . ' entries.' . PHP_EOL );
 
         }
 
