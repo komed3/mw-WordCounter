@@ -36,6 +36,38 @@ php maintenance/run.php update.php
 
 ## Parser Functions
 
+WordCounter provides several parser functions to display word and page statistics directly in wiki pages. All functions support an optional format parameter:
+
+- Use `R` for the raw number (unformatted), or leave empty for a localized, formatted number.
+
+**Usage:**
+
+- `{{#pagewords:}}`  
+  Displays the word count of the current page (formatted).
+- `{{#pagewords:R}}`  
+  Displays the word count of the current page (raw number).
+- `{{#pagewords:|Page Title}}`  
+  Displays the word count of the specified page (formatted).
+- `{{#pagewords:R|Page Title}}`  
+  Displays the word count of the specified page (raw number).
+- `{{#totalwords:}}`  
+  Displays the total word count across all supported pages (formatted).
+- `{{#totalwords:R}}`  
+  Displays the total word count across all supported pages (raw number).
+- `{{#totalpages:}}`  
+  Displays the total number of supported pages (formatted).
+- `{{#totalpages:R}}`  
+  Displays the total number of supported pages (raw number).
+
+**Examples:**
+
+```
+There are {{#pagewords:}} words on this page.
+The article "Foo" has {{#pagewords:R|Foo}} words.
+Total words in the wiki: {{#totalwords:}}
+Total pages counted: {{#totalpages:R}}
+```
+
 ## API Usage
 
 ## Configuration Variables
