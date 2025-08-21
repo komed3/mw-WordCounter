@@ -119,6 +119,9 @@
             $this->output( 'Total processed: ' . $totalProcessed . ' entries.' . PHP_EOL );
             $this->output( 'Total errors: ' . $totalErrors . ' entries.' . PHP_EOL );
 
+            // If there were errors, we consider it a fatal error
+            if ( $totalErrors ) $this->fatalError();
+
         }
 
     }

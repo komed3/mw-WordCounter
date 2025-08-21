@@ -165,7 +165,7 @@
 
                     $title = Title::makeTitle( $row->page_namespace, $row->page_title );
 
-                    if ( $this->processPage( $title ) ) $this->processed++;
+                    if ( $title && $this->processPage( $title ) ) $this->processed++;
                     else $this->errors++;
 
                 }

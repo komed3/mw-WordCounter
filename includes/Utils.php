@@ -87,6 +87,8 @@
         /**
          * Get the cache service based on configuration.
          * 
+         * Set $wgWordCounterCacheService to choose the cache service.
+         * 
          * @return - The cache service instance
          * @throws InvalidArgumentException - If the configured cache service is invalid
          */
@@ -112,6 +114,8 @@
         /**
          * Check if word counting should be performed on page save.
          * 
+         * Set $wgWordCounterCountOnPageSave in wikis with high editing load.
+         * 
          * @return bool - True if word counting is enabled on page save
          */
         public static function countOnPageSave () : bool {
@@ -122,13 +126,17 @@
 
         /**
          * Get the supported namespaces for word counting.
-         * Use $wgWordCounterNamespaces to define valid namespaces.
+         * 
+         * Use $wgWordCounterSupportedNamespaces to define valid namespaces.
          * 
          * @return array - Array of supported namespace IDs
          */
         public static function supportedNamespaces () : array {
 
-            return (array) self::getConfig( 'WordCounterNamespaces', self::NS_FALLBACK );
+            return (array) self::getConfig(
+                'WordCounterSupportedNamespaces',
+                self::NS_FALLBACK
+            );
 
         }
 
@@ -148,6 +156,7 @@
 
         /**
          * Get the page ID from the title.
+         * 
          * Checks if the title exists, is not a redirect and is in a supported namespace.
          * 
          * @param Title $title - The title of the page
@@ -184,6 +193,12 @@
 
         /**
          * Count words from a revision record.
+         * 
+         * Use $wgWordCounterCustomPattern to define a custom regex pattern.
+         * Use $wgWordCounterCountNumbers to include numbers in the count.
+         * 
+         * Hooks 'WordCounterBeforeCount' and 'WordCounterAfterCount' allow extensions
+         * to modify the count.
          * 
          * @param RevisionRecord $revisionRecord - The revision record to count words from
          * @return int|null - The word count or null if not applicable
@@ -234,7 +249,7 @@
 
             // Determine which pattern to use for word counting
             // Use the configured pattern or default to counting words
-            $pattern = self::getConfig( 'WordCounterPattern', null ) ??
+            $pattern = self::getConfig( 'WordCounterCustomPattern', null ) ??
                 ( self::getConfig( 'WordCounterCountNumbers', false )
                     ? '/(?:[\p{N}]+([.,][\p{N}]+)*)|[\p{L}]+/u'
                     : '/[\p{L}]+/u' );
