@@ -1,22 +1,35 @@
-# WordCounter Extension
+# WordCounter Extension for MediaWiki
 
-A comprehensive MediaWiki extension that counts and tracks words in articles.
+**WordCounter** is a comprehensive MediaWiki extension that automatically counts and tracks the number of words in wiki pages. It provides parser functions for displaying word counts, a special page for listing articles by word count, an API module for programmatic access, maintenance scripts for batch operations, and a robust job system for background processing.
 
-## Features
+The extension is highly configurable, supports multiple languages, and is designed for performance and extensibility.
 
-- Automatic word counting when pages are saved
-- Word count display on page info
-- Magic words: `{{ARTICLEWORDS}}` and `{{TOTALWORDS}}`
-- Special page listing articles by word count
-- `API` integration for word count data
-- Total word count on `Special:Statistics`
-- Maintenance script for batch processing
+**Key Features:**
+
+- **Automatic word counting** on page save and via maintenance scripts.
+- **Parser functions** to display word counts in wiki pages.
+- **Special page** to list pages with the most words.
+- **API module** for retrieving word counts and statistics.
+- **Maintenance scripts** for batch counting and database cleanup.
+- **Job scheduler integration** for periodic updates and purges.
+- **Configurable options** for namespaces, caching, and counting behavior.
+- **Support** for multiple languages and scripts.
+- **Extensible hooks** for custom word counting logic.
 
 ## Installation
 
-1. Download and place the files in `extensions/WordCounter/`
-2. Add to `LocalSettings.php`:
+**Download** the extension and place it in your `extensions/WordCounter` directory.
+
+**Enable** the extension in your `LocalSettings.php`:
 
 ```php
 wfLoadExtension( 'WordCounter' );
 ```
+
+**Run the database update** to create the required tables:
+
+```sh
+php maintenance/run.php update.php
+```
+
+**(Optional)** Adjust configuration variables in `LocalSettings.php` as needed (see below).
