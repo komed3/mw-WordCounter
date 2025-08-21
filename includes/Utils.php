@@ -3,7 +3,9 @@
     /**
      * Class WordCounter/Utils
      * 
-     * Utility class for WordCounter extension.
+     * This utility class provides methods for configuration management,
+     * cache handling, word counting, and namespace validation for the
+     * WordCounter extension.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT
@@ -44,9 +46,7 @@
          * 
          * @var array
          */
-        private const NS_FALLBACK = [
-            NS_MAIN
-        ];
+        private const NS_FALLBACK = [ NS_MAIN ];
 
         /**
          * Cache keys for total word and page counts.
@@ -74,8 +74,7 @@
          * @return mixed - The configuration value or default
          */
         public static function getConfig (
-            string $key,
-            mixed $default = null
+            string $key, mixed $default = null
         ) : mixed {
 
             $config = MediaWikiServices::getInstance()->getMainConfig();
@@ -120,7 +119,7 @@
          */
         public static function countOnPageSave () : bool {
 
-            return (bool) self::getConfig( 'WordCounterCountOnPageSave', true );
+            return boolval( self::getConfig( 'WordCounterCountOnPageSave', true ) );
 
         }
 
@@ -178,8 +177,8 @@
         /**
          * Get the word count for a specific page by title.
          * 
-         * @param string $titleText - The title of the page
-         * @return int - The word count for the page
+         * @param Title $title - The Title object of the page
+         * @return int|null - The word count or null if the page is invalid
          */
         public static function getWordCountByTitle (
             Title $title
@@ -197,8 +196,8 @@
          * Use $wgWordCounterCustomPattern to define a custom regex pattern.
          * Use $wgWordCounterCountNumbers to include numbers in the count.
          * 
-         * Hooks 'WordCounterBeforeCount' and 'WordCounterAfterCount' allow extensions
-         * to modify the count.
+         * Hooks 'WordCounterBeforeCount' and 'WordCounterAfterCount' allow
+         * extensions to modify the count.
          * 
          * @param RevisionRecord $revisionRecord - The revision record to count words from
          * @return int|null - The word count or null if not applicable
@@ -270,18 +269,30 @@
         /**
          * Invalidate the parser cache for a specific page.
          * 
+         * This needs to be called after a page is saved and the word count
+         * has updated, to ensure the parser cache reflects the new word count.
+         * 
          * @param WikiPage $wikiPage - The wiki page to invalidate the cache for
          */
         public static function invalidateParserCache (
             $wikiPage
         ) : void {
 
-            // Clear parser cache for the given page
-            $parserCache = MediaWikiServices::getInstance()->getParserCache();
-            $parserCache->deleteOptionsKey( $wikiPage );
+            if ( $wikiPage instanceof WikiPage ) {
 
-            // Also clear the HTML cache
-            $wikiPage->doPurge();
+                // Clear parser cache for the given page
+                $parserCache = MediaWikiServices::getInstance()->getParserCache();
+                $parserCache->deleteOptionsKey( $wikiPage );
+
+                // Also clear the HTML cache
+                $wikiPage->doPurge();
+
+            } else {
+
+                // Log a debug message if the WikiPage object is invalid
+                wfDebugLog( 'WordCounter', 'Invalid WikiPage object provided for cache invalidation.' );
+
+            }
 
         }
 
@@ -293,11 +304,10 @@
         public static function getTotalWordCount () : int {
 
             $cache = self::getCacheService();
+            $key = $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'words' ] );
 
             return $cache->getWithSetCallback(
-                $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'words' ] ),
-                self::CACHE_TTL,
-                function () {
+                $key, self::CACHE_TTL, function () {
                     return Database::getTotalWordCount();
                 }
             );
@@ -312,11 +322,10 @@
         public static function getTotalPageCount () : int {
 
             $cache = self::getCacheService();
+            $key = $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'pages' ] );
 
             return $cache->getWithSetCallback(
-                $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'pages' ] ),
-                self::CACHE_TTL,
-                function () {
+                $key, self::CACHE_TTL, function () {
                     return Database::getTotalPageCount();
                 }
             );
@@ -331,11 +340,10 @@
         public static function getPagesNeedingCount () : int {
 
             $cache = self::getCacheService();
+            $key = $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'uncounted' ] );
 
             return $cache->getWithSetCallback(
-                $cache->makeKey( 'wordcounter', self::CACHE_KEY[ 'uncounted' ] ),
-                self::CACHE_TTL,
-                function () {
+                $key, self::CACHE_TTL, function () {
                     return Database::getPagesNeedingCount();
                 }
             );

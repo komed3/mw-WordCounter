@@ -4,7 +4,8 @@
      * Class WordCounter/Database
      * 
      * This class handles database interactions for the WordCounter extension.
-     * It provides methods to update and retrieve word counts for pages.
+     * It provides methods to update and retrieve word counts for pages, lists
+     * pages ordered by word count, and manage orphaned entries in the database.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT
@@ -74,7 +75,7 @@
         }
 
         /**
-         * Delete the word count for a page.
+         * Delete the word count entry for a page.
          * 
          * @param int $pageId - The ID of the page to delete the word count for
          * @return bool - True if the deletion was successful, false otherwise
@@ -116,7 +117,7 @@
         }
 
         /**
-         * Get the word count for a page.
+         * Get the word count for a page by ID.
          * 
          * @param int $pageId - The ID of the page to get the word count for
          * @return int|null - The word count, or null if not found
@@ -169,7 +170,8 @@
                 __METHOD__,
                 [
                     'ORDER BY' => 'wc_word_count ' . ( $desc ? 'DESC' : 'ASC' ),
-                    'LIMIT' => $limit, 'OFFSET' => $offset
+                    'LIMIT' => $limit,
+                    'OFFSET' => $offset
                 ],
                 [
                     'page' => [
@@ -183,6 +185,8 @@
 
         /**
          * Get the total word count across all pages.
+         * 
+         * Use Utils::getTotalWordCount() to avoid unnecessary database queries.
          * 
          * @return int - The total word count
          */
@@ -214,6 +218,8 @@
         /**
          * Get the total number of pages with word counts.
          * 
+         * Use Utils::getTotalPageCount() to avoid unnecessary database queries.
+         * 
          * @return int - The total number of pages
          */
         public static function getTotalPageCount () : int {
@@ -243,6 +249,8 @@
 
         /**
          * Get the number of pages that need word count updates.
+         * 
+         * Use Utils::getPagesNeedingCount() to avoid unnecessary database queries.
          * 
          * This method counts pages that are in supported namespaces,
          * not redirects, and have a wikitext content model, but do not
@@ -276,7 +284,7 @@
         }
 
         /**
-         * Get pages that need word counting with limit.
+         * Get pages that need word counting.
          * 
          * This method retrieves pages that have not been counted yet,
          * filtered by supported namespaces and content model.
@@ -317,8 +325,8 @@
         /**
          * Get pages with outdated word counts that need updating.
          * 
-         * This method retrieves pages where the word count is outdated,
-         * meaning the word count was last updated before the page was last touched.
+         * This method retrieves pages where the word count is outdated, meaning
+         * the word count was last updated before the page was last touched.
          * 
          * @param int $limit - Maximum number of pages to return
          * @return IResultWrapper - The result set containing outdated word counts
@@ -360,7 +368,7 @@
          * 
          * @param int $limit - Maximum number of pages to return
          * @param int $offset - Offset for pagination
-         * @return IResultWrapper - The result set
+         * @return IResultWrapper - The result set of supported pages
          */
         public static function getAllSupportedPages (
             int $limit = 100, int $offset = 0
@@ -379,7 +387,8 @@
                 __METHOD__,
                 [
                     'ORDER BY' => 'page_id',
-                    'LIMIT' => $limit, 'OFFSET' => $offset
+                    'LIMIT' => $limit,
+                    'OFFSET' => $offset
                 ]
             );
 
@@ -418,10 +427,9 @@
 
             // Delete orphaned entries
             if ( $orphanedIds && ! $tryRun ) self::deleteWordCounts( $orphanedIds );
-            $totalDeleted = count( $orphanedIds );
 
             // If limit is reached, do not proceed further
-            if ( $totalDeleted >= $limit ) return $totalDeleted;
+            if ( ( $totalDeleted = count( $orphanedIds ) ) >= $limit ) return $totalDeleted;
 
             // Find entries for unsupported namespaces, redirects, or non-wikitext
             $invalidIds = $dbr->selectFieldValues(
@@ -446,6 +454,7 @@
 
             // Delete invalid entries
             if ( $invalidIds && ! $tryRun ) self::deleteWordCounts( $invalidIds );
+
             return $totalDeleted + count( $invalidIds );
 
         }
