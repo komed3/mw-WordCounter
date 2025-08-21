@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Job: CountWords
+     * Class WordCounter/Jobs/CountWordsJob
      * 
      * Background job that executes the CountWords task.
      * Processes pages in configurable batches without output.
@@ -14,12 +14,12 @@
     namespace MediaWiki\Extension\WordCounter\Jobs;
 
     use Job;
-    use MediaWiki\Extension\WordCounter\Tasks\CountWords;
     use MediaWiki\Extension\WordCounter\JobScheduler;
+    use MediaWiki\Extension\WordCounter\Tasks\CountWordsTask;
     use MediaWiki\Extension\WordCounter\Utils;
 
     /**
-     * Class CountWordsJob
+     * Class WordCounter/Jobs/CountWordsJob
      * 
      * Executes word counting in the background job queue.
      */
@@ -44,16 +44,16 @@
          * and runs it with a limit. If the full limit is processed,
          * it schedules the next job immediately.
          * 
-         * @return bool - True if successful, false otherwise.
+         * @return bool - True if successful, false otherwise
          */
-        public function run () {
+        public function run () : bool {
 
             // Check if jobs are enabled (limit > 0)
             $limit = (int) Utils::getConfig( 'WordCounterCountWordsJobLimit', 50 );
             if ( $limit <= 0 ) return true;
 
             // Set up the task
-            $task = new CountWords ();
+            $task = new CountWordsTask ();
 
             // Run the task
             $result = $task->runTask( [ 'limit' => $limit ] ) !== null;

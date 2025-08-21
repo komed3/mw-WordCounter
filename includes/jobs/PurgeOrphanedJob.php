@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Job: PurgeOrphaned
+     * Class WordCounter/Jobs/PurgeOrphanedJob
      * 
      * Background job that executes the PurgeOrphaned task.
      * Cleans up orphaned entries in configurable batches without output.
@@ -14,12 +14,12 @@
     namespace MediaWiki\Extension\WordCounter\Jobs;
 
     use Job;
-    use MediaWiki\Extension\WordCounter\Tasks\PurgeOrphaned;
     use MediaWiki\Extension\WordCounter\JobScheduler;
+    use MediaWiki\Extension\WordCounter\Tasks\PurgeOrphanedTask;
     use MediaWiki\Extension\WordCounter\Utils;
 
     /**
-     * Class PurgeOrphaned
+     * Class WordCounter/Jobs/PurgeOrphanedJob
      * 
      * Executes orphaned entry cleanup in the background job queue.
      */
@@ -46,14 +46,14 @@
          * 
          * @return bool - Always return true for cleanup jobs
          */
-        public function run () {
+        public function run () : bool {
 
             // Check if jobs are enabled (limit > 0)
             $limit = (int) Utils::getConfig( 'WordCounterPurgeOrphanedJobLimit', 1000 );
             if ( $limit <= 0 ) return true;
 
             // Set up the task
-            $task = new PurgeOrphaned ();
+            $task = new PurgeOrphanedTask ();
 
             // Run the task
             $result = $task->runTask( [ 'limit' => $limit ] ) !== null;
