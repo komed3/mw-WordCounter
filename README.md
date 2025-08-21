@@ -40,6 +40,53 @@ php maintenance/run.php update.php
 
 ## Configuration Variables
 
+All configuration variables can be set in `LocalSettings.php` using `$wgWordCounter...`.
+
+- `$wgWordCounterSupportedNamespaces` – List of namespaces for whose pages words are to be counted.  
+  Default: `[ 0 ]`  
+  Example: `$wgWordCounterSupportedNamespaces = [ 0, 4 ];`
+- `$wgWordCounterCountNumbers` – Whether to count numbers (digits) as words.  
+  Default: `false`  
+  Example: `$wgWordCounterCountNumbers = true;`
+- `$wgWordCounterCustomPattern` – Regular expression pattern to match words; if null, the default pattern is used.  
+  Default: `null`  
+  Example: `$wgWordCounterCustomPattern = '/\w+/u';`
+- `$wgWordCounterCountOnPageSave` – Whether to count words on page save.  
+  Default: `true`  
+  Example: `$wgWordCounterCountOnPageSave = false;`
+- `$wgWordCounterCacheService` – Cache service to use; options are 'local', 'wan', 'micro' or 'main'.  
+  Default: `'main'`  
+  Example: `$wgWordCounterCacheService = 'wan';`
+- `$wgWordCounterCacheSpecialPages` – Whether to cache the query results of special pages.  
+  Default: `true`  
+  Example: `$wgWordCounterCacheSpecialPages = false;`
+- `$wgWordCounterSpecialPageCacheTTL` – Cache expiry time for special pages in seconds.  
+  Default: `3600`  
+  Example: `$wgWordCounterSpecialPageCacheTTL = 600;`
+- `$wgWordCounterSpecialPageMaxResults` – Maximum number of results to return in special pages.  
+  Default: `5000`  
+  Example: `$wgWordCounterSpecialPageMaxResults = 1000;`
+- `$wgWordCounterCountWordsJobLimit` – Number of pages to process per CountWords job (0 to disable jobs).  
+  Default: `50`  
+  Example: `$wgWordCounterCountWordsJobLimit = 100;`
+- `$wgWordCounterCountWordsJobInterval` – Minimum interval in seconds between jobs.  
+  Default: `3600`  
+  Example: `$wgWordCounterCountWordsJobInterval = 7200;`
+- `$wgWordCounterPurgeOrphanedJobLimit` – Number of entries to process per PurgeOrphaned job (0 to disable jobs).  
+  Default: `1000`  
+  Example: `$wgWordCounterPurgeOrphanedJobLimit = 500;`
+- `$wgWordCounterPurgeOrphanedJobInterval` – Minimum interval in seconds between jobs.  
+  Default: `86400`  
+  Example: `$wgWordCounterPurgeOrphanedJobInterval = 43200;`
+
+**Tips for your Wiki:**
+
+- For large wikis, increase job and batch limits for faster processing.
+- Use a custom regex for language-specific word counting if needed.
+- In wikis with high edit rates, word counting on page save should be disabled.
+- Take advantage of the best cache service available.  
+  Visit https://www.mediawiki.org/wiki/Object_cache for more information.
+
 ## Maintenance Scripts
 
 ## Job System
