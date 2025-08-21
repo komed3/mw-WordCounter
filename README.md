@@ -34,7 +34,7 @@ php maintenance/run.php update.php
 
 **(Optional)** Adjust configuration variables in `LocalSettings.php` as needed (see below).
 
-## Usage of Parser Functions
+## Parser Functions
 
 ## API Usage
 
@@ -89,12 +89,34 @@ All configuration variables can be set in `LocalSettings.php` using `$wgWordCoun
 
 ## Maintenance Scripts
 
+WordCounter provides maintenance scripts for batch operations.
+
+**`countWords.php`** – Counts words in articles and updates the database.
+
+```sh
+php maintenance/run.php WordCounter:countWords [--dry-run] [--force] [--limit=N] [--pages=Page1|Page2]
+```
+
+- `--dry-run` – Show what would be done, but do not change the database.
+- `--force` – Recount all articles, even if already counted.
+- `--limit=N` – Maximum number of pages to process in this run.
+- `--pages=...` – Only process the given pages (separated by `|`).
+
+**`purgeOrphaned.php`** – Removes orphaned or invalid entries from the `wordcounter` table.
+
+```sh
+php maintenance/run.php WordCounter:purgeOrphaned [--dry-run] [--limit=N]
+```
+
+- `--dry-run` – Show what would be deleted, but do not actually delete.
+- `--limit=N` – Maximum number of entries to process per batch.
+
 ## Job System
 
 WordCounter integrates with MediaWiki's job queue for background processing:
 
-- **CountWordsJob:** Periodically counts words for new or outdated pages.
-- **PurgeOrphanedJob:** Periodically removes orphaned entries from the database.
+- **CountWordsJob** – Periodically counts words for new or outdated pages.
+- **PurgeOrphanedJob** – Periodically removes orphaned entries from the database.
 
 Jobs are scheduled automatically based on the configured intervals and limits. You can also trigger jobs manually via maintenance scripts.
 
@@ -102,18 +124,18 @@ Jobs are scheduled automatically based on the configured intervals and limits. Y
 
 WordCounter registers and uses several MediaWiki hooks:
 
-- `PageSaveComplete`: Updates word count on page save.
-- `PageDelete`: Removes word count when a page is deleted.
-- `ParserFirstCallInit`: Registers parser functions.
-- `InfoAction`: Adds word count to the page info.
-- `SpecialStatsAddExtra`: Adds word count stats to `Special:Statistics`.
-- `LoadExtensionSchemaUpdates`: Handles database schema updates.
+- `PageSaveComplete` – Updates word count on page save.
+- `PageDelete` – Removes word count when a page is deleted.
+- `ParserFirstCallInit` – Registers parser functions.
+- `InfoAction` – Adds word count to the page info.
+- `SpecialStatsAddExtra` – Adds word count stats to `Special:Statistics`.
+- `LoadExtensionSchemaUpdates` – Handles database schema updates.
 
 The extension creates a `wordcounter` table with the following fields:
 
-- `wc_page_id` (int, primary key): The page ID.
-- `wc_wordcount` (int): The current word count.
-- `wc_timestamp` (binary): Last update timestamp.
+- `wc_page_id` (int, primary key) – The page ID.
+- `wc_wordcount` (int) – The current word count.
+- `wc_timestamp` (binary) – Last update timestamp.
 
 Indexes are created for performance. See `sql/wordcounter.sql` for details.
 
@@ -121,8 +143,8 @@ Indexes are created for performance. See `sql/wordcounter.sql` for details.
 
 You can extend or modify the word counting logic using the following hooks:
 
-- `WordCounterBeforeCount`: Modify the plain text before counting.
-- `WordCounterAfterCount`: Modify or override the word count after counting.
+- `WordCounterBeforeCount` – Modify the plain text before counting.
+- `WordCounterAfterCount` – Modify or override the word count after counting.
 
 Minimal Example: Custom Hook in `LocalSettings.php`
 
