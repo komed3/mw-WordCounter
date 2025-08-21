@@ -43,9 +43,11 @@
          * This indicates that the page may take a long time to load and
          * should be cached on large sites.
          * 
-         * @return bool - true if the page is expensive and should be cached
+         * Use $wgWordCounterCacheSpecialPages to control this behavior.
+         * 
+         * @return bool - True if the page is expensive, false otherwise
          */
-        public function isExpensive () {
+        public function isExpensive () : bool {
 
             return (bool) Utils::getConfig( 'WordCounterCacheSpecialPages', true );
 
@@ -54,9 +56,11 @@
         /**
          * Get the maximum age of cached results in seconds.
          * 
+         * Use $wgWordCounterSpecialPageCacheTTL to set the cache duration.
+         * 
          * @return int - Cache age in seconds
          */
-        public function getCacheExpiry () {
+        public function getCacheExpiry () : int {
 
             return (int) Utils::getConfig( 'WordCounterSpecialPageCacheTTL', 3600 );
 
@@ -65,9 +69,11 @@
         /**
          * Get the maximum number of results to cache.
          * 
+         * Use $wgWordCounterSpecialPageMaxResults to set the limit.
+         * 
          * @return int - Maximum cached results
          */
-        public function getMaxResults () {
+        public function getMaxResults () : int {
 
             return (int) Utils::getConfig( 'WordCounterSpecialPageMaxResults', 5000 );
 
@@ -76,9 +82,9 @@
         /**
          * Indicates that this special page is not syndicated.
          * 
-         * @return bool - false, as this page is not syndicated
+         * @return bool - False, as this page is not syndicated
          */
-        public function isSyndicated () {
+        public function isSyndicated () : bool {
 
             return false;
 
@@ -86,12 +92,13 @@
 
         /**
          * Returns the query info for the special page.
+         * 
          * This method defines the database tables and fields that will be
          * queried to retrieve the word counts.
          * 
-         * @return array - the query information
+         * @return array - The query information
          */
-        public function getQueryInfo () {
+        public function getQueryInfo () : array {
 
             return [
                 'tables' => [
@@ -119,12 +126,13 @@
 
         /**
          * Returns the order fields for sorting the results.
+         * 
          * This method specifies that the results should be sorted by the
          * word count in descending order.
          * 
-         * @return array - the order fields
+         * @return array - The order fields
          */
-        public function getOrderFields () {
+        public function getOrderFields () : array {
 
             return [ 'wc_word_count' ];
 
@@ -133,9 +141,9 @@
         /**
          * Indicates that the results should be sorted in descending order.
          * 
-         * @return bool - true, as the results should be sorted descending
+         * @return bool - True, as the results should be sorted descending
          */
-        public function sortDescending () {
+        public function sortDescending () : bool {
 
             return true;
 
@@ -143,12 +151,13 @@
 
         /**
          * Formats the result for display.
+         * 
          * This method generates the output for each page, including the link
          * to the page and its word count.
          * 
-         * @param Skin $skin - the skin object for rendering
-         * @param object $result - the result object containing page data
-         * @return string - formatted output for the page
+         * @param Skin $skin - The skin object for rendering
+         * @param object $result - The result object containing page data
+         * @return string - Formatted output for the page
          */
         public function formatResult (
             $skin, $result
@@ -208,11 +217,12 @@
 
         /**
          * Returns the header for the special page.
+         * 
          * This method provides the title and description for the special page.
          * 
-         * @return string - the header text
+         * @return string - The header text
          */
-        public function getPageHeader () {
+        public function getPageHeader () : string {
 
             $header = $this->msg( 'wordcounter-special-mostwords-header' )->parseAsBlock();
 
@@ -244,12 +254,13 @@
 
         /**
          * Returns the group name for the special page.
+         * 
          * This method specifies the group under which this special page
          * will be categorized.
          * 
-         * @return string - the group name
+         * @return string - The group name
          */
-        protected function getGroupName () {
+        protected function getGroupName () : string {
 
             return 'pages';
 
@@ -257,9 +268,10 @@
 
         /**
          * Returns the description for the special page.
+         * 
          * This method provides a brief description of what the special page does.
          * 
-         * @return string - the description text
+         * @return string - The description text
          */
         public function getDescription () {
 
