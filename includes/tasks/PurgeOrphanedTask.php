@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class PurgeOrphaned
+     * Class WordCounter/Tasks/PurgeOrphanedTask
      * 
      * This task purges orphaned or invalid word counter entries
      * from the database. It extends the Task class and implements
@@ -18,26 +18,27 @@
     use MediaWiki\Extension\WordCounter\Utils;
 
     /**
-     * Class PurgeOrphaned
+     * Class WordCounter/Tasks/PurgeOrphanedTask
      * 
      * Implements the task to purge orphaned or invalid word counter entries.
      */
-    class PurgeOrphaned extends Task {
+    class PurgeOrphanedTask extends TaskBase {
 
         /**
          * Runs the task to purge orphaned or invalid word counter entries.
          * 
-         * @param array $options - Options for the task, including limit and dry-run mode.
-         * @return array - Result of the task execution.
+         * @param array $options - Options for the task
+         * @return array - Result of the task execution
          */
         public function runTask (
             array $options
         ) : array {
 
+            // Set up task
             $this->output( 'Starting orphaned wordcounter entry cleanup.' );
-
             $this->setDryRun( (bool) $options[ 'dry-run' ] );
 
+            // Prepare options
             $limit = (int) $options[ 'limit' ] ?: 1000;
 
             // Delete orphaned or invalid entries

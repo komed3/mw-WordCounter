@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class CountWords
+     * Class WordCounter/Tasks/CountWordsTask
      * 
      * This task counts words for pages and updates the database.
      * It extends the Task class and implements the runTask method
@@ -22,11 +22,11 @@
     use Wikimedia\Rdbms\IResultWrapper;
 
     /**
-     * Class CountWords
+     * Class WordCounter/Tasks/CountWords
      * 
      * Implements the task to count words for pages.
      */
-    class CountWords extends Task {
+    class CountWordsTask extends TaskBase {
 
         /**
          * Revision lookup service.
@@ -67,13 +67,16 @@
             array $options
         ) : array {
 
+            // Set up task
             $this->output( 'Starting word counting task.' );
             $this->setDryRun( (bool) $options[ 'dry-run' ] );
 
+            // Initialize revision lookup service and counters
             $this->revLookup = MediaWikiServices::getInstance()->getRevisionLookup();
             $this->processed = 0;
             $this->errors = 0;
 
+            // Prepare options
             $force = (bool) ( $options[ 'force' ] ?? false );
             $limit = (int) ( $options[ 'limit' ] ?? 100 );
             $pages = $options[ 'pages' ] ?? null;
@@ -105,8 +108,8 @@
         /**
          * Processes some specific pages by their titles for word counting.
          * 
-         * @param array $pages - Array of page names to process.
-         * @return array - Array containing the count of processed pages and errors.
+         * @param array $pages - Array of page names to process
+         * @return array - Array of results for each page processed
          */
         private function processSpecificPages (
             array $pages
@@ -119,7 +122,7 @@
                 if ( ! ( $title = Title::newFromText( trim( $pageName ) ) ) ) {
 
                     $this->output( 'Invalid page title: ' . $pageName );
-                    $errors++;
+                    $this->errors++;
 
                     continue;
 
@@ -135,11 +138,12 @@
         /**
          * Processes a batch of pages for word counting.
          * 
-         * This method retrieves a batch of pages from the database and processes them
-         * either in force mode or as uncounted pages, depending on the $force parameter.
+         * This method retrieves a batch of pages from the database and
+         * processes them either in force mode or as uncounted pages,
+         * depending on the $force parameter.
          * 
-         * @param bool $force - If true, processes all supported pages; otherwise, only uncounted pages.
-         * @param int $limit - The maximum number of pages to process in this batch.
+         * @param bool $force - If true, processes all supported pages; otherwise, only uncounted pages
+         * @param int $limit - The maximum number of pages to process in this batch
          */
         private function processBatch (
             bool $force, int $limit
@@ -200,11 +204,12 @@
         /**
          * Processes a single page for word counting.
          * 
-         * This method checks if the page exists, is not a redirect, and supports the namespace.
-         * It then retrieves the revision and counts the words, updating the database if not in dry-run mode.
+         * This method checks if the page exists, is not a redirect, and
+         * supports the namespace. It then retrieves the revision and
+         * counts the words, updating the database if not in dry-run mode.
          * 
-         * @param Title $title - The title of the page to process.
-         * @return bool - Returns true if the page was processed successfully, false otherwise.
+         * @param Title $title - The title of the page to process
+         * @return bool - Returns true if the page was processed successfully, false otherwise
          */
         private function processPage (
             Title $title

@@ -1,10 +1,10 @@
 <?php
 
     /**
-     * Class Task
+     * Class WordCounter/Tasks/TaskBase
      * 
-     * Base class for tasks in the WordCounter extension.
-     * Provides methods for outputting messages and setting an output callback.
+     * Base class for tasks in the WordCounter extension, providing
+     * common functionality such as dry-run mode and output handling.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT
@@ -14,11 +14,11 @@
     namespace MediaWiki\Extension\WordCounter\Tasks;
 
     /**
-     * Class Task
+     * Class WordCounter/Tasks/Task
      * 
      * This class serves as a base for all tasks in the WordCounter extension.
      */
-    class Task {
+    class TaskBase {
 
         /**
          * Flag to indicate if the task is running in dry-run mode.
@@ -40,7 +40,7 @@
         /**
          * Sets the dry-run mode for the task.
          * 
-         * @param bool $dryRun - If true, the task will run in dry-run mode.
+         * @param bool $dryRun - If true, the task will run in dry-run mode
          */
         public function setDryRun (
             bool $dryRun
@@ -65,10 +65,10 @@
         /**
          * Outputs a message.
          * 
-         * This method checks if an output callback is set and calls it with the provided message.
-         * If no callback is set, it does nothing.
+         * This method checks if an output callback is set and calls it with
+         * the provided message. If no callback is set, it does nothing.
          * 
-         * @param string $msg - The message to output.
+         * @param string $msg - The message to output
          */
         protected function output (
             string $msg
@@ -85,9 +85,10 @@
         /**
          * Sets the output callback function.
          * 
-         * This method allows setting a custom function that will be called to output messages.
+         * This method allows setting a custom function that will be
+         * called to output messages.
          * 
-         * @param callable|null $callback - The callback function to set. If null, no callback is set.
+         * @param callable|null $callback - The callback function to set
          */
         public function setOutputCallback (
             ?callable $callback
