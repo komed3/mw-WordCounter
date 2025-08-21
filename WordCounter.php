@@ -4,16 +4,17 @@
      * WordCounter Extension
      * 
      * WordCounter is a comprehensive MediaWiki extension that counts and tracks the number
-     * of words in articles. It provides features such as automatic word counting, parser
+     * of words in any pages. It provides features such as automatic word counting, parser
      * functions for displaying the word count, a special page for listing articles by word
      * count, and an API module.
      * 
      * Features:
-     *  - Automatic word counting for articles
+     *  - Automatic word counting for pages
      *  - Parser functions to display word counts
-     *  - Special page to list articles with the most words
+     *  - Special page to list pages with the most words
      *  - API module for retrieving word counts
-     *  - Maintenance script to update word counts
+     *  - Maintenance scripts to manage word counts
+     *  - Job scheduler integration for periodic updates
      *  - Configurable options for caching and namespaces
      *  - Support for multiple languages
      * 
