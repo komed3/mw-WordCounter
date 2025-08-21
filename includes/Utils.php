@@ -161,7 +161,7 @@
          * @param Title $title - The title of the page
          * @return int|null - The page ID if valid, null otherwise
          */
-        public static function getPageTitleSave (
+        public static function getPageIdSave (
             Title $title
         ) : ?int {
 
@@ -184,7 +184,7 @@
             Title $title
         ) : ?int {
 
-            return ( $pageId = self::getPageTitleSave( $title ) )
+            return ( $pageId = self::getPageIdSave( $title ) )
                 ? Database::getWordCount( $pageId )
                 : null;
 
@@ -278,21 +278,12 @@
             $wikiPage
         ) : void {
 
-            if ( $wikiPage instanceof WikiPage ) {
+            // Clear parser cache for the given page
+            $parserCache = MediaWikiServices::getInstance()->getParserCache();
+            $parserCache->deleteOptionsKey( $wikiPage );
 
-                // Clear parser cache for the given page
-                $parserCache = MediaWikiServices::getInstance()->getParserCache();
-                $parserCache->deleteOptionsKey( $wikiPage );
-
-                // Also clear the HTML cache
-                $wikiPage->doPurge();
-
-            } else {
-
-                // Log a debug message if the WikiPage object is invalid
-                wfDebugLog( 'WordCounter', 'Invalid WikiPage object provided for cache invalidation.' );
-
-            }
+            // Also clear the HTML cache
+            $wikiPage->doPurge();
 
         }
 

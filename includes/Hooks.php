@@ -3,7 +3,12 @@
     /**
      * Class WordCounter/Hooks
      * 
-     * This class implements hooks for the WordCounter extension.
+     * This class implements hooks for the WordCounter extension,
+     * handling schema updates, page saves, deletions, parser functions,
+     * and special stats.
+     * 
+     * Methods will not have type hints for parameters or return types
+     * because MediaWiki does not yet support them.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT
@@ -57,6 +62,10 @@
         /**
          * Update word count on page save.
          * 
+         * On large wikis, this can be performance-sensitive,
+         * so it is recommended to disable counting on page save
+         * by setting $wgWordCounterCountOnPageSave to false.
+         * 
          * @param WikiPage $wikiPage - The wiki page being saved
          * @param UserIdentity $user - The user performing the save
          * @param string $summary - The edit summary
@@ -71,13 +80,14 @@
             // Maybe schedule background jobs
             JobScheduler::maybeSchedule();
 
-            // Only count words if $wgWordCounterCountOnPageSave is true
-            // Should be disabled for large wikis or performance-sensitive environments
+            // If word counting on page save is disabled, return early
             if ( ! Utils::countOnPageSave() ) return true;
 
-            $pageId = Utils::getPageTitleSave( $wikiPage->getTitle() );
+            // Get page ID from Title object and count words from last revision
+            $pageId = Utils::getPageIdSave( $wikiPage->getTitle() );
             $wordCount = Utils::countWordsFromRevision( $revisionRecord );
 
+            // If page exists and words have been successfully counted
             if ( $pageId && $wordCount !== null ) {
 
                 // Store the word count in the database
@@ -86,7 +96,7 @@
                 // Clear cache
                 Utils::clearCache();
 
-                // Invalidate parser cache for this page and any pages that might reference it
+                // Invalidate parser cache for this page (parser functions)
                 Utils::invalidateParserCache( $wikiPage );
 
             } else {
@@ -147,7 +157,7 @@
         }
 
         /**
-         * Render the number of words on the current page.
+         * Wrapper to render the number of words on the current page.
          * 
          * @param Parser $parser - The parser instance
          * @param string $format - The format specifier
@@ -155,8 +165,8 @@
          * @return array - The rendered word count and options
          */
         public static function renderPageWords (
-            $parser, $format = '', $pageName = ''
-        ) {
+            Parser $parser, string $format = '', string $pageName = ''
+        ) : array {
 
             return [
                 ParserFunctions::renderPageWords(
@@ -168,15 +178,15 @@
         }
 
         /**
-         * Render the total number of words across all pages.
+         * Wrapper to render the total number of words across all pages.
          * 
          * @param Parser $parser - The parser instance
          * @param string $format - The format specifier
          * @return array - The rendered total word count and options
          */
         public static function renderTotalWords (
-            $parser, $format = ''
-        ) {
+            Parser $parser, string $format = ''
+        ) : array {
 
             return [
                 ParserFunctions::renderTotalWords(
@@ -188,15 +198,15 @@
         }
 
         /**
-         * Render the total number of pages.
+         * Wrapper to render the total number of pages.
          * 
          * @param Parser $parser - The parser instance
          * @param string $format - The format specifier
          * @return array - The rendered total page count and options
          */
         public static function renderTotalPages (
-            $parser, $format = ''
-        ) {
+            Parser $parser, string $format = ''
+        ) : array {
 
             return [
                 ParserFunctions::renderTotalPages(

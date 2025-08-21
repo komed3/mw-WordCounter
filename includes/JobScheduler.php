@@ -3,8 +3,9 @@
     /**
      * Class WordCounter/JobScheduler
      * 
-     * Will manage the scheduling of background jobs for the WordCounter extension.
-     * Handles direct and lazy scheduling of jobs. If needed, the job status can be retrieved.
+     * Will manage the scheduling of background jobs for the WordCounter
+     * extension. Handles direct and lazy scheduling of jobs. If needed,
+     * the job status can be retrieved.
      * 
      * @author Paul Köhler (komed3)
      * @license MIT

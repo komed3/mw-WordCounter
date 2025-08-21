@@ -34,14 +34,14 @@
 
         /**
          * Format a number based on the specified format.
-         *
+         * 
          * @param Parser $parser - The parser instance
          * @param int|string $result - The number to format
          * @param string $format - The format specifier
          * @return string - The formatted number
          */
         private static function formatNum (
-            $parser, $result, $format = ''
+            Parser $parser, int|string $result, string $format = ''
         ) : string {
 
             if ( strtoupper( trim( $format ) ) === 'R' )
@@ -53,25 +53,21 @@
 
         /**
          * Render the number of words on the current page.
-         *
+         * 
          * @param Parser $parser - The parser instance
          * @param string $format - The format specifier
          * @param string $pageName - Optional page name to count words for
          * @return string - The formatted word count
          */
         public static function renderPageWords (
-            $parser, $format = '', $pageName = ''
+            Parser $parser, string $format = '', string $pageName = ''
         ) : string {
 
             $title = $parser->getTitle();
 
             // If a specific page name is provided, use it to get the title
             // Otherwise, use the current page title
-            if ( $pageName && (
-                ! ( $title = Title::newFromText( $pageName ) ) ||
-                ! $title->exists() || $title->isRedirect() ||
-                ! Utils::supportsNamespace( $title->getNamespace() )
-            ) ) return '0';
+            if ( $pageName && ! ( $title = Title::newFromText( $pageName ) ) ) return '0';
 
             $wordCount = Utils::getWordCountByTitle( $title ) ?? 0;
 
@@ -81,13 +77,13 @@
 
         /**
          * Render the total number of words across all pages.
-         *
+         * 
          * @param Parser $parser - The parser instance
          * @param string $format - The format specifier
          * @return string - The formatted total word count
          */
         public static function renderTotalWords (
-            $parser, $format = ''
+            Parser $parser, string $format = ''
         ) : string {
 
             $totalWords = Utils::getTotalWordCount();
@@ -98,13 +94,13 @@
 
         /**
          * Render the total number of pages.
-         *
+         * 
          * @param Parser $parser - The parser instance
          * @param string $format - The format specifier
          * @return string - The formatted total page count
          */
         public static function renderTotalPages (
-            $parser, $format = ''
+            Parser $parser, string $format = ''
         ) : string {
 
             $totalPages = Utils::getTotalPageCount();
