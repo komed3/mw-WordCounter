@@ -15,7 +15,6 @@
     namespace MediaWiki\Extension\WordCounter\Api;
 
     use MediaWiki\Api\ApiBase;
-    use MediaWiki\Api\ApiMain;
     use MediaWiki\Extension\WordCounter\Database;
     use MediaWiki\Extension\WordCounter\Utils;
     use MediaWiki\Title\Title;
@@ -29,11 +28,13 @@
 
         /**
          * Execute the API query.
+         * 
          * This method processes the request parameters and retrieves
          * the requested word count data based on the specified properties.
          */
         public function execute () {
 
+            // Prepare options
             $params = $this->extractRequestParams();
 
             $prop = array_flip( $params[ 'prop' ] );
@@ -55,6 +56,7 @@
             if ( isset( $prop[ 'uncounted' ] ) )
                 $data[ 'uncounted' ] = $this->getUncountedPages( $params );
 
+            // Return the results
             $this->getResult()->addValue(
                 null, $this->getModuleName(), $data
             );
@@ -63,11 +65,12 @@
 
         /**
          * Get total word counts and page counts.
+         * 
          * This method returns the total word count, total page count,
          * and the number of pages that need to be counted.
          *
          * @return array - An array containing total word count, total page count,
-         *                 and uncounted pages.
+         *                 and uncounted pages
          */
         private function getTotals () : array {
 
@@ -81,11 +84,12 @@
 
         /**
          * Get word counts for specific pages.
+         * 
          * This method accepts either titles or page IDs and returns
          * the word count for each specified page.
          *
-         * @param array $params - The parameters containing titles or page IDs.
-         * @return array - An array of results with word counts for each page.
+         * @param array $params - The parameters containing titles or page IDs
+         * @return array - An array of results with word counts for each page
          */
         private function getPageWords (
             array $params
@@ -165,11 +169,12 @@
 
         /**
          * Get a list of pages ordered by word count.
+         * 
          * This method retrieves pages ordered by their word count,
          * with options for sorting and pagination.
          *
-         * @param array $params - The parameters containing limit, offset, and sort order.
-         * @return array - An array of results with page details and word counts.
+         * @param array $params - The parameters containing limit, offset, and sort order
+         * @return array - An array of results with page details and word counts
          */
         private function getPageList (
             array $params
@@ -216,11 +221,12 @@
 
         /**
          * Get a list of pages that have not been counted yet.
+         * 
          * This method retrieves pages that need word counting,
          * with options for pagination.
          *
-         * @param array $params - The parameters containing limit.
-         * @return array - An array of results with page details that need counting.
+         * @param array $params - The parameters containing limit
+         * @return array - An array of results with page details that need counting
          */
         private function getUncountedPages (
             array $params
@@ -260,9 +266,8 @@
 
         /**
          * Get the allowed parameters for this API module.
-         * This method defines the parameters that can be used in API requests.
-         *
-         * @return array - An array of allowed parameters with their types and requirements.
+         * 
+         * @return array - An array of allowed parameters with their types and requirements
          */
         public function getAllowedParams () : array {
 
@@ -318,9 +323,8 @@
 
         /**
          * Get the examples messages for this API module.
-         * This method provides example API requests and their corresponding messages.
          *
-         * @return array - An array of example API requests with their messages.
+         * @return array - An array of example API requests with their messages
          */
         protected function getExamplesMessages () : array {
 
@@ -343,9 +347,11 @@
 
         /**
          * Get the name of this API module.
-         * This method returns the name used to identify this module in API requests.
+         * 
+         * This method returns the name used to identify this
+         * module in API requests.
          *
-         * @return string - The name of the API module.
+         * @return string - The name of the API module
          */
         public function getHelpUrls () : array {
 
