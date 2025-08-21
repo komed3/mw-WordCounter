@@ -42,7 +42,14 @@ php maintenance/run.php update.php
 
 ## Maintenance Scripts
 
-## Job System Overview
+## Job System
+
+WordCounter integrates with MediaWiki's job queue for background processing:
+
+- **CountWordsJob:** Periodically counts words for new or outdated pages.
+- **PurgeOrphanedJob:** Periodically removes orphaned entries from the database.
+
+Jobs are scheduled automatically based on the configured intervals and limits. You can also trigger jobs manually via maintenance scripts.
 
 ## Hooks and Database Changes
 
