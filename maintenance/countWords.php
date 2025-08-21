@@ -19,7 +19,7 @@
     require_once $IP . '/maintenance/Maintenance.php';
     // @codeCoverageIgnoreEnd
 
-    use MediaWiki\Extension\WordCounter\Tasks as Tasks;
+    use MediaWiki\Extension\WordCounter\Tasks\CountWordsTask;
     use Maintenance;
 
     /**
@@ -31,6 +31,7 @@
 
         /**
          * Constructor
+         * 
          * Initializes the maintenance script with options and descriptions.
          */
         public function __construct () {
@@ -57,7 +58,7 @@
         public function execute () {
 
             // Set up the task
-            $task = new Tasks\CountWords ();
+            $task = new CountWordsTask ();
 
             $task->setOutputCallback( function( $msg ) {
                 $this->output( $msg . PHP_EOL );
@@ -75,11 +76,9 @@
                 'dry-run' => $dryRun
             ];
 
-            if ( $this->hasOption( 'pages' ) ) {
-
+            // If specific pages are provided, add them to options
+            if ( $this->hasOption( 'pages' ) )
                 $options[ 'pages' ] = explode( '|', $this->getOption( 'pages' ) );
-
-            }
 
             $totalProcessed = $totalErrors = 0;
 

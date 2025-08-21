@@ -19,7 +19,7 @@
     require_once $IP . '/maintenance/Maintenance.php';
     // @codeCoverageIgnoreEnd
 
-    use MediaWiki\Extension\WordCounter\Tasks as Tasks;
+    use MediaWiki\Extension\WordCounter\Tasks\PurgeOrphanedTask;
     use Maintenance;
 
     /**
@@ -31,6 +31,7 @@
 
         /**
          * Constructor
+         * 
          * Initializes the maintenance script with options and descriptions.
          */
         public function __construct () {
@@ -55,7 +56,7 @@
         public function execute () {
 
             // Set up the task
-            $task = new Tasks\PurgeOrphaned ();
+            $task = new PurgeOrphanedTask ();
 
             $task->setOutputCallback( function ( $msg ) {
                 $this->output( $msg . PHP_EOL );
