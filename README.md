@@ -70,6 +70,142 @@ Total pages counted: {{#totalpages:R}}
 
 ## API Usage
 
+WordCounter provides an API module at `action=wordcounter` for retrieving word and page statistics.
+
+Supported `prop` values:
+
+- `totals` – Get total word count, total page count, and uncounted pages.
+- `pagewords` – Get word counts for specific pages (by title or page ID).
+- `listpages` – List pages ordered by word count.
+- `uncounted` – List pages that have not yet been counted.
+
+**API Parameters:**
+
+- `prop` (required): One or more of `totals`, `pagewords`, `listpages`, `uncounted`
+- `titles`: Page titles (for `pagewords`)
+- `pageids`: Page IDs (for `pagewords`)
+- `namespaces`: Namespace IDs (for `listpages`)
+- `limit`: Limit for results (default 50)
+- `offset`: Offset for paging (default 0)
+- `sort`: `desc` (default) or `asc` (for `listpages`)
+
+See `api.php?action=help&modules=wordcounter` for full documentation.
+
+### Get total word and page counts
+
+```
+api.php?action=wordcounter&prop=totals
+```
+
+Response:
+
+```json
+{
+  "wordcounter": {
+    "totals": {
+      "totalWords": 123456,
+      "totalPages": 789,
+      "uncountedPages": 12
+    }
+  }
+}
+```
+
+### Get word count for specific pages
+
+```
+api.php?action=wordcounter&prop=pagewords&titles=Main_Page|Other_Page
+```
+
+Response:
+
+```json
+{
+  "wordcounter": {
+    "pagewords": {
+      "results": [
+        {
+          "pageId": 1,
+          "pageTitle": "Main Page",
+          "namespace": 0,
+          "wordCount": 512,
+          "exists": true
+        },
+        {
+          "pageId": 35,
+          "pageTitle": "Other Page",
+          "namespace": 0,
+          "wordCount": 2361,
+          "exists": true
+        }
+      ],
+      "count": 2,
+      "totalWords": 2873
+    }
+  }
+}
+```
+
+### List pages ordered by word count
+
+```
+api.php?action=wordcounter&prop=listpages&limit=10&sort=desc
+```
+
+Response:
+
+```json
+{
+  "wordcounter": {
+    "listpages": {
+      "results": [
+        {
+          "pageId": 5,
+          "pageTitle": "Longest Article",
+          "namespace": 0,
+          "wordCount": 2037
+        }
+        // ...
+      ],
+      "count": 10,
+      "totalWords": 15173,
+      "namespaces": [ 0 ],
+      "offset": 0,
+      "limit": 10,
+      "sort": "desc"
+    }
+  }
+}
+```
+
+### List uncounted pages
+
+```
+api.php?action=wordcounter&prop=uncounted&limit=100
+```
+
+Response:
+
+```json
+{
+  "wordcounter": {
+    "uncounted": {
+      "results": [
+        {
+          "pageId": 42,
+          "pageTitle": "New Article",
+          "namespace": 0
+        }
+        // ...
+      ],
+      "count": 1,
+      "limit": 100,
+      "total": 23
+    }
+  }
+}
+```
+
 ## Configuration Variables
 
 All configuration variables can be set in `LocalSettings.php` using `$wgWordCounter...`.
