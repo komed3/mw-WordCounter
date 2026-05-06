@@ -248,7 +248,7 @@
 
             $this->output(
                 ( $this->isDryRun() ? 'Would process ' : 'Processed ' ) .
-                $pageName . ' (' . $wordCount . ' words)' 
+                $pageName . ' (' . $wordCount . ' words)'
             );
 
             return true;
