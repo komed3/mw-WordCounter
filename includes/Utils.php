@@ -254,7 +254,7 @@
                     : '/[\p{L}]+/u' );
 
             // Count words using the pattern
-            $wordCount = preg_match_all( $pattern, $plainText );
+            $wordCount = preg_match_all( $pattern, $plainText, $m );
 
             // Allow extensions to override or modify the word count
             $services->getHookContainer()->run( 'WordCounterAfterCount', [
