@@ -236,9 +236,10 @@
 
             // Strip Html tags and trim the text
             // If the text is empty after stripping tags, return 0
-            if ( ( $plainText = trim( strip_tags(
-                $parserOutput->getRawText()
-            ) ) ) === '' ) return 0;
+            if ( ( $plainText = html_entity_decode(
+                trim( strip_tags( $parserOutput->getRawText() ) ),
+                ENT_QUOTES | ENT_HTML5
+            ) ) === '' ) return 0;
 
             // Allow extensions to modify the plain text before counting
             $services->getHookContainer()->run( 'WordCounterBeforeCount', [
