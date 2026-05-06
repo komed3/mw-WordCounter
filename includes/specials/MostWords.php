@@ -241,9 +241,9 @@
                     ->params( $lastUpdated, $maxResults )
                     ->parseAsBlock();
 
-                $header .= Html::rawElement( 'div', 
-                    [ 'class' => 'mw-wordcounter-cache-info' ], 
-                    $cacheInfo 
+                $header .= Html::rawElement( 'div',
+                    [ 'class' => 'mw-wordcounter-cache-info' ],
+                    $cacheInfo
                 );
 
             }

@@ -215,7 +215,7 @@
             // Get services and create a parser options object from anon (no DB user)
             $services = MediaWikiServices::getInstance();
             $lang = $services->getContentLanguage();
-            $parser = $services->getParser();
+            $contentRenderer = $services->getContentRenderer();
             $parserOptions = ParserOptions::newFromAnon();
 
             // Set the target language for the parser options
@@ -229,17 +229,17 @@
                 $parserOptions->setIsPreview( false );
 
             // Parse the content to get Html output
-            $parserOutput = $parser->parse(
-                $content->getText(),
-                $revisionRecord->getPageAsLinkTarget(),
-                $parserOptions
+            $parserOutput = $contentRenderer->getParserOutput(
+                $content, $revisionRecord->getPage(),
+                null, $parserOptions
             );
 
             // Strip Html tags and trim the text
             // If the text is empty after stripping tags, return 0
-            if ( ( $plainText = trim( strip_tags(
-                $parserOutput->getText( [ 'unwrap' => true ] )
-            ) ) ) === '' ) return 0;
+            if ( ( $plainText = html_entity_decode(
+                trim( strip_tags( $parserOutput->getRawText() ) ),
+                ENT_QUOTES | ENT_HTML5
+            ) ) === '' ) return 0;
 
             // Allow extensions to modify the plain text before counting
             $services->getHookContainer()->run( 'WordCounterBeforeCount', [
@@ -254,7 +254,7 @@
                     : '/[\p{L}]+/u' );
 
             // Count words using the pattern
-            $wordCount = preg_match_all( $pattern, $plainText );
+            $wordCount = preg_match_all( $pattern, $plainText, $m );
 
             // Allow extensions to override or modify the word count
             $services->getHookContainer()->run( 'WordCounterAfterCount', [

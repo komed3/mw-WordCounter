@@ -127,14 +127,14 @@
         ) : ?int {
 
             $dbr = self::getDBConnection();
-            
+
             $wordCount = $dbr->selectField(
                 'wordcounter',
                 'wc_word_count',
                 [ 'wc_page_id' => $pageId ],
                 __METHOD__
             );
-            
+
             return $wordCount !== false ? (int) $wordCount : null;
 
         }
