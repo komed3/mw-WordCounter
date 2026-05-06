@@ -215,7 +215,7 @@
             // Get services and create a parser options object from anon (no DB user)
             $services = MediaWikiServices::getInstance();
             $lang = $services->getContentLanguage();
-            $parser = $services->getParser();
+            $contentRenderer = $services->getContentRenderer();
             $parserOptions = ParserOptions::newFromAnon();
 
             // Set the target language for the parser options
@@ -229,16 +229,15 @@
                 $parserOptions->setIsPreview( false );
 
             // Parse the content to get Html output
-            $parserOutput = $parser->parse(
-                $content->getText(),
-                $revisionRecord->getPageAsLinkTarget(),
-                $parserOptions
+            $parserOutput = $contentRenderer->getParserOutput(
+                $content, $revisionRecord->getPage(),
+                null, $parserOptions
             );
 
             // Strip Html tags and trim the text
             // If the text is empty after stripping tags, return 0
             if ( ( $plainText = trim( strip_tags(
-                $parserOutput->getText( [ 'unwrap' => true ] )
+                $parserOutput->getRawText()
             ) ) ) === '' ) return 0;
 
             // Allow extensions to modify the plain text before counting
